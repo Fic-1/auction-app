@@ -39,6 +39,13 @@ const userSchema = new mongoose.Schema({
   photo: String,
 });
 
+userSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword,
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
+
 userSchema.pre('save', async function (next) {
   //Only run this function if the password was modified
   if (!this.isModified('password')) return next();
