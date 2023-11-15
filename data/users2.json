@@ -1,0 +1,176 @@
+[
+  {
+    "name": "Quinten Patton",
+    "email": "qpatton@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-0"
+  },
+  {
+    "name": "Dante Pierce",
+    "email": "dpierce@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-1"
+  },
+  {
+    "name": "Kobe Benitez",
+    "email": "kbenitez@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-2"
+  },
+  {
+    "name": "Zack Duffy",
+    "email": "zduffy@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-3"
+  },
+  {
+    "name": "Cyrus Mcmillan",
+    "email": "cmcmillan@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-4"
+  },
+  {
+    "name": "Demetrius Burton",
+    "email": "dburton@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-5"
+  },
+  {
+    "name": "Ashanti Obrien",
+    "email": "aobrien@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-6"
+  },
+  {
+    "name": "Paxton Neal",
+    "email": "pneal@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-7"
+  },
+  {
+    "name": "Gianni Walton",
+    "email": "gwalton@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-8"
+  },
+  {
+    "name": "Tate Newman",
+    "email": "tnewman@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-9"
+  },
+  {
+    "name": "Mohammad Gould",
+    "email": "mgould@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-10"
+  },
+  {
+    "name": "Gustavo Stevens",
+    "email": "gstevens@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-11"
+  },
+  {
+    "name": "Kenzie Novak",
+    "email": "knovak@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-12"
+  },
+  {
+    "name": "Dangelo Burke",
+    "email": "dburke@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-13"
+  },
+  {
+    "name": "Zaid Baker",
+    "email": "zbaker@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-14"
+  },
+  {
+    "name": "Carter Fernandez",
+    "email": "cfernandez@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-15"
+  },
+  {
+    "name": "Brielle Shah",
+    "email": "bshah@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-16"
+  },
+  {
+    "name": "Ashanti Sandoval",
+    "email": "asandoval@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-17"
+  },
+  {
+    "name": "Gauge Carroll",
+    "email": "gcarroll@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-18"
+  },
+  {
+    "name": "Elyse Gonzalez",
+    "email": "egonzalez@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": "user-19"
+  },
+  {
+    "name": "Amanda Contreras",
+    "email": "acontreras@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": ""
+  },
+  {
+    "name": "Hadassah Porter",
+    "email": "hporter@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": ""
+  },
+  {
+    "name": "Sofia Lane",
+    "email": "slane@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": ""
+  },
+  {
+    "name": "Mariam Stanton",
+    "email": "mstanton@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "photo": ""
+  },
+  {
+    "name": "Nelson Patrick",
+    "email": "npatrick@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234"
+  }
+]

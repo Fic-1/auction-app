@@ -41,6 +41,9 @@ exports.signup = async (req, res, next) => {
     });
     createAndSendToken(newUser, 201, req, res);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({
+      satus: 'fail',
+      message: err.message,
+    });
   }
 };
