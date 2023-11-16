@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const AppError = require('../utils/appError');
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -15,6 +16,9 @@ const productSchema = new mongoose.Schema({
   },
   currentBid: {
     type: Number,
+    default: function () {
+      return this.startingBid;
+    },
   },
   seller: {
     type: mongoose.Schema.ObjectId,
@@ -26,11 +30,8 @@ const productSchema = new mongoose.Schema({
       bidder: {
         type: mongoose.Schema.ObjectId,
         ref: 'User',
-        required: [true, 'Bid must have a bidder'],
       },
-      type: mongoose.Schema.ObjectId,
-      ref: 'Bid',
-      required: [true, 'Bid must have an amount'],
+      amount: Number,
     },
     // Additional bid history
   ],
@@ -40,6 +41,17 @@ const productSchema = new mongoose.Schema({
   },
   // Additional product details
 });
+
+// productSchema.pre('save', function (next) {
+//   const { currentBid } = this;
+//   const { bids } = this;
+//   console.log(bids.at(-1));
+//   // Assuming bids is an array
+//   if (bids.length > 0 && currentBid <= bids.at(-1).amount) {
+//   }
+
+//   next();
+// });
 
 productSchema.pre(/^find/, function (next) {
   //   this.populate({ path: 'user', select: 'name photo' });
