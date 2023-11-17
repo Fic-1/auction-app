@@ -27,10 +27,7 @@ const productSchema = new mongoose.Schema({
   },
   bids: [
     {
-      bidder: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-      },
+      bidder: String,
       amount: Number,
     },
     // Additional bid history

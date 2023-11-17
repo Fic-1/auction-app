@@ -10,8 +10,12 @@ exports.createBid = factory.createOne(Bid);
 
 exports.addBid = catchAsync(async (req, res, next) => {
   const currentBid = req.body.amount;
-  const addedBid = { bidder: req.user.id, amount: currentBid };
+  const addedBid = { bidder: req.user.email, amount: currentBid };
   const doc = await Product.findOne({ _id: req.params.id });
+  if (doc.startingBid > currentBid)
+    return next(
+      new AppError('Bid must be a larger amount than the starting bid.', 400),
+    );
   //   console.log(doc);
   if (doc.bids.length > 0 && currentBid <= doc.bids.at(-1).amount) {
     return next(
@@ -23,7 +27,8 @@ exports.addBid = catchAsync(async (req, res, next) => {
   //   console.log(doc.bids);
   await doc.save({ validateBeforeSave: false });
   const newBid = await Bid.create({
-    product: req.params.id,
+    productId: req.params.id,
+    product: doc.name,
     bidder: req.user.id,
     amount: currentBid,
   });

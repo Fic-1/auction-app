@@ -2,11 +2,10 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 
 const bidSchema = new mongoose.Schema({
-  product: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Product',
-    required: [true, 'Bid must have a product'],
+  productId: {
+    type: String,
   },
+  product: String,
   bidder: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
@@ -16,11 +15,16 @@ const bidSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  time: {
+  createdAt: {
     type: Date,
     default: Date.now(),
-    select: false,
   },
+});
+
+bidSchema.pre(/^find/, function (next) {
+  this.populate({ path: 'bidder', select: 'name photo' });
+
+  next();
 });
 
 const Bid = mongoose.model('Bid', bidSchema);
