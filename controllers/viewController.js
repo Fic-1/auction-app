@@ -12,7 +12,7 @@ exports.getLandingPage = catchAsync(async (req, res, next) => {
 
   //* 3) Render template using the tour data from 1)
   res.status(200).render('landing', {
-    title: '--',
+    title: 'Welcome !',
     products,
   });
 });
