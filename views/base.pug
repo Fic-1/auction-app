@@ -1,0 +1,31 @@
+doctype html
+html
+    head
+        block head
+            meta(charset='utf-8')
+            meta(name='viewport' content='width=device-width, initial-scale=1.0, shrink-to-fit=no')
+            title auction-app
+            link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css')
+            link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css')
+            link(rel='stylesheet' href='assets/css/Articles-Cards-images.css')
+            link(rel='stylesheet' href='assets/css/Navbar-Right-Links-icons.css')
+            link(rel='stylesheet' href='assets/css/Sign-Up-Form---Gabriela-Carvalho.css')
+            title Auction-App | #{title}
+
+
+        body(data-alerts=`${alert ? alert : ''}`)
+        // HEADER
+        include _header
+
+        //CONTENT
+        block content 
+            h1 This is a placeholder heading
+
+        //FOOTER
+        include _footer
+
+script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js')
+script(src='assets/js/bs-init.js')
+
+
+

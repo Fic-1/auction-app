@@ -9,6 +9,7 @@ const rateLimit = require('express-rate-limit');
 const userRouter = require('./routes/userRoutes');
 const bidRouter = require('./routes/bidRoutes');
 const productRouter = require('./routes/productRoutes');
+const viewRouter = require('./routes/viewRoutes');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 
@@ -44,6 +45,7 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
+app.use('/', viewRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
 app.use('/api/v1/bids', bidRouter);
