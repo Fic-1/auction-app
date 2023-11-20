@@ -36,6 +36,8 @@ const productSchema = new mongoose.Schema({
     type: Date,
     default: Date.now() + 1000 * 60 * 60 * 24 * 3,
   },
+  coverImage: { type: String, default: 'default-no-img.png' },
+  pohots: { type: [String] },
   // Additional product details
 });
 

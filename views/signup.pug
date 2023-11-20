@@ -1,0 +1,31 @@
+extends base
+
+block content
+    section.position-relative.py-4.py-xl-5
+        .container
+            .row.mb-5
+                .col-md-8.col-xl-6.text-center.mx-auto
+                    h1 Sign Up
+                    p Please fill in this form to create an account.
+            .row.d-flex.justify-content-center
+                .col-md-6.col-xl-4(style='margin-top: -29px')
+                    .card.mb-5
+                    form(action='/action_page.php')
+                        .gc004-container(style='background: var(--bs-body-bg); margin-bottom: 17px')
+                            hr
+                            label.form-label.fw-bold(for='email') Email
+                            input(type='text', placeholder='Enter Email', name='email', required='')
+                            label.form-label.fw-bold(for='psw') Password
+                            input(type='password', placeholder='Enter Password', name='psw', required='')
+                            label.form-label.fw-bold(for='email') Repeat Password
+                            input(type='password', placeholder='Repeat Password', name='psw-repeat', required='')
+                            .form-check
+                                input#formCheck-1.form-check-input(type='checkbox', checked='checked', name='remember', style='margin-bottom: 15px')
+                                label.form-check-label(for='formCheck-1') Remember me
+                            p
+                                | By creating an account you agree to our&nbsp;
+                                a.gc004-dodgerblue(href='#') Terms &amp; Privacy
+                                | .
+                            .d-xl-flex.justify-content-xl-center.align-items-xl-center.gc-clearfix(style='display: flex')
+                                button.btn.btn-primary.gc-signupbtn(type='submit', style='background: var(--bs-link-color)')
+                                    | Sign Up

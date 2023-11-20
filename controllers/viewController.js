@@ -12,7 +12,19 @@ exports.getLandingPage = catchAsync(async (req, res, next) => {
 
   //* 3) Render template using the tour data from 1)
   res.status(200).render('landing', {
-    title: 'All tours',
+    title: '--',
     products,
+  });
+});
+
+exports.getLoginPage = catchAsync(async (req, res, next) => {
+  res.status(200).render('login', {
+    title: 'Log in',
+  });
+});
+
+exports.getSignupPage = catchAsync(async (req, res, next) => {
+  res.status(200).render('signup', {
+    title: 'Sign up',
   });
 });
