@@ -11,6 +11,8 @@ nav.navbar.navbar-expand-md.bg-body.py-3
       span.navbar-toggler-icon
     #navcol-2.collapse.navbar-collapse
       ul.navbar-nav.ms-auto
+        li.nav-item
+          a.nav-link(href='/') Home
         li.nav-item.dropdown
           a.dropdown-toggle.nav-link(aria-expanded='false' data-bs-toggle='dropdown' href='#') Products
           .dropdown-menu
@@ -18,9 +20,16 @@ nav.navbar.navbar-expand-md.bg-body.py-3
             a.dropdown-item(href='#') Second Item
             a.dropdown-item(href='#') Third Item
         li.nav-item
-        li.nav-item
-          a.nav-link(href='/') Home
-        li.nav-item
-          a.nav-link(href='#') My Account
-      a.btn.btn-primary.ms-md-2.btn--login(role='button' href='/login') Log in
-      a.btn.btn-primary.ms-md-2.btn--signin(role='button' href='/signup') Sign up
+        
+        if user
+          li.nav-item.dropdown
+            a.dropdown-toggle.nav-link(aria-expanded='false' data-bs-toggle='dropdown' href='#') My account
+            .dropdown-menu
+              a.dropdown-item(href='#') Profile
+              a.dropdown-item(href='#') My products
+              a.dropdown-item(href='/logout') Log out
+          li.nav-item
+        
+        else
+          a.btn.btn-primary.ms-md-2.btn--login(role='button' href='/login') Log in
+          a.btn.btn-primary.ms-md-2.btn--signin(role='button' href='/signup') Sign up

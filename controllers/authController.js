@@ -107,3 +107,33 @@ exports.restrictTo =
     }
     next();
   };
+
+exports.isLoggedIn = async (req, res, next) => {
+  console.log(res.locals);
+  if (req.cookies.jwt) {
+    try {
+      //! Verify token
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET,
+      );
+
+      const currentUser = await User.findById(decoded.id);
+      if (!currentUser) return next();
+      console.log(req.cookies, currentUser);
+
+      //TODO: dodati funkcionalnost nakon izrade reset tokena
+      // if (currentUser.changedPasswordAfter(decoded.iat)) {
+      //   return next();
+      // }
+
+      //! THERE IS A LOGGED IN USER
+      res.locals.user = currentUser; //* Every pug template has acces to res.locals
+
+      return next();
+    } catch (error) {
+      return next();
+    }
+  }
+  next();
+};
