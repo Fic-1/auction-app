@@ -57,8 +57,3 @@ app.all('*', (req, res, next) => {
 app.use(globalErrorHandler);
 
 module.exports = app;
-
-//TODO: Create routes
-//TODO: Create controllers
-//TODO: Add more data to DB
-//TODO: Create templates
