@@ -1,7 +1,8 @@
-import { login } from './login';
+import { login, logout } from './login';
 
 const loginForm = document.querySelector('.form--login');
-
+const logOutBtn = document.querySelector('.logoutbtn');
+console.log(logOutBtn);
 if (loginForm) {
   loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -10,3 +11,5 @@ if (loginForm) {
     login(email, password);
   });
 }
+
+if (logOutBtn) logOutBtn.addEventListener('click', logout);

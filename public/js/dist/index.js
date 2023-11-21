@@ -577,12 +577,15 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 },{}],"f2QDv":[function(require,module,exports) {
 var _login = require("./login");
 const loginForm = document.querySelector(".form--login");
+const logOutBtn = document.querySelector(".logoutbtn");
+console.log(logOutBtn);
 if (loginForm) loginForm.addEventListener("submit", (e)=>{
     e.preventDefault();
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     (0, _login.login)(email, password);
 });
+if (logOutBtn) logOutBtn.addEventListener("click", (0, _login.logout));
 
 },{"./login":"7yHem"}],"7yHem":[function(require,module,exports) {
 /*eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
