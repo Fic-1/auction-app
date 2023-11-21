@@ -576,8 +576,10 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"f2QDv":[function(require,module,exports) {
 var _login = require("./login");
+var _signup = require("./signup");
 const loginForm = document.querySelector(".form--login");
 const logOutBtn = document.querySelector(".logoutbtn");
+const signupForm = document.querySelector(".form--signup");
 console.log(logOutBtn);
 if (loginForm) loginForm.addEventListener("submit", (e)=>{
     e.preventDefault();
@@ -585,9 +587,20 @@ if (loginForm) loginForm.addEventListener("submit", (e)=>{
     const password = document.getElementById("password").value;
     (0, _login.login)(email, password);
 });
+console.log(signupForm);
+if (signupForm) signupForm.addEventListener("submit", (e)=>{
+    console.log("signup event listener");
+    e.preventDefault();
+    const firstName = document.getElementById("fname").value;
+    const lastName = document.getElementById("lname").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const passwordConfirm = document.getElementById("passwordConfirm").value;
+    (0, _signup.signup)(firstName, lastName, email, password, passwordConfirm);
+});
 if (logOutBtn) logOutBtn.addEventListener("click", (0, _login.logout));
 
-},{"./login":"7yHem"}],"7yHem":[function(require,module,exports) {
+},{"./login":"7yHem","./signup":"fNY2o"}],"7yHem":[function(require,module,exports) {
 /*eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "login", ()=>login);
@@ -5035,6 +5048,41 @@ const showAlert = (type, msg)=>{
     window.setTimeout(hideAlert, 5000);
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2Ex4i","f2QDv"], "f2QDv", "parcelRequire37fe")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fNY2o":[function(require,module,exports) {
+/*eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "signup", ()=>signup);
+var _axios = require("axios");
+var _axiosDefault = parcelHelpers.interopDefault(_axios);
+var _alerts = require("./alerts");
+const signup = async (firstName, lastName, email, password, passwordConfirm)=>{
+    console.log("signup");
+    const name = `${firstName}  ${lastName}`;
+    if (password !== passwordConfirm) (0, _alerts.showAlert)("danger", "Passwords do not match");
+    if (!email || !password || !passwordConfirm) (0, _alerts.showAlert)("danger", "Please enter valid information");
+    try {
+        const res = await (0, _axiosDefault.default)({
+            method: "POST",
+            url: "/api/v1/users/signup",
+            data: {
+                name,
+                email,
+                password,
+                passwordConfirm
+            }
+        });
+        console.log(res);
+        if (res.data.status === "success") {
+            (0, _alerts.showAlert)("success", "Signed in successfuly!");
+            window.setTimeout(()=>{
+                location.assign("/"); //* Poslje dodati rutu /me
+            }, 1500);
+        }
+    } catch (error) {
+        (0, _alerts.showAlert)("danger", error.response.data.message);
+    }
+};
+
+},{"axios":"jo6P5","./alerts":"6Mcnf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2Ex4i","f2QDv"], "f2QDv", "parcelRequire37fe")
 
 //# sourceMappingURL=index.js.map
