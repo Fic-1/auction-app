@@ -9,6 +9,10 @@ const router = express.Router();
 
 router.use('/:id/bids', bidRouter);
 
+router
+  .route('/5-latest')
+  .get(productController.aliasLatestProducts, productController.getAllProducts);
+
 router.get('/', productController.getAllProducts);
 router.get('/:id', productController.getProduct);
 router.post('/', authController.protect, productController.createProduct);
