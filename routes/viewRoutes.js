@@ -1,12 +1,18 @@
 const express = require('express');
 const viewController = require('../controllers/viewController');
 const authController = require('../controllers/authController');
+const productController = require('../controllers/productController');
 
 const router = express.Router();
 
 // router.use(viewController.alerts);
 
-router.get('/', authController.isLoggedIn, viewController.getLandingPage);
+router.get(
+  '/',
+  productController.aliasLatestProducts,
+  authController.isLoggedIn,
+  viewController.getLandingPage,
+);
 router.get('/login', authController.isLoggedIn, viewController.getLoginPage);
 router.get('/signup', viewController.getSignupPage);
 

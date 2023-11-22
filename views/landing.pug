@@ -3,10 +3,10 @@ extends base
 block content
     .form-query
         form.search
-            input.search--bar(type='text', placeholder='Search for more than 100.000+ words!')
-            button.search--button
+            input.search--bar(type='text', name="searchBar" style="margin:0" placeholder='Search for active auctions')
+        button.search--button(for="searchBar")
                 span
-                    img(src='assets/img/search-24.png')
+                img(src='assets/img/search-24.png')
     section.d-flex.d-sm-flex.d-xl-flex.justify-content-center.align-items-center.justify-content-sm-center.align-items-sm-center.justify-content-xl-center.landing-welcome(style='position: static;')
         h1.text-center.d-xl-flex.justify-content-xl-center.align-items-xl-center.bounce.animated(style='font-size: 40px;')= `${user ? `Hi ${user.name.split(' ')[0]} 👋`:''}`
             |<br>Welcome to the<br>Auction house!
@@ -20,8 +20,17 @@ block content
                             .card-body.p-4
                                 h4.card-title #{product.name}
                                 p.card-text #{product.description}
-                                .d-flex
-                                    img.rounded-circle.flex-shrink-0.me-3.fit-cover(width='50' height='50' src=`/img/${product.seller.photo === 'default.png' ? product.seller.photo : product.seller.photo + '.jpg' }`)
-                                    div
-                                        p.fw-bold.mb-0= product.seller.name
-                                        p.text-muted.mb-0 LOKACIJA - UPDATE MODELA
+                                .info-products
+                                    .d-flex
+                                        img.rounded-circle.flex-shrink-0.me-3.fit-cover(width='50' height='50' src=`/img/${product.seller.photo === 'default.png' ? product.seller.photo : product.seller.photo + '.jpg' }`)
+                                        div
+                                            p.fw-bold.mb-0= product.seller.name
+                                            p.text-muted.mb-0 LOKACIJA - UPDATE MODELA
+                                    div(style="border-left:1px solid #000;padding: 0px 10px 0px 5px")
+                                    .d-flex
+                                        div
+                                            p.fw-bold.mb-0 Remaining:
+                                            - const oneDay = 24*60*60*1000
+                                            - const remainingTime = product.endDate - Date.now()
+                                            - const remainingDays = Math.round(Math.abs(remainingTime / oneDay))
+                                            p.text-muted.mb-0= `${remainingDays > 1 ? `${remainingDays} days left`: `${remainingDays} day left`}`

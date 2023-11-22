@@ -3,14 +3,16 @@ const Product = require('../models/productsModel');
 const Bid = require('../models/bidsModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const APIFeatures = require('../utils/apiFeatures');
 
 exports.getLandingPage = catchAsync(async (req, res, next) => {
-  //* 1) Get tour data from the collection
-  const products = await Product.find();
-  //TODO: Napraviti funkcionalnost da se dobije limitiran broj rezultata za landing page (npr top-5)
-  //* 2) Build template
+  const features = new APIFeatures(Product.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+  const products = await features.query;
 
-  //* 3) Render template using the tour data from 1)
   res.status(200).render('landing', {
     title: 'Welcome !',
     products,
