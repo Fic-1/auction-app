@@ -1,0 +1,7 @@
+.fit-cover {
+  object-fit: contain;
+}
+
+.navbar-toggler {
+  width: 15vw;
+}

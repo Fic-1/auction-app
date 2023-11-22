@@ -28,3 +28,9 @@ exports.getSignupPage = catchAsync(async (req, res, next) => {
     title: 'Sign up',
   });
 });
+
+exports.getProfilePage = catchAsync(async (req, res, next) => {
+  res.status(200).render('profile', {
+    title: 'My profile',
+  });
+});

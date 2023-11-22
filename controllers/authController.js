@@ -118,7 +118,6 @@ exports.restrictTo =
   };
 
 exports.isLoggedIn = async (req, res, next) => {
-  console.log(res.locals);
   if (req.cookies.jwt) {
     try {
       //! Verify token
@@ -129,7 +128,6 @@ exports.isLoggedIn = async (req, res, next) => {
 
       const currentUser = await User.findById(decoded.id);
       if (!currentUser) return next();
-      console.log(req.cookies, currentUser);
 
       //TODO: dodati funkcionalnost nakon izrade reset tokena
       // if (currentUser.changedPasswordAfter(decoded.iat)) {

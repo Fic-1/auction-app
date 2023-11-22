@@ -1,0 +1,93 @@
+extends base
+
+block content
+    section.flex-row.profile-section(style='display: flex;')
+        aside#sidenav-main.sidenav.navbar.navbar-vertical.navbar-expand-xs.border-0.border-radius-xl.my-3.fixed-left.ms-3(style='position: relative;')
+            .sidenav-header
+                i.fa.fa-times.p-3.cursor-pointer.text-secondary.opacity-5.position-absolute.right-0.top-0.d-none.d-xl-none
+                a.navbar-brand.m-0(href='')
+                hr.horizontal.dark.mt-0
+                #sidenav-collapse-main.collapse.navbar-collapse.w-auto
+                    ul.navbar-nav
+                        span.ps-4.ms-2.text-uppercase.text-xs.font-weight-bolder.opacity-6 Account Pages
+                        li.nav-item
+                            a.nav-link.active(href='')
+                                i.fa.fa-user.active.icon.icon-shape.icon-sm.shadow.border-radius-md.bg-white.text-center.me-2.d-flex.align-items-center.justify-content-center
+                                span.nav-link-text.ms-1
+                                    | Profile
+                                    br
+                        li.nav-item
+                            a.nav-link(href='')
+                                i.fas.fa-box.icon.icon-shape.icon-sm.shadow.border-radius-md.bg-white.text-center.me-2.d-flex.align-items-center.justify-content-center
+                                span.nav-link-text.ms-1
+                                    | My products
+                                    br
+        .container-fluid
+            h3.text-dark.mb-4 My Profile
+            .card.shadow.mb-3
+                .card-header.py-3
+                    p.text-primary.m-0.fw-bold User Settings
+                .card-body
+                    form
+                        .row(style='margin-bottom: 25px;text-align: left;')
+                            .col-sm-4.col-md-4.col-lg-3.col-xl-2.col-xxl-2(style='display: inline;text-align: center;margin-bottom: 25px;')
+                                img.rounded-circle.mb-3.mt-4.img-fluid(src=`img/${user.photo === 'default.png' ? user.photo : user.photo + '.jpg' }`, style='display: inline;max-height: 110px;')
+                                br
+                                button#photoBtn.btn.btn-primary.btn-sm(type='button') Change Photo
+                            .col-sm-8.col-md-8.col-lg-9.col-xl-10.col-xxl-10.align-self-center
+                                .row
+                                    .col-md-12.text-start
+                                        .mb-3
+                                            label.form-label(for='email')
+                                                strong Email Address
+                                            input#email.form-control(type='email', placeholder=`${user.email}`, name='email', required='')
+                                    .col-md-12.text-start
+                                        .mb-3
+                                            label.form-label(for='username')
+                                                strong Username
+                                            input.form-control(type='text', placeholder=`${user.name}`, name='username', required='')
+                            .col-md-6.text-start
+                                .mb-3
+                                    label.form-label(for='username')
+                                        strong Password
+                                    input#password.form-control(type='password', placeholder='Password')
+                            .col-md-6.text-start
+                                .mb-3
+                                    label.form-label(for='username')
+                                        strong Confirm Password
+                                    input#verifyPassword.form-control(type='password', placeholder='Password')
+                            .col-md-6
+                                .mb-3
+                                    label.form-label(for='first_name')
+                                        strong First Name
+                                    input.form-control(type='text', placeholder=`${user.name.split(' ')[0]}`, name='first_name', required='')
+                            .col-md-6
+                                .mb-3
+                                    label.form-label(for='last_name')
+                                        strong Last Name
+                                    input.form-control(type='text', placeholder=`${user.name.split(' ')[1]}`, name='last_name', required='')
+                            .col-md-6
+                                .mb-3
+                                    label.form-label(for='country')
+                                        strong Country
+                                    select#countryId.form-select.countries.order-alpha.limit-pop-1000000.presel-MX.group-continents.group-order-na(name='country', required='')
+                            .col-md-6
+                                .mb-3
+                                    label.form-label(for='city')
+                                        strong State
+                                    select#stateId.form-select.states.order-alpha(name='state', required='')
+                            .col-md-6
+                                .mb-3
+                                    label.form-label(for='city')
+                                        strong City
+                                    input#cityId.form-control(type='text', placeholder='Los Angeles', name='city', required='')
+                            .col-md-6
+                                .mb-3
+                                    label.form-label(for='address')
+                                        strong Address
+                                    input.form-control(type='text', placeholder='Sunset Blvd, 38', name='address')
+                            .col
+                                p#emailErrorMsg.text-danger(style='display:none;')
+                                p#passwordErrorMsg.text-danger(style='display:none;')
+                            .col-md-12(style='text-align: right;margin-top: 5px;')
+                                button#submitBtn.btn.btn-primary.btn-sm(type='submit') Save Settings

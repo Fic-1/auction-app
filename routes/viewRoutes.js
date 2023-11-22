@@ -10,6 +10,7 @@ router.get('/', authController.isLoggedIn, viewController.getLandingPage);
 router.get('/login', authController.isLoggedIn, viewController.getLoginPage);
 router.get('/signup', viewController.getSignupPage);
 
+router.get('/me', authController.protect, viewController.getProfilePage);
 // router.get(
 //   '/tour/:tourSlug',
 //   authController.isLoggedIn,

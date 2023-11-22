@@ -8,11 +8,10 @@ h1 {
 }
 
 form {
-  border: 1px solid #ccc;
+  border: 1px none #ccc ;
 }
 
-input[type='text'],
-input[type='password'] {
+input[type=text], input[type=password] {
   width: 100%;
   padding: 15px;
   margin: 5px 0 22px 0;
@@ -21,8 +20,7 @@ input[type='password'] {
   background: #f1f1f1;
 }
 
-input[type='text']:focus,
-input[type='password']:focus {
+input[type=text]:focus, input[type=password]:focus {
   background-color: #ddd;
   outline: none;
 }
@@ -36,9 +34,8 @@ hr {
   color: dodgerblue;
 }
 
-button,
-.gc-signupbtn {
-  background-color: #04aa6d;
+button, .gc-signupbtn {
+  background-color: #04AA6D;
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -57,8 +54,7 @@ button:hover {
   background-color: #f44336;
 }
 
-.gc-cancelbtn,
-.gc-signupbtn {
+.gc-cancelbtn, .gc-signupbtn {
   float: left;
   width: 50%;
 }
@@ -68,18 +64,14 @@ button:hover {
 }
 
 .gc-clearfix::after {
-  content: '';
+  content: "";
   clear: both;
   display: table;
 }
 
 @media screen and (max-width: 300px) {
-  .gc-cancelbtn,
-  .gc-signupbtn {
+  .gc-cancelbtn, .gc-signupbtn {
     width: 100%;
   }
 }
 
-.logoutbtn {
-  color: red;
-}
