@@ -1,0 +1,49 @@
+.product-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 95vw;
+  height: 100dvh;
+  margin: 2%;
+}
+
+body {
+  background-color: brown;
+}
+
+.product-card {
+  margin: 5%;
+  width: 100%;
+}
+.card-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.product-col {
+  display: flex;
+  align-items: center;
+  height: 30dvh;
+  flex: 40;
+  background-color: bisque;
+}
+.bid-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 30dvh;
+  flex: 60;
+  background-color: blueviolet;
+  margin-left: 2%;
+}
+.live-col {
+  /* display: none; */
+  height: 30dvh;
+  flex: 100;
+  background-color: bisque;
+}
+.product-img {
+  width: 35vw;
+  height: 23dvh;
+}
