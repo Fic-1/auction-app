@@ -63,7 +63,7 @@
 
 .landing-welcome {
   height: 50vh;
-  background: url("../../assets/img/background-1.jpg") center / cover no-repeat;
+  background: url("../../../assets/img/assets/img/background-1.jpg") center / cover no-repeat;
 }
 
 .landing-auctions {

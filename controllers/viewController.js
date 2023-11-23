@@ -36,3 +36,9 @@ exports.getProfilePage = catchAsync(async (req, res, next) => {
     title: 'My profile',
   });
 });
+
+exports.getProductPage = catchAsync(async (req, res, next) => {
+  res.status(200).render('productPage', {
+    title: 'Name of a product',
+  });
+});

@@ -1,0 +1,64 @@
+extends base
+
+block content 
+    section.product-section
+      .product-container
+        .card.text-center.product-card
+          .card-header
+            ul.nav.nav-tabs.card-header-tabs.card-header-tabs
+              li.nav-item
+                a.nav-link.active(aria-current='true', href='#') Active
+              li.nav-item
+                a.nav-link(href='#')
+                  span Live bids
+              li.nav-item
+                a.nav-link.active(aria-disabled='true', href='#', tabindex='-1') Disabled
+          .card-body.card-flex
+            .product-col
+              img.product-img(src='assets/img/vaza.jpg')
+            .bid-col
+              .row.g-3
+                .col
+                  input.form-control(type='text', aria-label='First name', placeholder='First name')
+                .col
+                  input.form-control(type='text', aria-label='Last name', placeholder='Last name')
+              hr.style-one
+              .row.g-3
+                .col
+                  input.form-control(type='text', aria-label='First name', placeholder='First name')
+                .col
+                  input.form-control(type='text', aria-label='Last name', placeholder='Last name')
+              input.btn.btn-primary(type='submit', value='Add bid')
+          .card-body.none(style='overflow: visible')
+            .product-col
+              img.product-img(src='assets/img/vaza.jpg')
+            .bid-col
+              .card-flex-col
+                .websocket-background
+                  .imessage
+                    p.from-them
+                      | First N.
+                      br
+                      | Added bid: 
+                      strong 80&euro;
+                    p.from-me
+                      | You bid for:
+                      br
+                      strong 95&euro;
+                    p.from-them
+                      | First N.
+                      br
+                      | Added bid: 
+                      strong 100&euro;
+                    p.from-them
+                      | First N.
+                      br
+                      | Added bid: 
+                      strong 105&euro;
+                    p.from-me
+                      | You bid for:
+                      br
+                      strong 110&euro;
+                .card-flex.websocket-bid
+                  input.websocket-form.form-control(type='text', aria-label='First name', placeholder='Enter amount', style='margin: 0px 5px; padding: 1vh')
+                  input.btn.btn-primary(type='submit', value='Add bid 📤')
