@@ -75,11 +75,10 @@ block content
           button.accordion-button.button-margin.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseTwo", aria-expanded="false", aria-controls="collapseTwo")
               strong| Seller
           #collapseTwo.accordion-collapse.collapse(data-bs-parent="#accordionExample")
-            .accordion-body
-              strong This is the second item&apos;s accordion body.
-              | It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It&apos;s also worth noting that just about any HTML can go within the
-              code .accordion-body
-              | , though the transition does limit overflow.
+            .accordion-body 
+              img(src=`/img/${product.seller.photo === 'default.png' ? product.seller.photo : product.seller.photo + '.jpg' }`)
+              p=`${product.seller.name}`
+            
         .accordion-item
           button.accordion-button.button-margin.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseThree", aria-expanded="false", aria-controls="collapseThree")
               strong| Shipping details
