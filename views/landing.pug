@@ -32,6 +32,8 @@ block content
                                             div
                                                 p.fw-bold.mb-0 Remaining:
                                                 - const oneDay = 24*60*60*1000
+                                                - const oneHour = 60*60*1000
                                                 - const remainingTime = product.endDate - Date.now()
                                                 - const remainingDays = Math.round(Math.abs(remainingTime / oneDay))
-                                                p.text-muted.mb-0= `${remainingDays > 1 ? `${remainingDays} days left`: `${remainingDays} day left`}`
+                                                - const remainingHours = Math.round(Math.abs(remainingTime / oneHour))
+                                                p.text-muted.mb-0= `${remainingDays > 1 ? `${remainingDays} days left`: `${remainingHours} day left`}`

@@ -5,13 +5,18 @@
 .product-section {
   display: flex;
   margin-top: 3dvh;
-  /* align-items: center; */
+  align-items: center;
   justify-content: center;
-  height: 100dvh;
+  height: fit-content;
+  flex-direction: column;
 }
 
 .product-container {
   width: 70%;
+}
+
+.button-margin {
+  margin: 0px;
 }
 
 .product-card {

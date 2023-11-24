@@ -8,15 +8,15 @@ block content
           .card-header
             ul.nav.nav-tabs.card-header-tabs.card-header-tabs
               li.nav-item
-                a.nav-link.active(aria-current='true', href='#') Active
+                a.nav-link.active(aria-current='true', href='#')= `${product.name}`
               li.nav-item
                 a.nav-link(href='#')
-                  span Live bids
+                  span Live biddings
               li.nav-item
-                a.nav-link.active(aria-disabled='true', href='#', tabindex='-1') Disabled
+                a.nav-link(disabled='true', href='#', tabindex='-1') Disabled
           .card-body.none
             .product-col
-              img.product-img(src='/background_img/vaza.jpg')
+              img.product-img(src=`/background_img/${product.coverImage}`)
             .bid-col
               .row.g-3
                 .col
@@ -32,7 +32,7 @@ block content
               input.btn.btn-primary(type='submit', value='Add bid')
           .card-body.card-flex(style='overflow: visible')
             .product-col
-              img.product-img(src='/background_img/vaza.jpg')
+              img.product-img(src=`/background_img/${product.coverImage}`)
             .bid-col
               .card-flex-col
                 .websocket-background
@@ -63,3 +63,27 @@ block content
                 .card-flex.websocket-bid
                   input.websocket-form.form-control(type='text', aria-label='First name', placeholder='Enter amount', style='margin: 0px 5px; padding: 1vh')
                   input.btn.btn-primary(type='submit', value='Add bid 📤')
+      #accordionExample.accordion.product-container.mt-2
+        .accordion-item
+          button.accordion-button.button-margin(type="button", data-bs-toggle="collapse", data-bs-target="#collapseOne", aria-expanded="true", aria-controls="collapseOne")
+              strong| Description
+          #collapseOne.accordion-collapse.collapse.show(data-bs-parent="#accordionExample")
+            .accordion-body= `${product.description}`
+        .accordion-item
+          button.accordion-button.button-margin.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseTwo", aria-expanded="false", aria-controls="collapseTwo")
+              strong| Seller
+          #collapseTwo.accordion-collapse.collapse(data-bs-parent="#accordionExample")
+            .accordion-body
+              strong This is the second item&apos;s accordion body.
+              | It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It&apos;s also worth noting that just about any HTML can go within the
+              code .accordion-body
+              | , though the transition does limit overflow.
+        .accordion-item
+          button.accordion-button.button-margin.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseThree", aria-expanded="false", aria-controls="collapseThree")
+              strong| Shipping details
+          #collapseThree.accordion-collapse.collapse(data-bs-parent="#accordionExample")
+            .accordion-body
+              strong This is the third item&apos;s accordion body.
+              | It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It&apos;s also worth noting that just about any HTML can go within the
+              code .accordion-body
+              | , though the transition does limit overflow.
