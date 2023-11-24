@@ -62,6 +62,9 @@
 }
 
 .landing-welcome {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   height: 50vh;
   background: url('/assets/img/background-1.jpg') center / cover no-repeat;
 }
