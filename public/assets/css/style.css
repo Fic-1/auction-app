@@ -17,8 +17,7 @@ body {
 
 .product-card {
   margin: 5%;
-  height: 30dvh;
-  scale: 1;
+  height: fit-content;
 }
 
 @media (min-width: 300px) {
