@@ -19,6 +19,22 @@ exports.getLandingPage = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getProduct = catchAsync(async (req, res, next) => {
+  //* 1) Get data for requested tour (including revires and tour guides)
+  const product = await Product.findOne({ _id: req.params.id });
+
+  if (!product)
+    return next(new AppError('There is no product with that name.', 404));
+
+  // const users = await User.find();
+  //* 2) build template
+  //* 3) Render the template using the data from 1)
+  res.status(200).render('productPage', {
+    title: `${product.name}`,
+    product,
+  });
+});
+
 exports.getLoginPage = catchAsync(async (req, res, next) => {
   res.status(200).render('login', {
     title: 'Log in',

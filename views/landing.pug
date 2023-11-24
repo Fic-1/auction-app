@@ -6,7 +6,7 @@ block content
             input.search--bar(type='text', name="searchBar" style="margin:0" placeholder='Search for active auctions')
         button.search--button(for="searchBar")
                 span
-                img(src='assets/img/search-24.png')
+                img(src='/assets/img/search-24.png')
     section.d-flex.d-sm-flex.d-xl-flex.justify-content-center.align-items-center.justify-content-sm-center.align-items-sm-center.justify-content-xl-center.landing-welcome(style='position: static;')
         h1.text-center.d-xl-flex.justify-content-xl-center.align-items-xl-center.bounce.animated(style='font-size: 40px;')= `${user ? `Hi ${user.name.split(' ')[0]} 👋`:''}`
             |<br>Welcome to the<br>Auction house!

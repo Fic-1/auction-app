@@ -30,7 +30,7 @@ nav.navbar.navbar-expand-md.bg-body.py-3
               .dropdown-divider
               a.dropdown-item.logoutbtn(href='#') Log out
           li.nav-item
-            img.rounded-circle.img-fluid(src=`img/${user.photo === 'default.png' ? user.photo : user.photo + '.jpg' }`, style='display: inline;max-height: 4vh;')
+            img.rounded-circle.img-fluid(src=`/img/${user.photo === 'default.png' ? user.photo : user.photo + '.jpg' }`, style='display: inline;max-height: 4vh;')
         
         else
           a.btn.btn-primary.ms-md-2.btn--login(role='button' href='/login') Log in
