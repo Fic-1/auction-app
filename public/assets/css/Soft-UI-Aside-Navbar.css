@@ -961,7 +961,7 @@ a {
 .search--button {
   border-radius: 30px;
   padding: 0.5rem;
-  margin-left: -2.78rem;
+  /* margin-left: -2.78rem; */
   background-color: rgba(0, 0, 0, 0);
   border: none;
   cursor: pointer;
