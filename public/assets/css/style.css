@@ -2,21 +2,19 @@
   display: none;
 }
 
-.product-container {
+.product-section {
   display: flex;
-  align-items: flex-start;
+  margin-top: 3dvh;
+  /* align-items: center; */
   justify-content: center;
-  width: 95vw;
   height: 100dvh;
-  margin: 2%;
 }
 
-body {
-  /* background-color: brown; */
+.product-container {
+  width: 70%;
 }
 
 .product-card {
-  margin: 5%;
   height: fit-content;
 }
 
@@ -27,17 +25,81 @@ body {
     justify-content: space-evenly;
     flex-direction: column;
   }
+  .product-container {
+    width: 100%;
+  }
+  .bid-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex: 80;
+    margin-left: 2%;
+    width: fit-content;
+  }
+  .product-img {
+    width: fit-content;
+    height: 23dvh;
+  }
 }
 
 @media (min-width: 700px) {
   .card-flex {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
-    flex-direction: row;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .product-container {
+    width: 70%;
+  }
+  .bid-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex: 80;
+    margin-left: 2%;
+    width: fit-content;
+  }
+  .product-col {
+    justify-content: center;
   }
 }
 
+@media (min-width: 1200px) {
+  .card-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: row;
+  }
+  .product-container {
+    width: 70%;
+  }
+  .bid-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex: 80;
+    margin-left: 2%;
+    width: fit-content;
+  }
+  .product-col {
+    display: flex;
+    align-items: center;
+    height: 30dvh;
+    flex: 40;
+    width: auto;
+  }
+}
+
+@media (min-width: 1700px) {
+  .product-container {
+    width: 50%;
+  }
+}
 .card-flex-col {
   display: flex;
   align-items: center;
@@ -51,30 +113,12 @@ body {
   align-items: center;
   height: 30dvh;
   flex: 40;
-  /* background-color: bisque; */
-}
-
-.bid-col {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  flex: 80;
-  /* background-color: blueviolet; */
-  margin-left: 2%;
-  width: 30vw;
-}
-
-.product-img {
-  width: 20vw;
-  height: 23dvh;
 }
 
 .websocket-background {
   margin-bottom: 10px;
   height: 30dvh;
   width: inherit;
-  /* background-color: chartreuse; */
   border: 0px solid;
   overflow: scroll;
 }
@@ -98,6 +142,7 @@ body {
   margin: 0 auto 1rem;
   max-width: 600px;
   padding: 0.5rem 1.5rem;
+  width: auto;
 }
 
 .imessage p {
