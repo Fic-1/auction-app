@@ -23,7 +23,7 @@
   height: fit-content;
 }
 
-@media (min-width: 300px) {
+@media (min-width: 10px) {
   .card-flex {
     display: flex;
     align-items: center;
@@ -43,7 +43,7 @@
     width: fit-content;
   }
   .product-img {
-    width: fit-content;
+    width: inherit;
     height: 23dvh;
   }
   .search {
@@ -51,7 +51,7 @@
   }
 }
 
-@media (min-width: 700px) {
+@media (min-width: 768px) {
   .card-flex {
     display: flex;
     align-items: center;
@@ -75,6 +75,10 @@
   }
   .search {
     width: 60vw;
+  }
+  .product-img {
+    width: min-content;
+    height: 23dvh;
   }
 }
 
@@ -103,6 +107,10 @@
     height: 30dvh;
     flex: 40;
     width: auto;
+  }
+  .product-img {
+    width: fit-content;
+    height: 23dvh;
   }
 }
 
