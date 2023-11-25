@@ -9,8 +9,7 @@ block content
             button.search--button(for="name")
                 span
                 img(src='/assets/img/search-24.png')
-        each product in results
-            - console.log(product)
+        each product in products
             a(href=`/products/${product.id}`) 
                 .row
                     .col-md-12
@@ -24,9 +23,14 @@ block content
                                         p.card-text
                                         | #{product.description}
                                         p.card-text
-                                        - const oneDay = 24*60*60*1000
-                                        - const oneHour = 60*60*1000
-                                        - const remainingTime = product.endDate - Date.now()
-                                        - const remainingDays = Math.round(Math.abs(remainingTime / oneDay))
-                                        - const remainingHours = Math.round(Math.abs(remainingTime / oneHour))
-                                        small.text-body-secondary= `Lasts for: ${remainingDays > 1 ? `${remainingDays} hours left`: `${remainingHours} hour left`}`
+                                            - const oneDay = 24*60*60*1000
+                                            - const oneHour = 60*60*1000
+                                            - let remainingStr
+                                            - const remainingTime = product.endDate - Date.now()
+                                            - if(remainingTime > 0) 
+                                                - const remainingDays = Math.round(Math.abs(remainingTime / oneDay)) 
+                                                - const remainingHours = Math.round(Math.abs(remainingTime / oneHour))
+                                                - remainingStr = `${remainingDays > 1 ? `${remainingDays} days left`: `${remainingHours} day left`}`
+                                                p.text-muted.mb-0= `${remainingStr}`
+                                            - if(remainingTime < 0) 
+                                                p.text-muted.mb-0 Auction has ended

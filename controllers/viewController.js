@@ -20,21 +20,20 @@ exports.getLandingPage = catchAsync(async (req, res, next) => {
 });
 
 exports.getSearchResults = catchAsync(async (req, res, next) => {
-  const query = `$regex: /.*${req.query.name}.*/`;
-  const results = await Product.find({
+  const results = Product.find({
     name: { $regex: req.query.name, $options: 'i' },
   });
-  // const features = new APIFeatures(results, req.query)
-  //   .filter()
-  //   .sort()
-  //   .limitFields()
-  //   .paginate();
-  // const products = await features.query;
+  req.query.sort = '-endDate';
+  const features = new APIFeatures(results, req.query)
+    .sort()
+    .limitFields()
+    .paginate();
+  const products = await features.query;
 
   res.status(200).render('searchResults', {
     title: 'Search results',
     count: results.length,
-    results,
+    products,
   });
 });
 
