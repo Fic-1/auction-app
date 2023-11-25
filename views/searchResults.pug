@@ -1,0 +1,32 @@
+extends base
+block append head 
+  link(rel='stylesheet', href='/assets/css/style.css')
+block content
+    .container
+        .form-query
+        form.search(action="/searchResults" style="margin: auto; padding: 10px")
+            input.search--bar(type='text', name="name" style="margin:0" placeholder='Search for active auctions')
+            button.search--button(for="name")
+                span
+                img(src='/assets/img/search-24.png')
+        each product in results
+            - console.log(product)
+            a(href=`/products/${product.id}`) 
+                .row
+                    .col-md-12
+                        .card.mb-3(style='max-width: 100%;')
+                            .row.g-0
+                                .col-md-4
+                                    img.img-fluid.rounded-start(src=`/background_img/${product.coverImage}` alt=`${product.name}`)
+                                .col-md-8
+                                    .card-body
+                                        h5.card-title #{product.name}
+                                        p.card-text
+                                        | #{product.description}
+                                        p.card-text
+                                        - const oneDay = 24*60*60*1000
+                                        - const oneHour = 60*60*1000
+                                        - const remainingTime = product.endDate - Date.now()
+                                        - const remainingDays = Math.round(Math.abs(remainingTime / oneDay))
+                                        - const remainingHours = Math.round(Math.abs(remainingTime / oneHour))
+                                        small.text-body-secondary= `Lasts for: ${remainingDays > 1 ? `${remainingDays} hours left`: `${remainingHours} hour left`}`

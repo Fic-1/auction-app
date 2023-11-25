@@ -19,6 +19,11 @@ router.get(
   authController.isLoggedIn,
   viewController.getLandingPage,
 );
+router.get(
+  '/searchResults',
+  authController.isLoggedIn,
+  viewController.getSearchResults,
+);
 router.get('/login', authController.isLoggedIn, viewController.getLoginPage);
 router.get('/signup', viewController.getSignupPage);
 

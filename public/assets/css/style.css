@@ -46,6 +46,9 @@
     width: fit-content;
     height: 23dvh;
   }
+  .search {
+    width: 75vw;
+  }
 }
 
 @media (min-width: 700px) {
@@ -69,6 +72,9 @@
   }
   .product-col {
     justify-content: center;
+  }
+  .search {
+    width: 60vw;
   }
 }
 

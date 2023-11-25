@@ -19,6 +19,25 @@ exports.getLandingPage = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getSearchResults = catchAsync(async (req, res, next) => {
+  const query = `$regex: /.*${req.query.name}.*/`;
+  const results = await Product.find({
+    name: { $regex: req.query.name, $options: 'i' },
+  });
+  // const features = new APIFeatures(results, req.query)
+  //   .filter()
+  //   .sort()
+  //   .limitFields()
+  //   .paginate();
+  // const products = await features.query;
+
+  res.status(200).render('searchResults', {
+    title: 'Search results',
+    count: results.length,
+    results,
+  });
+});
+
 exports.getProduct = catchAsync(async (req, res, next) => {
   //* 1) Get data for requested tour (including revires and tour guides)
   const product = await Product.findOne({ _id: req.params.id });
