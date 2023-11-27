@@ -582,7 +582,6 @@ const loginForm = document.querySelector(".form--login");
 const logOutBtn = document.querySelector(".logoutbtn");
 const signupForm = document.querySelector(".form--signup");
 const productTabs = document.querySelector(".nav-tabs");
-const liveBids = document.querySelector(".websocket-background");
 console.log(productTabs);
 if (loginForm) loginForm.addEventListener("submit", (e)=>{
     e.preventDefault();
@@ -603,7 +602,6 @@ if (signupForm) signupForm.addEventListener("submit", (e)=>{
 });
 if (logOutBtn) logOutBtn.addEventListener("click", (0, _login.logout));
 if (productTabs) productTabs.addEventListener("click", (0, _productPage.switchTabs));
-if (liveBids) liveBids.scrollTop = liveBids.scrollHeight;
 
 },{"./login":"7yHem","./productPage":"c9xgY","./signup":"fNY2o"}],"7yHem":[function(require,module,exports) {
 /*eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -5058,13 +5056,21 @@ const showAlert = (type, msg)=>{
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "switchTabs", ()=>switchTabs);
 const switchTabs = (e)=>{
+    const liveBids = document.querySelector(".websocket-background");
     const tabProduct = e.target.closest("#product");
     const tabLive = e.target.closest("#liveBid");
     const product = document.getElementById("product");
+    const productContent = document.getElementById("productContent");
     const live = document.getElementById("liveBid");
+    const liveContent = document.getElementById("liveBidContent");
     if (!tabProduct && !tabLive) return;
     product.classList.toggle("active");
+    productContent.classList.toggle("none");
+    productContent.classList.toggle("card-flex");
     live.classList.toggle("active");
+    liveContent.classList.toggle("none");
+    liveContent.classList.toggle("card-flex");
+    liveBids.scrollTop = liveBids.scrollHeight;
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fNY2o":[function(require,module,exports) {

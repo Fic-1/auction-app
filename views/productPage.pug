@@ -14,7 +14,7 @@ block content
                   span Live biddings
               li.nav-item
                 a.nav-link#checkoutLink(disabled='true', href='#', tabindex='-1') Disabled
-          .card-body.none
+          #productContent.card-body.card-flex
             .product-col
               img.product-img(src=`/background_img/${product.coverImage}`)
             .bid-col
@@ -30,36 +30,26 @@ block content
                 .col
                   input.form-control(type='text', aria-label='Last name', placeholder='Last name')
               input.btn.btn-primary(type='submit', value='Add bid')
-          .card-body.card-flex(style='overflow: visible')
+          #liveBidContent.card-body.none(style='overflow: visible')
             .product-col
               img.product-img(src=`/background_img/${product.coverImage}`)
             .bid-col
               .card-flex-col
                 .websocket-background
                   .imessage
-                    p.from-them
-                      | First N.
-                      br
-                      | Added bid: 
-                      strong 80&euro;
-                    p.from-me
-                      | You bid for:
-                      br
-                      strong 95&euro;
-                    p.from-them
-                      | First N.
-                      br
-                      | Added bid: 
-                      strong 100&euro;
-                    p.from-them
-                      | First N.
-                      br
-                      | Added bid: 
-                      strong 105&euro;
-                    p.from-me
-                      | You bid for:
-                      br
-                      strong 110&euro;
+                    - console.log(user)
+                    each bid in product.bids
+                      - if(user.email === bid.bidder)
+                        p.from-me #{bid.bidder} 
+                          br
+                          span Added bid: 
+                          strong #{bid.amount}
+                      - if(user.email !== bid.bidder)  
+                        p.from-them #{bid.bidder} 
+                          br
+                          span Added bid: 
+                          strong #{bid.amount}
+
                 .card-flex.websocket-bid
                   input.websocket-form.form-control(type='text', aria-label='First name', placeholder='Enter amount', style='margin: 0px 5px; padding: 1vh')
                   input.btn.btn-primary(type='submit', value='Add bid 📤')

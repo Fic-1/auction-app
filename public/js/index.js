@@ -6,7 +6,6 @@ const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.logoutbtn');
 const signupForm = document.querySelector('.form--signup');
 const productTabs = document.querySelector('.nav-tabs');
-const liveBids = document.querySelector('.websocket-background');
 
 console.log(productTabs);
 if (loginForm) {
@@ -36,5 +35,3 @@ if (logOutBtn) logOutBtn.addEventListener('click', logout);
 if (productTabs) {
   productTabs.addEventListener('click', switchTabs);
 }
-
-if (liveBids) liveBids.scrollTop = liveBids.scrollHeight;
