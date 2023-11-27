@@ -34,6 +34,7 @@ exports.getSearchResults = catchAsync(async (req, res, next) => {
     title: 'Search results',
     count: results.length,
     products,
+    query: req.query,
   });
 });
 

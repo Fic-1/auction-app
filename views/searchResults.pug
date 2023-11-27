@@ -9,28 +9,35 @@ block content
             button.search--button(for="name")
                 span
                 img(src='/assets/img/search-24.png')
-        each product in products
-            a(href=`/products/${product.id}`) 
-                .row
-                    .col-md-12
-                        .card.mb-3(style='max-width: 100%;')
-                            .row.g-0
-                                .col-md-4
-                                    img.img-fluid.rounded-start(src=`/background_img/${product.coverImage}` alt=`${product.name}`)
-                                .col-md-8
-                                    .card-body
-                                        h5.card-title #{product.name}
-                                        p.card-text
-                                        | #{product.description}
-                                        p.card-text
-                                            - const oneDay = 24*60*60*1000
-                                            - const oneHour = 60*60*1000
-                                            - let remainingStr
-                                            - const remainingTime = product.endDate - Date.now()
-                                            - if(remainingTime > 0) 
-                                                - const remainingDays = Math.round(Math.abs(remainingTime / oneDay)) 
-                                                - const remainingHours = Math.round(Math.abs(remainingTime / oneHour))
-                                                - remainingStr = `${remainingDays > 1 ? `${remainingDays} days left`: `${remainingHours} day left`}`
-                                                p.text-muted.mb-0= `${remainingStr}`
-                                            - if(remainingTime < 0) 
-                                                p.text-muted.mb-0 Auction has ended
+        if !products.length
+            .row
+                .error
+                .error__title
+                    h2.heading-secondary.heading-secondary--error= `No results for "${query.name}"`
+                    h2.error__emoji Try again 🔎
+        else
+            each product in products  
+                a(href=`/products/${product.id}`) 
+                    .row
+                        .col-md-12
+                            .card.mb-3(style='max-width: 100%;')
+                                .row.g-0
+                                    .col-md-4
+                                        img.img-fluid.rounded-start(src=`/background_img/${product.coverImage}` alt=`${product.name}`)
+                                    .col-md-8
+                                        .card-body
+                                            h5.card-title #{product.name}
+                                            p.card-text
+                                            | #{product.description}
+                                            p.card-text
+                                                - const oneDay = 24*60*60*1000
+                                                - const oneHour = 60*60*1000
+                                                - let remainingStr
+                                                - const remainingTime = product.endDate - Date.now()
+                                                - if(remainingTime > 0) 
+                                                    - const remainingDays = Math.round(Math.abs(remainingTime / oneDay)) 
+                                                    - const remainingHours = Math.round(Math.abs(remainingTime / oneHour))
+                                                    - remainingStr = `${remainingDays > 1 ? `${remainingDays} days left`: `${remainingHours} day left`}`
+                                                    p.text-muted.mb-0= `${remainingStr}`
+                                                - if(remainingTime < 0) 
+                                                    p.text-muted.mb-0 Auction has ended
