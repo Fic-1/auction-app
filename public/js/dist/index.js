@@ -576,11 +576,14 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"f2QDv":[function(require,module,exports) {
 var _login = require("./login");
+var _productPage = require("./productPage");
 var _signup = require("./signup");
 const loginForm = document.querySelector(".form--login");
 const logOutBtn = document.querySelector(".logoutbtn");
 const signupForm = document.querySelector(".form--signup");
-console.log(logOutBtn);
+const productTabs = document.querySelector(".nav-tabs");
+const liveBids = document.querySelector(".websocket-background");
+console.log(productTabs);
 if (loginForm) loginForm.addEventListener("submit", (e)=>{
     e.preventDefault();
     const email = document.getElementById("email").value;
@@ -599,8 +602,10 @@ if (signupForm) signupForm.addEventListener("submit", (e)=>{
     (0, _signup.signup)(firstName, lastName, email, password, passwordConfirm);
 });
 if (logOutBtn) logOutBtn.addEventListener("click", (0, _login.logout));
+if (productTabs) productTabs.addEventListener("click", (0, _productPage.switchTabs));
+if (liveBids) liveBids.scrollTop = liveBids.scrollHeight;
 
-},{"./login":"7yHem","./signup":"fNY2o"}],"7yHem":[function(require,module,exports) {
+},{"./login":"7yHem","./productPage":"c9xgY","./signup":"fNY2o"}],"7yHem":[function(require,module,exports) {
 /*eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "login", ()=>login);
@@ -5046,6 +5051,20 @@ const showAlert = (type, msg)=>{
     const markup = `<div class="alert alert-${type}">${msg}</div>`;
     document.querySelector("body").insertAdjacentHTML("afterbegin", markup);
     window.setTimeout(hideAlert, 5000);
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"c9xgY":[function(require,module,exports) {
+/*eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "switchTabs", ()=>switchTabs);
+const switchTabs = (e)=>{
+    const tabProduct = e.target.closest("#product");
+    const tabLive = e.target.closest("#liveBid");
+    const product = document.getElementById("product");
+    const live = document.getElementById("liveBid");
+    if (!tabProduct && !tabLive) return;
+    product.classList.toggle("active");
+    live.classList.toggle("active");
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fNY2o":[function(require,module,exports) {

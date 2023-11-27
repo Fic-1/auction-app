@@ -1,11 +1,14 @@
 import { login, logout } from './login';
+import { switchTabs } from './productPage';
 import { signup } from './signup';
 
 const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.logoutbtn');
 const signupForm = document.querySelector('.form--signup');
+const productTabs = document.querySelector('.nav-tabs');
+const liveBids = document.querySelector('.websocket-background');
 
-console.log(logOutBtn);
+console.log(productTabs);
 if (loginForm) {
   loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -29,3 +32,9 @@ if (signupForm) {
 }
 
 if (logOutBtn) logOutBtn.addEventListener('click', logout);
+
+if (productTabs) {
+  productTabs.addEventListener('click', switchTabs);
+}
+
+if (liveBids) liveBids.scrollTop = liveBids.scrollHeight;

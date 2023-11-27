@@ -314,3 +314,14 @@ h2 {
     margin: 0.5rem 0;
   }
 }
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.websocket-background::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.websocket-background {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

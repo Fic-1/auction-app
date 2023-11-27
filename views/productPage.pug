@@ -8,12 +8,12 @@ block content
           .card-header
             ul.nav.nav-tabs.card-header-tabs.card-header-tabs
               li.nav-item
-                a.nav-link.active(aria-current='true', href='#')= `${product.name}`
+                a.nav-link.active#product(aria-current='true', href='#')= `${product.name}`
               li.nav-item
-                a.nav-link(href='#')
+                a.nav-link#liveBid(href='#')
                   span Live biddings
               li.nav-item
-                a.nav-link(disabled='true', href='#', tabindex='-1') Disabled
+                a.nav-link#checkoutLink(disabled='true', href='#', tabindex='-1') Disabled
           .card-body.none
             .product-col
               img.product-img(src=`/background_img/${product.coverImage}`)
