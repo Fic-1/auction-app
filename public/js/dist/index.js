@@ -582,14 +582,12 @@ const loginForm = document.querySelector(".form--login");
 const logOutBtn = document.querySelector(".logoutbtn");
 const signupForm = document.querySelector(".form--signup");
 const productTabs = document.querySelector(".nav-tabs");
-console.log(productTabs);
 if (loginForm) loginForm.addEventListener("submit", (e)=>{
     e.preventDefault();
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     (0, _login.login)(email, password);
 });
-console.log(signupForm);
 if (signupForm) signupForm.addEventListener("submit", (e)=>{
     console.log("signup event listener");
     e.preventDefault();

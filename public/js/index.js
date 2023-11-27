@@ -7,7 +7,6 @@ const logOutBtn = document.querySelector('.logoutbtn');
 const signupForm = document.querySelector('.form--signup');
 const productTabs = document.querySelector('.nav-tabs');
 
-console.log(productTabs);
 if (loginForm) {
   loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -16,7 +15,6 @@ if (loginForm) {
     login(email, password);
   });
 }
-console.log(signupForm);
 if (signupForm) {
   signupForm.addEventListener('submit', (e) => {
     console.log('signup event listener');
