@@ -1,6 +1,7 @@
 const express = require('express');
 const server = require('../server');
 const startWebSocketServer = require('../webSocketServer');
+const websocketController = require('../controllers/websocketController');
 const viewController = require('../controllers/viewController');
 const authController = require('../controllers/authController');
 const productController = require('../controllers/productController');
@@ -13,7 +14,6 @@ const router = express.Router();
 router.get(
   '/products/:id',
   authController.isLoggedIn,
-  startWebSocketServer(server),
   viewController.getProduct,
 );
 

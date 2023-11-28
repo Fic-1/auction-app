@@ -7,7 +7,7 @@ const app = require('./app');
 const DB = process.env.DATABASE.replace('<password>', process.env.DB_PASSWORD);
 
 const port = process.env.PORT || 3000;
-exports.server = app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
 
@@ -20,3 +20,5 @@ mongoose.connect(DB).then(() => console.log('DB connection successful'));
 //     process.exit(1); //1 - uncaught exception 0 - success
 //   });
 // });
+
+module.exports = server;
