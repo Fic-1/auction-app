@@ -1,9 +1,45 @@
+// const WebSocket = require('ws');
+
 const User = require('../models/usersModel');
 const Product = require('../models/productsModel');
 const Bid = require('../models/bidsModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const APIFeatures = require('../utils/apiFeatures');
+
+// exports.startWebsocket = (req, res, next) => {
+//   console.log('ws');
+//   const wss = new WebSocket.Server({ port: 8080 });
+//   wss.on('connection', (ws) => {
+//     ws.on('message', (data) => {
+//       console.log('received: %s', data);
+//     });
+
+//     ws.send('something');
+//   });
+//   wss.on();
+//   next();
+// };
+
+// exports.shutdown(exitCode = 0) {
+//   // Close WebSocket connections
+//   wss.clients.forEach((client) => {
+//     if (client.readyState === WebSocket.OPEN) {
+//       client.close();
+//     }
+//   });
+
+//   // Close the WebSocket server
+//   wss.close(() => {
+//     console.log('WebSocket server closed.');
+
+//     // Close the HTTP server
+//     server.close(() => {
+//       console.log('HTTP server closed. Exiting process.');
+//       process.exit(exitCode);
+//     });
+//   });
+// }
 
 exports.getLandingPage = catchAsync(async (req, res, next) => {
   const features = new APIFeatures(Product.find(), req.query)

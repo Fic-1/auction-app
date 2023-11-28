@@ -10,6 +10,8 @@ const userRouter = require('./routes/userRoutes');
 const bidRouter = require('./routes/bidRoutes');
 const productRouter = require('./routes/productRoutes');
 const viewRouter = require('./routes/viewRoutes');
+const startWebSocketServer = require('./webSocketServer');
+const server = require('./server');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 

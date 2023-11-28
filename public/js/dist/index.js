@@ -575,18 +575,45 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"f2QDv":[function(require,module,exports) {
-var _login = require("./login");
-var _productPage = require("./productPage");
-var _signup = require("./signup");
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+var _isomorphicWs = require("isomorphic-ws");
+var _isomorphicWsDefault = parcelHelpers.interopDefault(_isomorphicWs);
+var _loginJs = require("./login.js");
+var _productPageJs = require("./productPage.js");
+var _signupJs = require("./signup.js");
 const loginForm = document.querySelector(".form--login");
 const logOutBtn = document.querySelector(".logoutbtn");
 const signupForm = document.querySelector(".form--signup");
 const productTabs = document.querySelector(".nav-tabs");
+if (productTabs) {
+    const uri = "ws://localhost:8080";
+    const ws = new (0, _isomorphicWsDefault.default)(uri);
+    ws.onopen = function open() {
+        console.log("connected");
+        ws.send(Date.now());
+    };
+    ws.onclose = function close() {
+        ws.close();
+        console.log("disconnected");
+    };
+    ws.onmessage = function incoming(data) {
+        console.log(`Roundtrip time: ${Date.now() - data.data} ms`);
+        setTimeout(function timeout() {
+            ws.send(Date.now());
+        }, 500);
+    };
+    // ws.onclose = function (e) {
+    //   console.log('connection closed');
+    // };
+    window.addEventListener("unload", function() {
+        if (ws.readyState == (0, _isomorphicWsDefault.default).OPEN) ws.close();
+    });
+}
 if (loginForm) loginForm.addEventListener("submit", (e)=>{
     e.preventDefault();
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-    (0, _login.login)(email, password);
+    (0, _loginJs.login)(email, password);
 });
 if (signupForm) signupForm.addEventListener("submit", (e)=>{
     console.log("signup event listener");
@@ -596,19 +623,19 @@ if (signupForm) signupForm.addEventListener("submit", (e)=>{
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const passwordConfirm = document.getElementById("passwordConfirm").value;
-    (0, _signup.signup)(firstName, lastName, email, password, passwordConfirm);
+    (0, _signupJs.signup)(firstName, lastName, email, password, passwordConfirm);
 });
-if (logOutBtn) logOutBtn.addEventListener("click", (0, _login.logout));
-if (productTabs) productTabs.addEventListener("click", (0, _productPage.switchTabs));
+if (logOutBtn) logOutBtn.addEventListener("click", (0, _loginJs.logout));
+if (productTabs) productTabs.addEventListener("click", (0, _productPageJs.switchTabs));
 
-},{"./login":"7yHem","./productPage":"c9xgY","./signup":"fNY2o"}],"7yHem":[function(require,module,exports) {
+},{"./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","isomorphic-ws":"5nVUE","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7yHem":[function(require,module,exports) {
 /*eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "login", ()=>login);
 parcelHelpers.export(exports, "logout", ()=>logout);
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
-var _alerts = require("./alerts");
+var _alertsJs = require("./alerts.js");
 const login = async (email, password)=>{
     try {
         const res = await (0, _axiosDefault.default)({
@@ -620,13 +647,13 @@ const login = async (email, password)=>{
             }
         });
         if (res.data.status === "success") {
-            (0, _alerts.showAlert)("success", "Logged in successfuly!");
+            (0, _alertsJs.showAlert)("success", "Logged in successfuly!");
             window.setTimeout(()=>{
                 location.assign("/");
             }, 1500);
         }
     } catch (error) {
-        (0, _alerts.showAlert)("danger", error.response.data.message);
+        (0, _alertsJs.showAlert)("danger", error.response.data.message);
     }
 };
 const logout = async ()=>{
@@ -637,11 +664,11 @@ const logout = async ()=>{
         });
         if (res.data.status === "success") location.reload(true);
     } catch (error) {
-        (0, _alerts.showAlert)("error", "Error logging out! Try again.");
+        (0, _alertsJs.showAlert)("error", "Error logging out! Try again.");
     }
 };
 
-},{"axios":"jo6P5","./alerts":"6Mcnf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jo6P5":[function(require,module,exports) {
+},{"axios":"jo6P5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./alerts.js":"6Mcnf"}],"jo6P5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>(0, _axiosJsDefault.default));
@@ -5077,12 +5104,12 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "signup", ()=>signup);
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
-var _alerts = require("./alerts");
+var _alertsJs = require("./alerts.js");
 const signup = async (firstName, lastName, email, password, passwordConfirm)=>{
     console.log("signup");
     const name = `${firstName}  ${lastName}`;
-    if (password !== passwordConfirm) (0, _alerts.showAlert)("danger", "Passwords do not match");
-    if (!email || !password || !passwordConfirm) (0, _alerts.showAlert)("danger", "Please enter valid information");
+    if (password !== passwordConfirm) (0, _alertsJs.showAlert)("danger", "Passwords do not match");
+    if (!email || !password || !passwordConfirm) (0, _alertsJs.showAlert)("danger", "Please enter valid information");
     try {
         const res = await (0, _axiosDefault.default)({
             method: "POST",
@@ -5095,16 +5122,29 @@ const signup = async (firstName, lastName, email, password, passwordConfirm)=>{
             }
         });
         if (res.data.status === "success") {
-            (0, _alerts.showAlert)("success", "Signed in successfuly!");
+            (0, _alertsJs.showAlert)("success", "Signed in successfuly!");
             window.setTimeout(()=>{
                 location.assign("/"); //* Poslje dodati rutu /me
             }, 1500);
         }
     } catch (error) {
-        (0, _alerts.showAlert)("danger", error.response.data.message);
+        (0, _alertsJs.showAlert)("danger", error.response.data.message);
     }
 };
 
-},{"axios":"jo6P5","./alerts":"6Mcnf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2Ex4i","f2QDv"], "f2QDv", "parcelRequire37fe")
+},{"axios":"jo6P5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./alerts.js":"6Mcnf"}],"5nVUE":[function(require,module,exports) {
+// https://github.com/maxogden/websocket-stream/blob/48dc3ddf943e5ada668c31ccd94e9186f02fafbd/ws-fallback.js
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var global = arguments[3];
+var ws = null;
+if (typeof WebSocket !== "undefined") ws = WebSocket;
+else if (typeof MozWebSocket !== "undefined") ws = MozWebSocket;
+else if (typeof global !== "undefined") ws = global.WebSocket || global.MozWebSocket;
+else if (typeof window !== "undefined") ws = window.WebSocket || window.MozWebSocket;
+else if (typeof self !== "undefined") ws = self.WebSocket || self.MozWebSocket;
+exports.default = ws;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2Ex4i","f2QDv"], "f2QDv", "parcelRequire37fe")
 
 //# sourceMappingURL=index.js.map
