@@ -1,3 +1,4 @@
+const WebSocket = require('ws');
 const startWebSocketServer = require('../webSocketServer');
 
 const formatDate = (date = new Date()) => {
@@ -12,33 +13,40 @@ const formatDate = (date = new Date()) => {
 
   return [day, month, year, time].join('');
 };
-
 const wss = startWebSocketServer({ port: 8080 });
 
-const heartbeat = function () {
-  this.isAlive = true;
-};
+let activeBids = [];
 
-wss.on('connection', (ws) => {
+wss.on('connection', (ws, req, client) => {
+  ws.send(JSON.stringify({ type: 'initialBids', data: activeBids }));
   ws.isAlive = true;
-  ws.on('error', console.error);
-  ws.on('pong', heartbeat);
+
   ws.on('message', (data) => {
+    // Process the message if needed
+
+    // For example, if you receive a new bid from a client, update the database
+    // and broadcast the new bid to all connected clients
+
+    const newBid = JSON.parse(data);
+
+    activeBids.push(newBid);
+
+    console.log(`Received message: ${data} from user ${client}`);
+    // Broadcast the new bid to all connected clients
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({ type: 'newBid', data: newBid }));
+      }
+    });
     console.log('received: %s', data);
     console.log(`Time: ${formatDate()}`);
-    const response = `Server received: ${data}`;
-    ws.send(response);
+
+    console.log(activeBids);
   });
-
-  // ws.on('message', (data) => {
-  //   ws.send(`Time: ${formatDate()}`);
-  // });
-  ws.send('something');
-  // setInterval(() => {
-  //   ws.send('3 seconds passed');
-  // }, 3000);s
 });
-
+wss.on('message', () => {
+  console.log(wss.clients);
+});
 const interval = setInterval(() => {
   wss.clients.forEach((ws) => {
     if (ws.isAlive === false) return ws.terminate();
@@ -52,6 +60,7 @@ wss.on('close', () => {
   console.log('connection closed');
   clearInterval(interval);
 });
+
 // exports.shutdown(exitCode = 0) {
 // Close WebSocket connections
 //   wss.clients.forEach((client) => {

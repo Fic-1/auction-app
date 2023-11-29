@@ -587,22 +587,23 @@ const signupForm = document.querySelector(".form--signup");
 const productTabs = document.querySelector(".nav-tabs");
 const wsForm = document.querySelector(".websocket-form");
 const btnAddBid = document.getElementById("btnAddBid");
-function heartbeat() {
-    clearTimeout(this.pingTimeout);
-    this.pingTimeout = setTimeout(()=>{
-        this.terminate();
-    }, 31000);
-}
 if (productTabs) {
     const uri = "ws://localhost:8080";
     const ws = new (0, _isomorphicWsDefault.default)(uri);
     const wsBidding = (formValue)=>{
-        ws.send(formValue);
-        formValue = "";
+        const id = document.getElementById("product").dataset.id;
+        const message = JSON.stringify({
+            type: "newBid",
+            data: {
+                amount: formValue,
+                id
+            }
+        });
+        ws.send(message);
     };
     ws.onopen = function open() {
         console.log("connected");
-        ws.send(Date.now());
+    // ws.send(Date.now());
     };
     ws.onclose = function close() {
         ws.close();
@@ -610,17 +611,18 @@ if (productTabs) {
     };
     ws.onmessage = (event)=>{
         console.log(`Message from server: ${event.data}`);
-    // console.log(`Roundtrip time: ${Date.now() - data.data} ms`);
-    // setTimeout(function timeout() {
-    //   ws.send(Date.now());
-    // }, 500);
+        const message = JSON.parse(event.data);
+        if (message.type === "initialBids") {
+            // Handle the initial bid data when connecting to the WebSocket
+            const initialBids = message.data;
+        // Update the UI or do any other processing with the initial bid data
+        //TODO Inner html manipulation
+        } else if (message.type === "newBid") {
+            // Handle updates for new bids in real-time
+            const newBid = message.data;
+        // Update the UI or do any other processing with the new bid data
+        }
     };
-    // ws.on('error', console.error);
-    // ws.on('open', heartbeat);
-    // ws.on('ping', heartbeat);
-    // ws.on('close', function clear() {
-    //   clearTimeout(this.pingTimeout);
-    // });
     if (btnAddBid) {
         wsForm.addEventListener("keydown", (e)=>{
             if (e.key === "Enter") {
