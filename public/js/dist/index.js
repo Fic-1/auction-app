@@ -585,9 +585,16 @@ const loginForm = document.querySelector(".form--login");
 const logOutBtn = document.querySelector(".logoutbtn");
 const signupForm = document.querySelector(".form--signup");
 const productTabs = document.querySelector(".nav-tabs");
+const wsForm = document.querySelector(".websocket-form");
+const btnAddBid = document.getElementById("btnAddBid");
+console.log(btnAddBid);
 if (productTabs) {
     const uri = "ws://localhost:8080";
     const ws = new (0, _isomorphicWsDefault.default)(uri);
+    const wsBidding = (formValue)=>{
+        ws.send(formValue);
+        formValue = "";
+    };
     ws.onopen = function open() {
         console.log("connected");
         ws.send(Date.now());
@@ -602,6 +609,19 @@ if (productTabs) {
             ws.send(Date.now());
         }, 500);
     };
+    if (btnAddBid) {
+        wsForm.addEventListener("keydown", (e)=>{
+            if (e.key === "Enter") {
+                wsBidding(wsForm.value);
+                wsForm.value = "";
+            }
+        });
+        btnAddBid.addEventListener("click", (e)=>{
+            e.preventDefault;
+            wsBidding(wsForm.value);
+            wsForm.value = "";
+        });
+    }
     // ws.onclose = function (e) {
     //   console.log('connection closed');
     // };
@@ -628,7 +648,50 @@ if (signupForm) signupForm.addEventListener("submit", (e)=>{
 if (logOutBtn) logOutBtn.addEventListener("click", (0, _loginJs.logout));
 if (productTabs) productTabs.addEventListener("click", (0, _productPageJs.switchTabs));
 
-},{"./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","isomorphic-ws":"5nVUE","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7yHem":[function(require,module,exports) {
+},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5nVUE":[function(require,module,exports) {
+// https://github.com/maxogden/websocket-stream/blob/48dc3ddf943e5ada668c31ccd94e9186f02fafbd/ws-fallback.js
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var global = arguments[3];
+var ws = null;
+if (typeof WebSocket !== "undefined") ws = WebSocket;
+else if (typeof MozWebSocket !== "undefined") ws = MozWebSocket;
+else if (typeof global !== "undefined") ws = global.WebSocket || global.MozWebSocket;
+else if (typeof window !== "undefined") ws = window.WebSocket || window.MozWebSocket;
+else if (typeof self !== "undefined") ws = self.WebSocket || self.MozWebSocket;
+exports.default = ws;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"7yHem":[function(require,module,exports) {
 /*eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "login", ()=>login);
@@ -668,7 +731,7 @@ const logout = async ()=>{
     }
 };
 
-},{"axios":"jo6P5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./alerts.js":"6Mcnf"}],"jo6P5":[function(require,module,exports) {
+},{"axios":"jo6P5","./alerts.js":"6Mcnf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jo6P5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>(0, _axiosJsDefault.default));
@@ -1350,37 +1413,7 @@ function bind(fn, thisArg) {
     };
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"cpqD8":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cpqD8":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _utilsJs = require("./../utils.js");
@@ -5080,6 +5113,8 @@ const showAlert = (type, msg)=>{
 /*eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "switchTabs", ()=>switchTabs);
+var _isomorphicWs = require("isomorphic-ws");
+var _isomorphicWsDefault = parcelHelpers.interopDefault(_isomorphicWs);
 const switchTabs = (e)=>{
     const liveBids = document.querySelector(".websocket-background");
     const tabProduct = e.target.closest("#product");
@@ -5098,7 +5133,7 @@ const switchTabs = (e)=>{
     liveBids.scrollTop = liveBids.scrollHeight;
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fNY2o":[function(require,module,exports) {
+},{"isomorphic-ws":"5nVUE","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fNY2o":[function(require,module,exports) {
 /*eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "signup", ()=>signup);
@@ -5132,19 +5167,6 @@ const signup = async (firstName, lastName, email, password, passwordConfirm)=>{
     }
 };
 
-},{"axios":"jo6P5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./alerts.js":"6Mcnf"}],"5nVUE":[function(require,module,exports) {
-// https://github.com/maxogden/websocket-stream/blob/48dc3ddf943e5ada668c31ccd94e9186f02fafbd/ws-fallback.js
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var global = arguments[3];
-var ws = null;
-if (typeof WebSocket !== "undefined") ws = WebSocket;
-else if (typeof MozWebSocket !== "undefined") ws = MozWebSocket;
-else if (typeof global !== "undefined") ws = global.WebSocket || global.MozWebSocket;
-else if (typeof window !== "undefined") ws = window.WebSocket || window.MozWebSocket;
-else if (typeof self !== "undefined") ws = self.WebSocket || self.MozWebSocket;
-exports.default = ws;
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2Ex4i","f2QDv"], "f2QDv", "parcelRequire37fe")
+},{"axios":"jo6P5","./alerts.js":"6Mcnf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2Ex4i","f2QDv"], "f2QDv", "parcelRequire37fe")
 
 //# sourceMappingURL=index.js.map

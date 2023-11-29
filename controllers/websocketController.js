@@ -9,9 +9,9 @@ wss.on('connection', (ws) => {
   });
 
   ws.send('something');
-  setInterval(() => {
-    ws.send('3 seconds passed');
-  }, 3000);
+  // setInterval(() => {
+  //   ws.send('3 seconds passed');
+  // }, 3000);s
 });
 // exports.shutdown(exitCode = 0) {
 // Close WebSocket connections

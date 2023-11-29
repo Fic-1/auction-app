@@ -1,4 +1,5 @@
 /*eslint-disable */
+import WebSocket from 'isomorphic-ws';
 
 export const switchTabs = (e) => {
   const liveBids = document.querySelector('.websocket-background');

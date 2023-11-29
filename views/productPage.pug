@@ -51,8 +51,8 @@ block content
                           strong #{bid.amount}
 
                 .card-flex.websocket-bid
-                  input.websocket-form.form-control(type='text', aria-label='First name', placeholder='Enter amount', style='margin: 0px 5px; padding: 1vh')
-                  input.btn.btn-primary(type='submit', value='Add bid 📤')
+                  input.websocket-form.form-control(type='text',name='bidAmount', aria-label='bidAmount', placeholder='Enter amount', style='margin: 0px 5px; padding: 1vh')
+                  input.btn.btn-primary#btnAddBid(type='submit', for='bidAmount' value='Add bid 📤')
       hr
       h2 Product details:
       #accordionExample.accordion.product-container.mt-2.mb-4

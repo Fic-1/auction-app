@@ -8,10 +8,19 @@ const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.logoutbtn');
 const signupForm = document.querySelector('.form--signup');
 const productTabs = document.querySelector('.nav-tabs');
+const wsForm = document.querySelector('.websocket-form');
+const btnAddBid = document.getElementById('btnAddBid');
+
+console.log(btnAddBid);
 
 if (productTabs) {
   const uri = 'ws://localhost:8080';
   const ws = new WebSocket(uri);
+
+  const wsBidding = (formValue) => {
+    ws.send(formValue);
+    formValue = '';
+  };
 
   ws.onopen = function open() {
     console.log('connected');
@@ -30,6 +39,21 @@ if (productTabs) {
       ws.send(Date.now());
     }, 500);
   };
+
+  if (btnAddBid) {
+    wsForm.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        wsBidding(wsForm.value);
+        wsForm.value = '';
+      }
+    });
+
+    btnAddBid.addEventListener('click', (e) => {
+      e.preventDefault;
+      wsBidding(wsForm.value);
+      wsForm.value = '';
+    });
+  }
   // ws.onclose = function (e) {
   //   console.log('connection closed');
   // };
