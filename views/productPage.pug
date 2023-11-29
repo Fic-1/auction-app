@@ -37,7 +37,6 @@ block content
               .card-flex-col
                 .websocket-background
                   .imessage
-                    - console.log(user)
                     each bid in product.bids
                       - if(user.email === bid.bidder)
                         p.from-me #{bid.bidder} 

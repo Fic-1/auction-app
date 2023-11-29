@@ -587,7 +587,12 @@ const signupForm = document.querySelector(".form--signup");
 const productTabs = document.querySelector(".nav-tabs");
 const wsForm = document.querySelector(".websocket-form");
 const btnAddBid = document.getElementById("btnAddBid");
-console.log(btnAddBid);
+function heartbeat() {
+    clearTimeout(this.pingTimeout);
+    this.pingTimeout = setTimeout(()=>{
+        this.terminate();
+    }, 31000);
+}
 if (productTabs) {
     const uri = "ws://localhost:8080";
     const ws = new (0, _isomorphicWsDefault.default)(uri);
@@ -603,12 +608,19 @@ if (productTabs) {
         ws.close();
         console.log("disconnected");
     };
-    ws.onmessage = function incoming(data) {
-        console.log(`Roundtrip time: ${Date.now() - data.data} ms`);
-        setTimeout(function timeout() {
-            ws.send(Date.now());
-        }, 500);
+    ws.onmessage = (event)=>{
+        console.log(`Message from server: ${event.data}`);
+    // console.log(`Roundtrip time: ${Date.now() - data.data} ms`);
+    // setTimeout(function timeout() {
+    //   ws.send(Date.now());
+    // }, 500);
     };
+    // ws.on('error', console.error);
+    // ws.on('open', heartbeat);
+    // ws.on('ping', heartbeat);
+    // ws.on('close', function clear() {
+    //   clearTimeout(this.pingTimeout);
+    // });
     if (btnAddBid) {
         wsForm.addEventListener("keydown", (e)=>{
             if (e.key === "Enter") {
