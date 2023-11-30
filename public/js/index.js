@@ -10,6 +10,7 @@ const signupForm = document.querySelector('.form--signup');
 const productTabs = document.querySelector('.nav-tabs');
 const wsForm = document.querySelector('.websocket-form');
 const btnAddBid = document.getElementById('btnAddBid');
+const liveBiddingArea = document.querySelector('.imessage');
 
 if (productTabs) {
   const uri = 'ws://localhost:8080';
@@ -20,8 +21,9 @@ if (productTabs) {
     const message = JSON.stringify({
       type: 'newBid',
       data: {
-        amount: formValue,
         id,
+        amount: formValue,
+        user: '',
       },
     });
     ws.send(message);
@@ -40,7 +42,7 @@ if (productTabs) {
   ws.onmessage = (event) => {
     console.log(`Message from server: ${event.data}`);
     const message = JSON.parse(event.data);
-
+    // console.log(event);
     if (message.type === 'initialBids') {
       // Handle the initial bid data when connecting to the WebSocket
       const initialBids = message.data;
@@ -48,8 +50,10 @@ if (productTabs) {
       //TODO Inner html manipulation
     } else if (message.type === 'newBid') {
       // Handle updates for new bids in real-time
+      const markup = `<p class="from-me">${message.data.data.user} <br><span>Added bid: </span><strong>${message.data.data.amount}</strong></p>`;
       const newBid = message.data;
       // Update the UI or do any other processing with the new bid data
+      liveBiddingArea.insertAdjacentHTML('beforeend', markup);
     }
   };
 

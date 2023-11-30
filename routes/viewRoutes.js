@@ -13,7 +13,9 @@ const router = express.Router();
 
 router.get(
   '/products/:id',
+  authController.protect,
   authController.isLoggedIn,
+  websocketController.liveBidding,
   viewController.getProduct,
 );
 
