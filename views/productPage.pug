@@ -38,17 +38,17 @@ block content
               .card-flex-col
                 .websocket-background
                   .imessage
-                    each bid in product.bids
-                      - if(user.email === bid.bidder)
-                        p.from-me #{bid.bidder} 
-                          br
-                          span Added bid: 
-                          strong #{bid.amount}
-                      - if(user.email !== bid.bidder)  
-                        p.from-them #{bid.bidder} 
-                          br
-                          span Added bid: 
-                          strong #{bid.amount}
+                    //- each bid in product.bids
+                    //-   - if(user.email === bid.bidder)
+                    //-     p.from-me #{bid.bidder} 
+                    //-       br
+                    //-       span Added bid: 
+                    //-       strong #{bid.amount}
+                    //-   - if(user.email !== bid.bidder)  
+                    //-     p.from-them #{bid.bidder} 
+                    //-       br
+                    //-       span Added bid: 
+                    //-       strong #{bid.amount}
 
                 .card-flex.websocket-bid
                   input.websocket-form.form-control(type='text',name='bidAmount', aria-label='bidAmount', placeholder='Enter amount', style='margin: 0px 5px; padding: 1vh')

@@ -41,23 +41,23 @@ exports.liveBidding = async (req, res, next) => {
       // and broadcast the new bid to all connected clients
 
       const newBid = JSON.parse(data);
-      newBid.data.user = req.user.email;
+      newBid.bidder = req.user.email;
       // console.log(newBid);
       if (
         product.bids.length > 0 &&
-        newBid.data.amount <= activeBids.at(-1).amount
+        newBid.amount <= activeBids.at(-1).amount
       ) {
         ws.send('Bid must be a larger amount than the current bid.');
         return;
       }
-      newBid.data.amount *= 1;
-      if (!newBid.data.amount) {
+      newBid.amount *= 1;
+      if (!newBid.amount) {
         ws.send('Bid must be a number!');
         return;
       }
       activeBids.push(newBid);
 
-      // console.log(`Received message: ${data} from user ${req.user.email}`);
+      console.log(`Received message: ${data} from user ${req.user.email}`);
       // Broadcast the new bid to all connected clients
       wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {

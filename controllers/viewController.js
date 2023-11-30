@@ -75,7 +75,12 @@ exports.getSearchResults = catchAsync(async (req, res, next) => {
 exports.getProduct = catchAsync(async (req, res, next) => {
   //* 1) Get data for requested tour (including revires and tour guides)
   const product = await Product.findOne({ _id: req.params.id });
-
+  res.cookie('user', req.user.email, {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
+    ),
+    SameSite: 'Lax',
+  });
   if (!product)
     return next(new AppError('There is no product with that name.', 404));
 
