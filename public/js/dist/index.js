@@ -587,19 +587,76 @@ const signupForm = document.querySelector(".form--signup");
 const productTabs = document.querySelector(".nav-tabs");
 const wsForm = document.querySelector(".websocket-form");
 const btnAddBid = document.getElementById("btnAddBid");
-const liveBiddingArea = document.querySelector(".imessage");
+const liveBiddingElement = document.querySelector(".imessage");
+// const updateBiddingUI = (state, messageData, updateElement) => {
+//   let markup;
+//   console.log(state);
+//   const lastBid = state.at(-1);
+//   console.log(messageData);
+//   if (messageData.type === 'initialBids') {
+//     messageData._activeBids.forEach((bid) => {
+//       markup = state
+//         .map((bid) => {
+//           return `<p class=${
+//             bid.bidder === userEmail ? 'from-me' : 'from-them'
+//           }>${bid.bidder} <br><span>Added bid: </span><strong>${
+//             bid.amount
+//           }</strong></p>`;
+//         })
+//         .join(' ');
+//     });
+//     updateElement.insertAdjacentHTML('beforeend', markup);
+//     //TODO Inner html manipulation
+//   }
+//   if (messageData.type === 'newBid') {
+//     console.log(lastBid.bidder);
+//     console.log(userEmail);
+//     markup = `<p class=${
+//       lastBid.bidder === userEmail ? 'from-me' : 'from-them'
+//     }>${lastBid.bidder} <br><span>Added bid: </span><strong>${
+//       lastBid.amount
+//     }</strong></p>`;
+//     console.log('Updating innerHTML');
+//     updateElement.innerHTML += markup;
+//     console.log('Updated!');
+//   }
+//   console.log(state, lastBid.bidder === userEmail);
+// };
+const updateBiddingUI = (state, newBid, messageData, updateElement)=>{
+    let markup;
+    console.log(state);
+    console.log(messageData);
+    if (messageData.type === "initialBids") {
+        markup = state.map((bid)=>{
+            return `<p class=${bid.bidder === userEmail ? "from-me" : "from-them"}>${bid.bidder} <br><span>Added bid: </span><strong>${bid.amount}</strong></p>`;
+        }).join(" ");
+        updateElement.innerHTML = markup;
+    }
+    if (messageData.type === "newBid") {
+        markup = `<p class=${newBid.bidder === userEmail ? "from-me" : "from-them"}>${newBid.bidder} <br><span>Added bid: </span><strong>${newBid.amount}</strong></p>`;
+        console.log("Updating innerHTML; USER:", userEmail);
+        updateElement.innerHTML += markup;
+        console.log("Updated!");
+    }
+};
 if (productTabs) {
     userEmail = document.cookie.split("=")[1].replace("%40", "@");
     const uri = `ws://${window.location.host.split(":")[0]}:8080`;
     const ws = new (0, _isomorphicWsDefault.default)(uri);
     const wsBidding = (formValue)=>{
         const id = document.getElementById("product").dataset.id;
-        const message = JSON.stringify({
+        const messageData = {
             _id: id,
             amount: formValue,
-            bidder: ""
-        });
-        ws.send(message);
+            bidder: userEmail
+        };
+        const message = JSON.stringify(messageData);
+        console.log(userEmail, messageData.bidder);
+        if (userEmail === messageData.bidder) {
+            console.log("Sending the message");
+            ws.send(message);
+            console.log("Message sent!");
+        }
     };
     ws.onopen = function open() {
         console.log("connected");
@@ -610,27 +667,13 @@ if (productTabs) {
         console.log("disconnected");
     };
     ws.onmessage = (event)=>{
-        let markup;
-        console.log(`Message from server: ${event.data}`);
         const message = JSON.parse(event.data);
-        // console.log(event);
-        if (message.type === "initialBids") {
-            // Handle the initial bid data when connecting to the WebSocket
-            const initialBids = message.data;
-            initialBids.forEach((bid)=>{
-                console.log(bid);
-                markup += `<p class=${bid.bidder === userEmail ? "from-me" : "from-them"}>${bid.bidder} <br><span>Added bid: </span><strong>${bid.amount}</strong></p>`;
-            });
-            liveBiddingArea.insertAdjacentHTML("beforeend", markup);
-        // Update the UI or do any other processing with the initial bid data
-        //TODO Inner html manipulation
-        } else if (message.type === "newBid") {
-            // Handle updates for new bids in real-time
-            const markup = `<p class=${message.data.bidder === userEmail ? "from-me" : "from-them"}>${message.data.bidder} <br><span>Added bid: </span><strong>${message.data.amount}</strong></p>`;
-            const newBid = message.data;
-            // Update the UI or do any other processing with the new bid data
-            liveBiddingArea.insertAdjacentHTML("beforeend", markup);
-        }
+        const biddingState = message._activeBids;
+        console.log(biddingState);
+        const newBid = message.bid;
+        updateBiddingUI(biddingState, newBid, message, liveBiddingElement);
+        // let markup;
+        console.log(`Message from server: ${event.data}`);
     };
     if (btnAddBid) {
         wsForm.addEventListener("keydown", (e)=>{

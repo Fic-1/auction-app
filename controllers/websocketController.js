@@ -22,16 +22,16 @@ exports.liveBidding = async (req, res, next) => {
   console.log('querying db...');
   const product = await Product.findOne({ _id: req.params.id });
   console.log('product found');
-  const activeBids = [];
+  const _activeBids = [];
   product.bids.forEach((bid) => {
-    activeBids.push(bid);
+    _activeBids.push(bid);
   });
 
   wss.on('connection', (ws) => {
     const currentUser = req.user;
     // console.log('Current user:', req.headers);
     if (!req.user) next(new AppError('Login to start bidding', 400));
-    ws.send(JSON.stringify({ type: 'initialBids', data: activeBids }));
+    ws.send(JSON.stringify({ type: 'initialBids', _activeBids }));
     ws.isAlive = true;
 
     ws.on('message', (data) => {
@@ -41,11 +41,10 @@ exports.liveBidding = async (req, res, next) => {
       // and broadcast the new bid to all connected clients
 
       const newBid = JSON.parse(data);
-      newBid.bidder = req.user.email;
       // console.log(newBid);
       if (
         product.bids.length > 0 &&
-        newBid.amount <= activeBids.at(-1).amount
+        newBid.amount <= _activeBids.at(-1).amount
       ) {
         ws.send('Bid must be a larger amount than the current bid.');
         return;
@@ -55,21 +54,22 @@ exports.liveBidding = async (req, res, next) => {
         ws.send('Bid must be a number!');
         return;
       }
-      activeBids.push(newBid);
+      _activeBids.push(newBid);
 
       console.log(`Received message: ${data} from user ${req.user.email}`);
       // Broadcast the new bid to all connected clients
       wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify({ type: 'newBid', data: newBid }));
+          client.send(JSON.stringify({ type: 'newBid', bid: newBid }));
         }
       });
-      // console.log('received: %s', data);
-      // console.log(`Time: ${formatDate()}`);
-
-      console.log(activeBids);
     });
+    // console.log('received: %s', data);
+    // console.log(`Time: ${formatDate()}`);
+
+    // console.log(_activeBids);
   });
+
   // const interval = setInterval(() => {
   //   wss.clients.forEach((ws) => {
   //     if (ws.isAlive === false) return ws.terminate();
