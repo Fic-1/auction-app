@@ -1,5 +1,6 @@
 const WebSocket = require('ws');
 const startWebSocketServer = require('../webSocketServer');
+const server = require('../server');
 const Product = require('../models/productsModel');
 const { getAllProducts } = require('./productController');
 const AppError = require('../utils/appError');
@@ -16,81 +17,87 @@ const formatDate = (date = new Date()) => {
 
   return [day, month, year, time].join('');
 };
+
+let product;
+let userData;
+let _activeBids;
+
 exports.wsServerStart = (req, res, next) => {
-  console.log(WebSocket.CLOSED);
-  if (!req.wsStatus) {
-    req.wss = startWebSocketServer({ port: 8080 });
-    req.wsStatus = 0;
-  }
+  // console.log(wss);
+  // if (!req.wsStatus) {
+  //   req.wss = wss;
+  //   req.wsStatus = 0;
+  // }
   next();
 };
 
 exports.liveBidding = async (req, res, next) => {
   console.log('querying db...');
-  const product = await Product.findOne({ _id: req.params.id });
+  product = await Product.findOne({ _id: req.params.id });
   console.log('product found');
-  const _activeBids = [];
+  _activeBids = [];
   product.bids.forEach((bid) => {
     _activeBids.push(bid);
   });
-
-  req.wss.on('connection', (ws) => {
-    const currentUser = req.user;
-    // console.log('Current user:', req.headers);
-    if (!req.user) next(new AppError('Login to start bidding', 400));
-    ws.send(JSON.stringify({ type: 'initialBids', _activeBids }));
-    ws.isAlive = true;
-
-    ws.on('message', (data) => {
-      // Process the message if needed
-
-      // For example, if you receive a new bid from a client, update the database
-      // and broadcast the new bid to all connected clients
-
-      const newBid = JSON.parse(data);
-      // console.log(newBid);
-      if (
-        product.bids.length > 0 &&
-        newBid.amount <= _activeBids.at(-1).amount
-      ) {
-        ws.send('Bid must be a larger amount than the current bid.');
-        return;
-      }
-      newBid.amount *= 1;
-      if (!newBid.amount) {
-        ws.send('Bid must be a number!');
-        return;
-      }
-      _activeBids.push(newBid);
-
-      console.log(`Received message: ${data} from user ${req.user.email}`);
-      // Broadcast the new bid to all connected clients
-      req.wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify({ type: 'newBid', bid: newBid }));
-        }
-      });
-    });
-    // console.log('received: %s', data);
-    // console.log(`Time: ${formatDate()}`);
-
-    // console.log(_activeBids);
-  });
-
-  // const interval = setInterval(() => {
-  //   req.wss.clients.forEach((ws) => {
-  //     if (ws.isAlive === false) return ws.terminate();
-
-  //     ws.isAlive = false;
-  //     ws.ping();
-  //   });
-  // }, 30000);
-
-  req.wss.on('close', () => {
-    console.log('connection closed');
-    clearInterval(interval);
-  });
+  userData = req.user;
 
   next();
 };
+
+const wss = startWebSocketServer({ port: '8080' });
+
+wss.on('connection', (ws) => {
+  console.log(userData);
+  // console.log('Current user:', req.headers);
+  // if (!user) next(new AppError('Login to start bidding', 400));
+  ws.send(JSON.stringify({ type: 'initialBids', _activeBids }));
+  ws.isAlive = true;
+
+  ws.on('message', (data) => {
+    // Process the message if needed
+
+    // For example, if you receive a new bid from a client, update the database
+    // and broadcast the new bid to all connected clients
+
+    const newBid = JSON.parse(data);
+    // console.log(newBid);
+    if (product.bids.length > 0 && newBid.amount <= _activeBids.at(-1).amount) {
+      ws.send('Bid must be a larger amount than the current bid.');
+      return;
+    }
+    newBid.amount *= 1;
+    if (!newBid.amount) {
+      ws.send('Bid must be a number!');
+      return;
+    }
+    _activeBids.push(newBid);
+
+    console.log(`Received message: ${data} from user ${userData}`);
+    // Broadcast the new bid to all connected clients
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({ type: 'newBid', bid: newBid }));
+      }
+    });
+  });
+  // console.log('received: %s', data);
+  // console.log(`Time: ${formatDate()}`);
+
+  // console.log(_activeBids);
+});
+
+// const interval = setInterval(() => {
+//   req.wss.clients.forEach((ws) => {
+//     if (ws.isAlive === false) return ws.terminate();
+
+//     ws.isAlive = false;
+//     ws.ping();
+//   });
+// }, 30000);
+
+wss.on('close', () => {
+  console.log('connection closed');
+  clearInterval(interval);
+});
+
 // exports.getUserData = (req, res, next) => {};
