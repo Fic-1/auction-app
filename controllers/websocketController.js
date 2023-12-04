@@ -16,7 +16,14 @@ const formatDate = (date = new Date()) => {
 
   return [day, month, year, time].join('');
 };
-const wss = startWebSocketServer({ port: 8080 });
+exports.wsServerStart = (req, res, next) => {
+  console.log(WebSocket.CLOSED);
+  if (!req.wsStatus) {
+    req.wss = startWebSocketServer({ port: 8080 });
+    req.wsStatus = 0;
+  }
+  next();
+};
 
 exports.liveBidding = async (req, res, next) => {
   console.log('querying db...');
@@ -27,7 +34,7 @@ exports.liveBidding = async (req, res, next) => {
     _activeBids.push(bid);
   });
 
-  wss.on('connection', (ws) => {
+  req.wss.on('connection', (ws) => {
     const currentUser = req.user;
     // console.log('Current user:', req.headers);
     if (!req.user) next(new AppError('Login to start bidding', 400));
@@ -58,7 +65,7 @@ exports.liveBidding = async (req, res, next) => {
 
       console.log(`Received message: ${data} from user ${req.user.email}`);
       // Broadcast the new bid to all connected clients
-      wss.clients.forEach((client) => {
+      req.wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
           client.send(JSON.stringify({ type: 'newBid', bid: newBid }));
         }
@@ -71,7 +78,7 @@ exports.liveBidding = async (req, res, next) => {
   });
 
   // const interval = setInterval(() => {
-  //   wss.clients.forEach((ws) => {
+  //   req.wss.clients.forEach((ws) => {
   //     if (ws.isAlive === false) return ws.terminate();
 
   //     ws.isAlive = false;
@@ -79,7 +86,7 @@ exports.liveBidding = async (req, res, next) => {
   //   });
   // }, 30000);
 
-  wss.on('close', () => {
+  req.wss.on('close', () => {
     console.log('connection closed');
     clearInterval(interval);
   });
