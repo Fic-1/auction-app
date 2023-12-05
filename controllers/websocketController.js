@@ -20,42 +20,47 @@ const formatDate = (date = new Date()) => {
 
 let product;
 let userData;
+let serverState = {};
 let _activeBids = [];
-
-exports.wsServerStart = (req, res, next) => {
-  // console.log(wss);
-  // if (!req.wsStatus) {
-  //   req.wss = wss;
-  //   req.wsStatus = 0;
-  // }
-  next();
-};
+let rooms = {};
 
 const wss = startWebSocketServer({ port: '8080' });
 
 exports.liveBidding = async (req, res, next) => {
+  userData = req.user;
   console.log('querying db...');
   product = await Product.findOne({ _id: req.params.id });
-  console.log('product found');
-  console.log(wss.clients.size);
-  if (wss.clients.size < 1) {
-    console.log('active bids executed');
+  console.log(`product ${product.name} found`);
+  if (!serverState[product._id]) {
+    serverState[product._id] = {};
+    serverState[product._id].clients = new Set();
+    serverState[product._id]._activeBids = [];
+  }
+  if (wss.clients.size < 1 && _activeBids.length < product.bids.length) {
     product.bids.forEach((bid) => {
+      serverState[product._id]._activeBids.push(bid);
       _activeBids.push(bid);
     });
   }
-  userData = req.user;
-  console.log('liveBidding just executed');
+  // if (!rooms[product._id]) rooms[product._id] = new Set();
   next();
 };
 
 wss.on('connection', (ws) => {
   // console.log('Current user:', req.headers);
   // if (!user) next(new AppError('Login to start bidding', 400));
-  ws.send(JSON.stringify({ type: 'initialBids', _activeBids }));
+  // rooms[product._id].add(userData.email);
+  serverState[product._id].clients.add(wss);
+  ws.send(
+    JSON.stringify({
+      type: 'initialBids',
+      _activeBids: serverState[product._id]._activeBids,
+    }),
+  );
   ws.isAlive = true;
 
   ws.on('message', (data) => {
+    console.log(serverState);
     // Process the message if needed
 
     // For example, if you receive a new bid from a client, update the database
@@ -63,7 +68,10 @@ wss.on('connection', (ws) => {
 
     const newBid = JSON.parse(data);
     // console.log(newBid);
-    if (product.bids.length > 0 && newBid.amount <= _activeBids.at(-1).amount) {
+    if (
+      product.bids.length > 0 &&
+      newBid.amount <= serverState[product._id]._activeBids.at(-1).amount
+    ) {
       ws.send('Bid must be a larger amount than the current bid.');
       return;
     }
@@ -72,10 +80,11 @@ wss.on('connection', (ws) => {
       ws.send('Bid must be a number!');
       return;
     }
-    _activeBids.push(newBid);
-    console.log(_activeBids);
+    // _activeBids.push(newBid);
+    serverState[product._id]._activeBids.push(newBid);
+    // console.log(_activeBids);
 
-    console.log(`Received message: ${data} from user ${userData}`);
+    // console.log(`Received message: ${data} from user ${userData}`);
     // Broadcast the new bid to all connected clients
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
@@ -86,6 +95,5 @@ wss.on('connection', (ws) => {
 });
 
 wss.on('close', () => {
-  console.log('connection closed');
-  clearInterval(interval);
+  rooms[product._id].delete(userData.email);
 });

@@ -65,7 +65,7 @@ const updateBiddingUI = (state, newBid, messageData, updateElement) => {
       })
       .join(' ');
 
-    updateElement.innerHTML = markup;
+    if (id === bid._id) updateElement.innerHTML = markup;
   }
 
   if (messageData.type === 'newBid') {
@@ -76,7 +76,7 @@ const updateBiddingUI = (state, newBid, messageData, updateElement) => {
     }</strong></p>`;
 
     console.log('Updating innerHTML; USER:', userEmail);
-    updateElement.innerHTML += markup;
+    if (id === newBid._id) updateElement.innerHTML += markup;
     console.log('Updated!');
   }
 };
@@ -95,9 +95,7 @@ if (productTabs) {
     const message = JSON.stringify(messageData);
     console.log(userEmail, messageData.bidder);
     if (userEmail === messageData.bidder) {
-      console.log('Sending the message');
       ws.send(message);
-      console.log('Message sent!');
     }
   };
 
