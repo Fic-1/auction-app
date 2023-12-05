@@ -20,7 +20,7 @@ const formatDate = (date = new Date()) => {
 
 let product;
 let userData;
-let _activeBids;
+let _activeBids = [];
 
 exports.wsServerStart = (req, res, next) => {
   // console.log(wss);
@@ -31,23 +31,25 @@ exports.wsServerStart = (req, res, next) => {
   next();
 };
 
+const wss = startWebSocketServer({ port: '8080' });
+
 exports.liveBidding = async (req, res, next) => {
   console.log('querying db...');
   product = await Product.findOne({ _id: req.params.id });
   console.log('product found');
-  _activeBids = [];
-  product.bids.forEach((bid) => {
-    _activeBids.push(bid);
-  });
+  console.log(wss.clients.size);
+  if (wss.clients.size < 1) {
+    console.log('active bids executed');
+    product.bids.forEach((bid) => {
+      _activeBids.push(bid);
+    });
+  }
   userData = req.user;
-
+  console.log('liveBidding just executed');
   next();
 };
 
-const wss = startWebSocketServer({ port: '8080' });
-
 wss.on('connection', (ws) => {
-  console.log(userData);
   // console.log('Current user:', req.headers);
   // if (!user) next(new AppError('Login to start bidding', 400));
   ws.send(JSON.stringify({ type: 'initialBids', _activeBids }));
@@ -71,6 +73,7 @@ wss.on('connection', (ws) => {
       return;
     }
     _activeBids.push(newBid);
+    console.log(_activeBids);
 
     console.log(`Received message: ${data} from user ${userData}`);
     // Broadcast the new bid to all connected clients
@@ -80,24 +83,9 @@ wss.on('connection', (ws) => {
       }
     });
   });
-  // console.log('received: %s', data);
-  // console.log(`Time: ${formatDate()}`);
-
-  // console.log(_activeBids);
 });
-
-// const interval = setInterval(() => {
-//   req.wss.clients.forEach((ws) => {
-//     if (ws.isAlive === false) return ws.terminate();
-
-//     ws.isAlive = false;
-//     ws.ping();
-//   });
-// }, 30000);
 
 wss.on('close', () => {
   console.log('connection closed');
   clearInterval(interval);
 });
-
-// exports.getUserData = (req, res, next) => {};
