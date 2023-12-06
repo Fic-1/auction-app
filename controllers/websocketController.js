@@ -24,17 +24,17 @@ let userData;
 let serverState = {};
 let _activeBids = [];
 let rooms = {};
+let activeConnections = 0;
 
 const updateProductBidsInDB = catchAsync(async () => {
   console.log('Updating DB ...');
   Object.keys(serverState).forEach(async (productId) => {
-    const currentBid = serverState[productId]._activeBids.at(-1);
+    const currentBid = serverState[productId]._activeBids.at(-1).amount;
     const doc = await Product.findOne({ _id: productId });
     if (doc.startingBid > currentBid) return;
     if (doc.bids.length > 0 && currentBid <= doc.bids.at(-1).amount) return;
     doc.currentBid = currentBid;
     doc.bids.push(...serverState[productId]._activeBids);
-
     await doc.save({ validateBeforeSave: false });
   });
   console.log('------Completed-------');
@@ -63,6 +63,7 @@ exports.liveBidding = async (req, res, next) => {
 
 wss.on('connection', (ws) => {
   serverState[product._id].clients.add(wss);
+  activeConnections++;
   ws.send(
     JSON.stringify({
       type: 'initialBids',
@@ -93,8 +94,9 @@ wss.on('connection', (ws) => {
     });
   });
 });
-
+//TODO: Add logic to update DB frequently
 wss.on('close', () => {
+  activeConnections--;
   rooms[product._id].delete(wss);
   serverState[product._id].clients.delete(wss);
 
@@ -108,3 +110,13 @@ process.on('SIGINT', () => {
   updateProductBidsInDB();
   process.exit();
 });
+
+setInterval(
+  async () => {
+    if (activeConnections > 0) {
+      console.log('Running database update every 5 minutes...');
+      updateProductBidsInDB();
+    }
+  },
+  5 * 60 * 1000,
+);
