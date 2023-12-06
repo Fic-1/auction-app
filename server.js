@@ -12,12 +12,19 @@ const server = app.listen(port, () => {
 
 mongoose.connect(DB).then(() => console.log('DB connection successful'));
 
-// process.on("unhandledRejection", (err) => {
-//   console.log(err.name, err.message);
-//   console.log("UNHANDLED REJECTION! 💥 Shutting down...");
-//   server.close(() => {
-//     process.exit(1); //1 - uncaught exception 0 - success
-//   });
-// });
+process.on('unhandledRejection', (err) => {
+  console.log(err.name, err.message);
+  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+  server.close(() => {
+    process.exit(1); //1 - uncaught exception 0 - success
+  });
+});
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM RECEIVED. Shitting down 👋');
+  server.close(() => {
+    console.log('💥 Process terminated');
+  });
+});
 
 module.exports = server;

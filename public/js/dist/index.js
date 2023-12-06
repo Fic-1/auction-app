@@ -588,6 +588,7 @@ const productTabs = document.querySelector(".nav-tabs");
 const wsForm = document.querySelector(".websocket-form");
 const btnAddBid = document.getElementById("btnAddBid");
 const liveBiddingElement = document.querySelector(".imessage");
+let productId = document.getElementById("product").dataset.id;
 // const updateBiddingUI = (state, messageData, updateElement) => {
 //   let markup;
 //   console.log(state);
@@ -624,6 +625,7 @@ const liveBiddingElement = document.querySelector(".imessage");
 // };
 const updateBiddingUI = (state, newBid, messageData, updateElement)=>{
     let markup;
+    productId = document.getElementById("product").dataset.id;
     console.log(state);
     console.log(messageData);
     if (messageData.type === "initialBids") {
@@ -635,7 +637,7 @@ const updateBiddingUI = (state, newBid, messageData, updateElement)=>{
     if (messageData.type === "newBid") {
         markup = `<p class=${newBid.bidder === userEmail ? "from-me" : "from-them"}>${newBid.bidder} <br><span>Added bid: </span><strong>${newBid.amount}</strong></p>`;
         console.log("Updating innerHTML; USER:", userEmail);
-        updateElement.innerHTML += markup;
+        if (productId === newBid._id) updateElement.innerHTML += markup;
         console.log("Updated!");
     }
 };
@@ -652,11 +654,7 @@ if (productTabs) {
         };
         const message = JSON.stringify(messageData);
         console.log(userEmail, messageData.bidder);
-        if (userEmail === messageData.bidder) {
-            console.log("Sending the message");
-            ws.send(message);
-            console.log("Message sent!");
-        }
+        if (userEmail === messageData.bidder) ws.send(message);
     };
     ws.onopen = function open() {
         console.log("connected");

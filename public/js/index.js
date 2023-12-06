@@ -11,6 +11,7 @@ const productTabs = document.querySelector('.nav-tabs');
 const wsForm = document.querySelector('.websocket-form');
 const btnAddBid = document.getElementById('btnAddBid');
 const liveBiddingElement = document.querySelector('.imessage');
+let productId = document.getElementById('product').dataset.id;
 
 // const updateBiddingUI = (state, messageData, updateElement) => {
 //   let markup;
@@ -50,6 +51,7 @@ const liveBiddingElement = document.querySelector('.imessage');
 
 const updateBiddingUI = (state, newBid, messageData, updateElement) => {
   let markup;
+  productId = document.getElementById('product').dataset.id;
 
   console.log(state);
   console.log(messageData);
@@ -65,7 +67,7 @@ const updateBiddingUI = (state, newBid, messageData, updateElement) => {
       })
       .join(' ');
 
-    if (id === bid._id) updateElement.innerHTML = markup;
+    updateElement.innerHTML = markup;
   }
 
   if (messageData.type === 'newBid') {
@@ -76,7 +78,7 @@ const updateBiddingUI = (state, newBid, messageData, updateElement) => {
     }</strong></p>`;
 
     console.log('Updating innerHTML; USER:', userEmail);
-    if (id === newBid._id) updateElement.innerHTML += markup;
+    if (productId === newBid._id) updateElement.innerHTML += markup;
     console.log('Updated!');
   }
 };

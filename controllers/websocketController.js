@@ -4,6 +4,7 @@ const server = require('../server');
 const Product = require('../models/productsModel');
 const { getAllProducts } = require('./productController');
 const AppError = require('../utils/appError');
+const catchAsync = require('../utils/catchAsync');
 
 const formatDate = (date = new Date()) => {
   const year = date.toLocaleString('default', { year: 'numeric' });
@@ -24,6 +25,21 @@ let serverState = {};
 let _activeBids = [];
 let rooms = {};
 
+const updateProductBidsInDB = catchAsync(async () => {
+  console.log('Updating DB ...');
+  Object.keys(serverState).forEach(async (productId) => {
+    const currentBid = serverState[productId]._activeBids.at(-1);
+    const doc = await Product.findOne({ _id: productId });
+    if (doc.startingBid > currentBid) return;
+    if (doc.bids.length > 0 && currentBid <= doc.bids.at(-1).amount) return;
+    doc.currentBid = currentBid;
+    doc.bids.push(...serverState[productId]._activeBids);
+
+    await doc.save({ validateBeforeSave: false });
+  });
+  console.log('------Completed-------');
+});
+
 const wss = startWebSocketServer({ port: '8080' });
 
 exports.liveBidding = async (req, res, next) => {
@@ -42,14 +58,10 @@ exports.liveBidding = async (req, res, next) => {
       _activeBids.push(bid);
     });
   }
-  // if (!rooms[product._id]) rooms[product._id] = new Set();
   next();
 };
 
 wss.on('connection', (ws) => {
-  // console.log('Current user:', req.headers);
-  // if (!user) next(new AppError('Login to start bidding', 400));
-  // rooms[product._id].add(userData.email);
   serverState[product._id].clients.add(wss);
   ws.send(
     JSON.stringify({
@@ -60,14 +72,7 @@ wss.on('connection', (ws) => {
   ws.isAlive = true;
 
   ws.on('message', (data) => {
-    console.log(serverState);
-    // Process the message if needed
-
-    // For example, if you receive a new bid from a client, update the database
-    // and broadcast the new bid to all connected clients
-
     const newBid = JSON.parse(data);
-    // console.log(newBid);
     if (
       product.bids.length > 0 &&
       newBid.amount <= serverState[product._id]._activeBids.at(-1).amount
@@ -80,12 +85,7 @@ wss.on('connection', (ws) => {
       ws.send('Bid must be a number!');
       return;
     }
-    // _activeBids.push(newBid);
-    serverState[product._id]._activeBids.push(newBid);
-    // console.log(_activeBids);
-
-    // console.log(`Received message: ${data} from user ${userData}`);
-    // Broadcast the new bid to all connected clients
+    serverState[newBid._id]._activeBids.push(newBid);
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify({ type: 'newBid', bid: newBid }));
@@ -95,5 +95,16 @@ wss.on('connection', (ws) => {
 });
 
 wss.on('close', () => {
-  rooms[product._id].delete(userData.email);
+  rooms[product._id].delete(wss);
+  serverState[product._id].clients.delete(wss);
+
+  updateProductBidsInDB();
+});
+wss.on('error', () => {
+  updateProductBidsInDB();
+});
+process.on('SIGINT', () => {
+  console.log('Server is shutting down...');
+  updateProductBidsInDB();
+  process.exit();
 });
