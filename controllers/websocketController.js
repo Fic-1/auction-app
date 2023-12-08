@@ -22,11 +22,13 @@ const formatDate = (date = new Date()) => {
 let product;
 let userData;
 let serverState = {};
-let _activeBids = [];
-let rooms = {};
 let activeConnections = 0;
 
 const updateProductBidsInDB = catchAsync(async () => {
+  if (serverState[product._id]._newBids.length === 0) {
+    console.log('No new bids!');
+    return;
+  }
   console.log('Updating DB ...');
   Object.keys(serverState).forEach(async (productId) => {
     const currentBid = serverState[productId]._activeBids.at(-1).amount;
@@ -34,8 +36,9 @@ const updateProductBidsInDB = catchAsync(async () => {
     if (doc.startingBid > currentBid) return;
     if (doc.bids.length > 0 && currentBid <= doc.bids.at(-1).amount) return;
     doc.currentBid = currentBid;
-    doc.bids.push(...serverState[productId]._activeBids);
+    doc.bids.push(...serverState[product._id]._newBids);
     await doc.save({ validateBeforeSave: false });
+    serverState[product._id]._newBids = [];
   });
   console.log('------Completed-------');
 });
@@ -51,11 +54,14 @@ exports.liveBidding = async (req, res, next) => {
     serverState[product._id] = {};
     serverState[product._id].clients = new Set();
     serverState[product._id]._activeBids = [];
+    serverState[product._id]._newBids = [];
   }
-  if (wss.clients.size < 1 && _activeBids.length < product.bids.length) {
+  if (
+    wss.clients.size < 1 &&
+    serverState[product._id]._activeBids.length < product.bids.length
+  ) {
     product.bids.forEach((bid) => {
       serverState[product._id]._activeBids.push(bid);
-      _activeBids.push(bid);
     });
   }
   next();
@@ -92,12 +98,12 @@ wss.on('connection', (ws) => {
         client.send(JSON.stringify({ type: 'newBid', bid: newBid }));
       }
     });
+    serverState[product._id]._newBids.push(newBid);
   });
 });
 //TODO: Add logic to update DB frequently
 wss.on('close', () => {
   activeConnections--;
-  rooms[product._id].delete(wss);
   serverState[product._id].clients.delete(wss);
 
   updateProductBidsInDB();
@@ -108,7 +114,7 @@ wss.on('error', () => {
 process.on('SIGINT', () => {
   console.log('Server is shutting down...');
   updateProductBidsInDB();
-  process.exit();
+  setTimeout(() => process.exit(), 3000);
 });
 
 setInterval(
