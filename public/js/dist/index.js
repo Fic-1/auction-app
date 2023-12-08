@@ -581,6 +581,7 @@ var _isomorphicWsDefault = parcelHelpers.interopDefault(_isomorphicWs);
 var _loginJs = require("./login.js");
 var _productPageJs = require("./productPage.js");
 var _signupJs = require("./signup.js");
+var _updateSettings = require("./updateSettings");
 const loginForm = document.querySelector(".form--login");
 const logOutBtn = document.querySelector(".logoutbtn");
 const signupForm = document.querySelector(".form--signup");
@@ -588,41 +589,10 @@ const productTabs = document.querySelector(".nav-tabs");
 const wsForm = document.querySelector(".websocket-form");
 const btnAddBid = document.getElementById("btnAddBid");
 const liveBiddingElement = document.querySelector(".imessage");
-let productId = document.getElementById("product").dataset.id;
-// const updateBiddingUI = (state, messageData, updateElement) => {
-//   let markup;
-//   console.log(state);
-//   const lastBid = state.at(-1);
-//   console.log(messageData);
-//   if (messageData.type === 'initialBids') {
-//     messageData._activeBids.forEach((bid) => {
-//       markup = state
-//         .map((bid) => {
-//           return `<p class=${
-//             bid.bidder === userEmail ? 'from-me' : 'from-them'
-//           }>${bid.bidder} <br><span>Added bid: </span><strong>${
-//             bid.amount
-//           }</strong></p>`;
-//         })
-//         .join(' ');
-//     });
-//     updateElement.insertAdjacentHTML('beforeend', markup);
-//     //TODO Inner html manipulation
-//   }
-//   if (messageData.type === 'newBid') {
-//     console.log(lastBid.bidder);
-//     console.log(userEmail);
-//     markup = `<p class=${
-//       lastBid.bidder === userEmail ? 'from-me' : 'from-them'
-//     }>${lastBid.bidder} <br><span>Added bid: </span><strong>${
-//       lastBid.amount
-//     }</strong></p>`;
-//     console.log('Updating innerHTML');
-//     updateElement.innerHTML += markup;
-//     console.log('Updated!');
-//   }
-//   console.log(state, lastBid.bidder === userEmail);
-// };
+const userDataForm = document.querySelector(".user-data");
+const userPasswordForm = document.querySelector(".change-password");
+let productId;
+if (productTabs) productId = document.getElementById("product").dataset.id;
 const updateBiddingUI = (state, newBid, messageData, updateElement)=>{
     let markup;
     productId = document.getElementById("product").dataset.id;
@@ -658,7 +628,6 @@ if (productTabs) {
     };
     ws.onopen = function open() {
         console.log("connected");
-    // ws.send(Date.now());
     };
     ws.onclose = function close() {
         ws.close();
@@ -670,7 +639,6 @@ if (productTabs) {
         console.log(biddingState);
         const newBid = message.bid;
         updateBiddingUI(biddingState, newBid, message, liveBiddingElement);
-        // let markup;
         console.log(`Message from server: ${event.data}`);
     };
     if (btnAddBid) {
@@ -686,9 +654,6 @@ if (productTabs) {
             wsForm.value = "";
         });
     }
-    // ws.onclose = function (e) {
-    //   console.log('connection closed');
-    // };
     window.addEventListener("unload", function() {
         if (ws.readyState == (0, _isomorphicWsDefault.default).OPEN) ws.close();
     });
@@ -711,8 +676,34 @@ if (signupForm) signupForm.addEventListener("submit", (e)=>{
 });
 if (logOutBtn) logOutBtn.addEventListener("click", (0, _loginJs.logout));
 if (productTabs) productTabs.addEventListener("click", (0, _productPageJs.switchTabs));
+if (userDataForm) userDataForm.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    // updateSettings(form, 'data');
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    (0, _updateSettings.updateSettings)({
+        name,
+        email
+    }, "data");
+});
+if (userPasswordForm) userPasswordForm.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    document.querySelector(".btn--save-password ").textContent = "Updating...";
+    const passwordCurrent = document.getElementById("password-current").value;
+    const password = document.getElementById("password").value;
+    const passwordConfirm = document.getElementById("password-confirm").value;
+    await (0, _updateSettings.updateSettings)({
+        passwordCurrent,
+        password,
+        passwordConfirm
+    }, "password");
+    document.querySelector(".btn--save-password ").textContent = "Change password";
+    document.getElementById("password-current").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("password-confirm").value = "";
+});
 
-},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5nVUE":[function(require,module,exports) {
+},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./updateSettings":"l3cGY"}],"5nVUE":[function(require,module,exports) {
 // https://github.com/maxogden/websocket-stream/blob/48dc3ddf943e5ada668c31ccd94e9186f02fafbd/ws-fallback.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -5231,6 +5222,30 @@ const signup = async (firstName, lastName, email, password, passwordConfirm)=>{
     }
 };
 
-},{"axios":"jo6P5","./alerts.js":"6Mcnf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2Ex4i","f2QDv"], "f2QDv", "parcelRequire37fe")
+},{"axios":"jo6P5","./alerts.js":"6Mcnf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"l3cGY":[function(require,module,exports) {
+/* eslint-disable */ // Update data function
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "updateSettings", ()=>updateSettings);
+var _axios = require("axios");
+var _axiosDefault = parcelHelpers.interopDefault(_axios);
+var _alerts = require("./alerts");
+const updateSettings = async (data, type)=>{
+    console.log(data);
+    try {
+        const url = type === "password" ? "/api/v1/users/updateMyPassword" : "/api/v1/users/updateMe";
+        const res = await (0, _axiosDefault.default)({
+            method: "PATCH",
+            url,
+            data
+        });
+        console.log(res);
+        if (res.data.status === "Success") (0, _alerts.showAlert)("success", `${type.toUpperCase()} changed successfuly!`);
+    } catch (err) {
+        (0, _alerts.showAlert)("error", err.response.data.message);
+    }
+};
+
+},{"axios":"jo6P5","./alerts":"6Mcnf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2Ex4i","f2QDv"], "f2QDv", "parcelRequire37fe")
 
 //# sourceMappingURL=index.js.map

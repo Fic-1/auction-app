@@ -144,3 +144,25 @@ exports.isLoggedIn = async (req, res, next) => {
   }
   next();
 };
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  // if (!req.body.email || !req.body.password)
+  //   return next(new AppError('Please enter password and email', 400));
+  //* 1) Get user from the collection
+  const currentUser = await User.findById(req.user.id).select('+password');
+  //* 2) Check if POSTed current password is correct
+  if (
+    !(await currentUser.correctPassword(
+      req.body.passwordCurrent,
+      currentUser.password,
+    ))
+  ) {
+    return next(new AppError('Current password is wrong!', 401));
+  }
+  //* 3) If so, update password
+  currentUser.password = req.body.password;
+  currentUser.passwordConfirm = req.body.passwordConfirm;
+  await currentUser.save();
+  //* 4) Log user in, send JWT
+  createAndSendToken(currentUser, 200, req, res);
+});
