@@ -7,38 +7,6 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const APIFeatures = require('../utils/apiFeatures');
 
-// exports.startWebsocket = (req, res, next) => {
-//   console.log(wss);
-//   wss.on('connection', (ws) => {
-//     ws.on('message', (data) => {
-//       console.log('received: %s', data);
-//     });
-
-//     ws.send('something');
-//   });
-//   next();
-// };
-
-// exports.shutdown(exitCode = 0) {
-// Close WebSocket connections
-//   wss.clients.forEach((client) => {
-//     if (client.readyState === WebSocket.OPEN) {
-//       client.close();
-//     }
-//   });
-
-// Close the WebSocket server
-//   wss.close(() => {
-//     console.log('WebSocket server closed.');
-
-// Close the HTTP server
-//     server.close(() => {
-//       console.log('HTTP server closed. Exiting process.');
-//       process.exit(exitCode);
-//     });
-//   });
-// }
-
 exports.getLandingPage = catchAsync(async (req, res, next) => {
   const features = new APIFeatures(Product.find(), req.query)
     .filter()
@@ -114,5 +82,16 @@ exports.getProfilePage = catchAsync(async (req, res, next) => {
 exports.getProductPage = catchAsync(async (req, res, next) => {
   res.status(200).render('productPage', {
     title: 'Name of a product',
+  });
+});
+
+exports.getMyProducts = catchAsync(async (req, res, next) => {
+  //* 1) Find all bookings
+  const products = await Product.find({ seller: { _id: req.user.id } });
+  console.log(products);
+
+  res.status(200).render('myProducts', {
+    title: 'My tours',
+    products,
   });
 });

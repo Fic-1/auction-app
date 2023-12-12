@@ -1,11 +1,9 @@
 const express = require('express');
-const server = require('../server');
-const startWebSocketServer = require('../webSocketServer');
 const websocketController = require('../controllers/websocketController');
 const viewController = require('../controllers/viewController');
 const authController = require('../controllers/authController');
 const productController = require('../controllers/productController');
-const { WebSocketServer } = require('ws');
+const productRouter = require('./productRoutes');
 
 const router = express.Router();
 
@@ -34,6 +32,12 @@ router.get('/login', authController.isLoggedIn, viewController.getLoginPage);
 router.get('/signup', viewController.getSignupPage);
 
 router.get('/me', authController.protect, viewController.getProfilePage);
+router.get(
+  '/my-products',
+  authController.protect,
+  viewController.getMyProducts,
+);
+
 // router.get('/product', viewController.getProductPage);
 // router.get(
 //   '/tour/:tourSlug',
