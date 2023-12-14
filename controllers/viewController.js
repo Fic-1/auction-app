@@ -86,12 +86,26 @@ exports.getProductPage = catchAsync(async (req, res, next) => {
 });
 
 exports.getMyProducts = catchAsync(async (req, res, next) => {
-  //* 1) Find all bookings
+  //* 1) Find all bookings for a specific user
   const products = await Product.find({ seller: { _id: req.user.id } });
   console.log(products);
 
   res.status(200).render('myProducts', {
     title: 'My tours',
     products,
+  });
+});
+
+exports.editProduct = catchAsync(async (req, res, next) => {
+  const product = await Product.findById(req.params.id);
+  console.log(product);
+  if (req.user.id !== product.seller.id) {
+    return next(
+      new Error('You do not have permission to do this function!', 403),
+    );
+  }
+  res.status(200).render('editProduct', {
+    title: 'Edit product',
+    product,
   });
 });

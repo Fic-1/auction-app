@@ -52,7 +52,13 @@ const updateBiddingUI = (state, newBid, messageData, updateElement) => {
 };
 
 if (productTabs) {
-  userEmail = document.cookie.split('=')[1].replace('%40', '@');
+  userEmail = document.cookie
+    .split(';')
+    .filter((el) => el.includes('user'))[0]
+    .trim()
+    .split('=')[1]
+    .replace('%40', '@');
+  console.log(userEmail);
   const uri = `ws://${window.location.host.split(':')[0]}:8080`;
   const ws = new WebSocket(uri);
   const wsBidding = (formValue) => {

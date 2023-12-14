@@ -38,6 +38,12 @@ router.get(
   viewController.getMyProducts,
 );
 
+router.get(
+  '/my-products/:id/edit',
+  authController.protect,
+  viewController.editProduct,
+);
+
 // router.get('/product', viewController.getProductPage);
 // router.get(
 //   '/tour/:tourSlug',

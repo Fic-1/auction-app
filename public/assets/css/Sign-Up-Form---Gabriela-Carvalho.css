@@ -87,3 +87,28 @@ button:hover {
 .info-products div {
   padding: 5px;
 }
+
+.editBtnDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.editBtn {
+  border-radius: 30px;
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  cursor: pointer;
+}
+.editBtn:hover {
+  transition: 0.5s;
+  background-color: rgba(220, 220, 220, 0.5);
+}
+
+.editImg {
+  height: 5vh;
+}
+.editImg:hover {
+  background-color: transparent;
+}

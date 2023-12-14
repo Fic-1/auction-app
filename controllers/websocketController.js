@@ -80,6 +80,7 @@ wss.on('connection', (ws) => {
 
   ws.on('message', (data) => {
     const newBid = JSON.parse(data);
+    console.log(newBid);
     if (
       product.bids.length > 0 &&
       newBid.amount <= serverState[product._id]._activeBids.at(-1).amount
