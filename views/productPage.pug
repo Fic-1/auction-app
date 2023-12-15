@@ -17,7 +17,7 @@ block content
                 a.nav-link#checkoutLink(disabled='true', href='#', tabindex='-1') Disabled
           #productContent.card-body.card-flex
             .product-col
-              img.product-img(src=`/background_img/${product.coverImage}`)
+              img.product-img(src=`/products/${product.coverImage}`)
             .bid-col
               .row.g-3
                 .col
@@ -33,7 +33,7 @@ block content
               input.btn.btn-primary(type='submit', value='Add bid')
           #liveBidContent.card-body.none(style='overflow: visible')
             .product-col
-              img.product-img(src=`/background_img/${product.coverImage}`)
+              img.product-img(src=`/products/${product.coverImage}`)
             .bid-col
               .card-flex-col
                 .websocket-background

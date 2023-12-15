@@ -31,18 +31,20 @@ router.get(
 router.get('/login', authController.isLoggedIn, viewController.getLoginPage);
 router.get('/signup', viewController.getSignupPage);
 
-router.get('/me', authController.protect, viewController.getProfilePage);
-router.get(
-  '/my-products',
-  authController.protect,
-  viewController.getMyProducts,
-);
+router.use(authController.protect);
 
-router.get(
-  '/my-products/:id/edit',
-  authController.protect,
-  viewController.editProduct,
-);
+router.get('/me', viewController.getProfilePage);
+router.get('/my-products', viewController.getMyProducts);
+
+router
+  .route('/my-products/:id/edit')
+  .get(authController.allowEdit, viewController.editProduct)
+  .patch(
+    authController.allowEdit,
+    // productController.uploadProductImages,
+    // productController.resizeProductImages,
+    // productController.updateProduct,
+  );
 
 // router.get('/product', viewController.getProductPage);
 // router.get(

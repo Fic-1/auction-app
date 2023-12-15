@@ -97,15 +97,8 @@ exports.getMyProducts = catchAsync(async (req, res, next) => {
 });
 
 exports.editProduct = catchAsync(async (req, res, next) => {
-  const product = await Product.findById(req.params.id);
-  console.log(product);
-  if (req.user.id !== product.seller.id) {
-    return next(
-      new Error('You do not have permission to do this function!', 403),
-    );
-  }
   res.status(200).render('editProduct', {
     title: 'Edit product',
-    product,
+    product: req.product,
   });
 });

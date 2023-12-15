@@ -20,7 +20,6 @@ const productDataForm = document.querySelector('.product-data-form');
 if (coverImageForm) {
   coverImageForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    console.log('event executed');
     const coverImage = document.getElementById('cover');
     const formData = new FormData();
     formData.append('coverImage', coverImage.files[0]);
@@ -29,7 +28,6 @@ if (coverImageForm) {
 
   productDataForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    console.log('event executed');
     const productName = document.getElementById('product-data--name');
     const productDescription = document.getElementById(
       'product-data--description',

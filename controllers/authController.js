@@ -1,6 +1,7 @@
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const User = require('../models/usersModel');
+const Product = require('../models/productsModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
@@ -166,3 +167,13 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   //* 4) Log user in, send JWT
   createAndSendToken(currentUser, 200, req, res);
 });
+
+exports.allowEdit = async (req, res, next) => {
+  req.product = await Product.findById(req.params.id);
+  if (req.user.id !== req.product.seller.id) {
+    return next(
+      new Error('You do not have permission to do this function!', 403),
+    );
+  }
+  next();
+};

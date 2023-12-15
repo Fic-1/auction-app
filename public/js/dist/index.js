@@ -596,7 +596,6 @@ const productDataForm = document.querySelector(".product-data-form");
 if (coverImageForm) {
     coverImageForm.addEventListener("submit", (e)=>{
         e.preventDefault();
-        console.log("event executed");
         const coverImage = document.getElementById("cover");
         const formData = new FormData();
         formData.append("coverImage", coverImage.files[0]);
@@ -604,7 +603,6 @@ if (coverImageForm) {
     });
     productDataForm.addEventListener("submit", (e)=>{
         e.preventDefault();
-        console.log("event executed");
         const productName = document.getElementById("product-data--name");
         const productDescription = document.getElementById("product-data--description");
         const productEndDate = document.getElementById("product-data--endDate");
@@ -5254,6 +5252,7 @@ const signup = async (firstName, lastName, email, password, passwordConfirm)=>{
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "updateSettings", ()=>updateSettings);
+parcelHelpers.export(exports, "updateCover", ()=>updateCover);
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _alerts = require("./alerts");
@@ -5268,6 +5267,19 @@ const updateSettings = async (data, type)=>{
         });
         console.log(res);
         if (res.data.status === "Success") (0, _alerts.showAlert)("success", `${type.toUpperCase()} changed successfuly!`);
+    } catch (err) {
+        (0, _alerts.showAlert)("error", err.response.data.message);
+    }
+};
+const updateCover = async (data, type)=>{
+    console.log(data);
+    try {
+        const url = type === "password" ? "/api/v1/users/updateMyPassword" : "/api/v1/users/updateMe";
+        const res = await (0, _axiosDefault.default)({
+            method: "PATCH",
+            url,
+            data
+        });
     } catch (err) {
         (0, _alerts.showAlert)("error", err.response.data.message);
     }
