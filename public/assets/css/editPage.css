@@ -6,14 +6,14 @@
   grid-row-gap: 0px;
 }
 
-.edit-product--image {
+.edit-product--cover {
   grid-area: 1 / 1 / 3 / 2;
 }
 .edit-product--data {
   grid-area: 1 / 2 / 4 / 3;
 }
 
-.product-image {
+.product-cover {
   height: fit-content;
   width: fit-content;
   max-width: 100%;

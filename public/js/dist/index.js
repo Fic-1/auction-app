@@ -591,7 +591,77 @@ const btnAddBid = document.getElementById("btnAddBid");
 const liveBiddingElement = document.querySelector(".imessage");
 const userDataForm = document.querySelector(".user-data");
 const userPasswordForm = document.querySelector(".change-password");
-let productId;
+const coverImageForm = document.querySelector(".product-cover-form");
+const productDataForm = document.querySelector(".product-data-form");
+if (coverImageForm) {
+    coverImageForm.addEventListener("submit", (e)=>{
+        e.preventDefault();
+        console.log("event executed");
+        const coverImage = document.getElementById("cover");
+        const formData = new FormData();
+        formData.append("coverImage", coverImage.files[0]);
+        console.log(...formData);
+    });
+    productDataForm.addEventListener("submit", (e)=>{
+        e.preventDefault();
+        console.log("event executed");
+        const productName = document.getElementById("product-data--name");
+        const productDescription = document.getElementById("product-data--description");
+        const productEndDate = document.getElementById("product-data--endDate");
+        const productPhotos = document.getElementById("files");
+        const formData = new FormData();
+        formData.append("name", productName);
+        formData.append("description", productDescription);
+        formData.append("endDate", productEndDate);
+        for(let i = 0; i < productPhotos.files.length; i++)formData.append("files", productPhotos.files[i]);
+        console.log(...formData);
+    });
+}
+if (loginForm) loginForm.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    (0, _loginJs.login)(email, password);
+});
+if (signupForm) signupForm.addEventListener("submit", (e)=>{
+    console.log("signup event listener");
+    e.preventDefault();
+    const firstName = document.getElementById("fname").value;
+    const lastName = document.getElementById("lname").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const passwordConfirm = document.getElementById("passwordConfirm").value;
+    (0, _signupJs.signup)(firstName, lastName, email, password, passwordConfirm);
+});
+if (logOutBtn) logOutBtn.addEventListener("click", (0, _loginJs.logout));
+if (productTabs) productTabs.addEventListener("click", (0, _productPageJs.switchTabs));
+if (userDataForm) userDataForm.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    // updateSettings(form, 'data');
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    (0, _updateSettings.updateSettings)({
+        name,
+        email
+    }, "data");
+});
+if (userPasswordForm) userPasswordForm.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    document.querySelector(".btn--save-password ").textContent = "Updating...";
+    const passwordCurrent = document.getElementById("password-current").value;
+    const password = document.getElementById("password").value;
+    const passwordConfirm = document.getElementById("password-confirm").value;
+    await (0, _updateSettings.updateSettings)({
+        passwordCurrent,
+        password,
+        passwordConfirm
+    }, "password");
+    document.querySelector(".btn--save-password ").textContent = "Change password";
+    document.getElementById("password-current").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("password-confirm").value = "";
+});
+/*----- Websocket logic -----*/ let productId;
 if (productTabs) productId = document.getElementById("product").dataset.id;
 const updateBiddingUI = (state, newBid, messageData, updateElement)=>{
     let markup;
@@ -659,50 +729,6 @@ if (productTabs) {
         if (ws.readyState == (0, _isomorphicWsDefault.default).OPEN) ws.close();
     });
 }
-if (loginForm) loginForm.addEventListener("submit", (e)=>{
-    e.preventDefault();
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    (0, _loginJs.login)(email, password);
-});
-if (signupForm) signupForm.addEventListener("submit", (e)=>{
-    console.log("signup event listener");
-    e.preventDefault();
-    const firstName = document.getElementById("fname").value;
-    const lastName = document.getElementById("lname").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const passwordConfirm = document.getElementById("passwordConfirm").value;
-    (0, _signupJs.signup)(firstName, lastName, email, password, passwordConfirm);
-});
-if (logOutBtn) logOutBtn.addEventListener("click", (0, _loginJs.logout));
-if (productTabs) productTabs.addEventListener("click", (0, _productPageJs.switchTabs));
-if (userDataForm) userDataForm.addEventListener("submit", (e)=>{
-    e.preventDefault();
-    // updateSettings(form, 'data');
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    (0, _updateSettings.updateSettings)({
-        name,
-        email
-    }, "data");
-});
-if (userPasswordForm) userPasswordForm.addEventListener("submit", async (e)=>{
-    e.preventDefault();
-    document.querySelector(".btn--save-password ").textContent = "Updating...";
-    const passwordCurrent = document.getElementById("password-current").value;
-    const password = document.getElementById("password").value;
-    const passwordConfirm = document.getElementById("password-confirm").value;
-    await (0, _updateSettings.updateSettings)({
-        passwordCurrent,
-        password,
-        passwordConfirm
-    }, "password");
-    document.querySelector(".btn--save-password ").textContent = "Change password";
-    document.getElementById("password-current").value = "";
-    document.getElementById("password").value = "";
-    document.getElementById("password-confirm").value = "";
-});
 
 },{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./updateSettings":"l3cGY"}],"5nVUE":[function(require,module,exports) {
 // https://github.com/maxogden/websocket-stream/blob/48dc3ddf943e5ada668c31ccd94e9186f02fafbd/ws-fallback.js
