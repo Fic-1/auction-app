@@ -635,12 +635,15 @@ if (logOutBtn) logOutBtn.addEventListener("click", (0, _loginJs.logout));
 if (productTabs) productTabs.addEventListener("click", (0, _productPageJs.switchTabs));
 if (userDataForm) userDataForm.addEventListener("submit", (e)=>{
     e.preventDefault();
+    const formData = new FormData();
     // updateSettings(form, 'data');
     const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
+    const photo = document.getElementById("photo").files[0];
     (0, _updateSettings.updateSettings)({
         name,
-        email
+        email,
+        photo
     }, "data");
 });
 if (userPasswordForm) userPasswordForm.addEventListener("submit", async (e)=>{
@@ -728,7 +731,7 @@ if (productTabs) {
     });
 }
 
-},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./updateSettings":"l3cGY"}],"5nVUE":[function(require,module,exports) {
+},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","./updateSettings":"l3cGY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5nVUE":[function(require,module,exports) {
 // https://github.com/maxogden/websocket-stream/blob/48dc3ddf943e5ada668c31ccd94e9186f02fafbd/ws-fallback.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);

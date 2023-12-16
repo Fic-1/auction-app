@@ -6,12 +6,12 @@ block content
     .container(style="margin-top: 3dvh")
         .edit-product
             .edit-product--cover 
-                form.product-cover-form
+                form.product-cover-form(enctype="multipart/form-data")
                     img.product-cover(src=`/products/${product.coverImage}`)
                     input.form-control.form-control-sm(type='file', id='cover', name='cover', accept='image/*')
                     button.btn.btn-primary.btn-sm.btn--change-cover(type='submit') Change picture
             .edit-product--data
-                form.product-data-form
+                form.product-data-form(enctype="multipart/form-data")
                         .row(style='margin-bottom: 25px;text-align: left;')
                             .row
                                 .col-md-8.text-start

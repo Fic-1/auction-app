@@ -34,7 +34,7 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
     .resize(500, 500)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
-    .toFile(`public/img/users/${req.file.filename}`);
+    .toFile(`public/img/${req.file.filename}`);
 
   next();
 });
@@ -54,6 +54,7 @@ exports.getMe = (req, res, next) => {
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   //* 1) Create error if user POSTs password data
+  console.log(req.file);
   console.log('Update me ran with', req.body);
   if (req.body.password || req.body.passwordConfirm)
     return next(

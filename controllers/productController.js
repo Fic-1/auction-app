@@ -28,16 +28,16 @@ exports.uploadProductImages = upload.fields([
 // upload.single('image') req.file
 // upload.array('images', 5) req.files
 
-exports.resizeTourImages = catchAsync(async (req, res, next) => {
+exports.resizeProductImages = catchAsync(async (req, res, next) => {
   if (!req.files.imageCover || !req.files.images) return next();
 
   // 1) Cover image
-  req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
+  req.body.imageCover = `product-${req.params.id}-${Date.now()}-cover.jpeg`;
   await sharp(req.files.imageCover[0].buffer)
     .resize(2000, 1333)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
-    .toFile(`public/img/tours/${req.body.imageCover}`); //todo: change path
+    .toFile(`public/img/products/${req.body.imageCover}`); //todo: change path
 
   // 2) Images
   req.body.images = [];
