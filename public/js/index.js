@@ -3,7 +3,11 @@ import WebSocket from 'isomorphic-ws';
 import { login, logout } from './login.js';
 import { switchTabs } from './productPage.js';
 import { signup } from './signup.js';
-import { updateSettings } from './updateSettings';
+import {
+  updateSettings,
+  updateCover,
+  updateProductData,
+} from './updateSettings';
 
 const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.logoutbtn');
@@ -18,30 +22,39 @@ const coverImageForm = document.querySelector('.product-cover-form');
 const productDataForm = document.querySelector('.product-data-form');
 
 if (coverImageForm) {
+  const productId = document.querySelector('.label-id').dataset.id;
+  //*UPDATE COVER IMAGE
   coverImageForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const coverImage = document.getElementById('cover');
     const formData = new FormData();
-    formData.append('coverImage', coverImage.files[0]);
+    formData.append(
+      'coverImage',
+      document.getElementById('coverImage').files[0],
+    );
     console.log(...formData);
+    updateCover(formData, productId);
   });
 
+  //* UPDATE PRODUCT DATA
   productDataForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const productName = document.getElementById('product-data--name');
+    const productName = document.getElementById('product-data--name').value;
     const productDescription = document.getElementById(
       'product-data--description',
-    );
-    const productEndDate = document.getElementById('product-data--endDate');
-    const productPhotos = document.getElementById('files');
+    ).value;
+    const productEndDate = document.getElementById(
+      'product-data--endDate',
+    ).value;
+    const productPhotos = document.getElementById('photos');
     const formData = new FormData();
     formData.append('name', productName);
     formData.append('description', productDescription);
     formData.append('endDate', productEndDate);
     for (let i = 0; i < productPhotos.files.length; i++) {
-      formData.append('files', productPhotos.files[i]);
+      formData.append('photos', productPhotos.files[i]);
     }
     console.log(...formData);
+    updateProductData(formData, productId);
   });
 }
 
@@ -80,9 +93,6 @@ if (userDataForm)
     formData.append('name', document.getElementById('name').value);
     formData.append('email', document.getElementById('email').value);
     formData.append('photo', document.getElementById('photo').files[0]);
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const photo = document.getElementById('photo').files[0];
     updateSettings(formData, 'data');
   });
 if (userPasswordForm)

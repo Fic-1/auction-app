@@ -8,7 +8,7 @@ block content
             .edit-product--cover 
                 form.product-cover-form(enctype="multipart/form-data")
                     img.product-cover(src=`/products/${product.coverImage}`)
-                    input.form-control.form-control-sm(type='file', id='cover', name='cover', accept='image/*')
+                    input.form-control.form-control-sm(type='file', id='coverImage', name='coverImage', accept='image/*')
                     button.btn.btn-primary.btn-sm.btn--change-cover(type='submit') Change picture
             .edit-product--data
                 form.product-data-form(enctype="multipart/form-data")
@@ -16,8 +16,11 @@ block content
                             .row
                                 .col-md-8.text-start
                                     .mb-3
-                                        label.form-label(for='email')
+                                        label.form-label(for='seller')
                                             strong= `Seller: ${product.seller.name}`
+                                    .mb-3
+                                        label.form-label.label-id(for='id' data-id=`${product.id}`)
+                                            strong= `Product ID: ${product.id}`
                             .col-md-12
                                 .mb-3
                                     label.form-label(for='name')
@@ -31,7 +34,7 @@ block content
                                     label.form-label(for='endDate')
                                         strong= `End date: ${product.endDate}`
                                     br
-                                    input#product-data--endDate(type='date', placeholder=`Enter new date`, name='endDate')
+                                    input#product-data--endDate(type='date', placeholder=`Enter new date`, name='endDate' required)
                                 .mb-3.multiple-upload 
                                     label.form-label(for='name')
                                         strong Upload product pictures:
@@ -48,6 +51,6 @@ block content
                                                     .browse
                                                         | click here to browse
                                                 output#list
-                                                input#files(multiple='' name='files[]' type='file')
+                                                input#photos(multiple='' name='photos' type='file')
                                 button.btn.btn-primary.btn-sm.btn--change-cover(type='submit') Save
 

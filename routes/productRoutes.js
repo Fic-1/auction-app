@@ -14,7 +14,7 @@ router
   .get(productController.aliasLatestProducts, productController.getAllProducts);
 
 router.get('/', productController.getAllProducts);
-router.get('/:id', productController.getProduct);
+router.route('/:id').get(productController.getProduct);
 router.post('/', authController.protect, productController.createProduct);
 
 module.exports = router;

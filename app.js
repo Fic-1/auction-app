@@ -57,3 +57,6 @@ app.all('*', (req, res, next) => {
 app.use(globalErrorHandler);
 
 module.exports = app;
+
+//TODO: Create Add product page
+//TODO: Add stripe payments

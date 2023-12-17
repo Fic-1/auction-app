@@ -55,6 +55,16 @@ router
     productController.updateProduct,
   );
 
+router
+  .route('/my-products/:id/edit/uploadCover')
+  .patch(
+    authController.protect,
+    authController.allowEdit,
+    productController.uploadProductCoverImage,
+    productController.resizeProductCoverImage,
+    productController.updateProduct,
+  );
+
 // router.get('/product', viewController.getProductPage);
 // router.get(
 //   '/tour/:tourSlug',

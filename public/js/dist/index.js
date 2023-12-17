@@ -594,25 +594,29 @@ const userPasswordForm = document.querySelector(".change-password");
 const coverImageForm = document.querySelector(".product-cover-form");
 const productDataForm = document.querySelector(".product-data-form");
 if (coverImageForm) {
+    const productId = document.querySelector(".label-id").dataset.id;
+    //*UPDATE COVER IMAGE
     coverImageForm.addEventListener("submit", (e)=>{
         e.preventDefault();
-        const coverImage = document.getElementById("cover");
         const formData = new FormData();
-        formData.append("coverImage", coverImage.files[0]);
+        formData.append("coverImage", document.getElementById("coverImage").files[0]);
         console.log(...formData);
+        (0, _updateSettings.updateCover)(formData, productId);
     });
+    //* UPDATE PRODUCT DATA
     productDataForm.addEventListener("submit", (e)=>{
         e.preventDefault();
-        const productName = document.getElementById("product-data--name");
-        const productDescription = document.getElementById("product-data--description");
-        const productEndDate = document.getElementById("product-data--endDate");
-        const productPhotos = document.getElementById("files");
+        const productName = document.getElementById("product-data--name").value;
+        const productDescription = document.getElementById("product-data--description").value;
+        const productEndDate = document.getElementById("product-data--endDate").value;
+        const productPhotos = document.getElementById("photos");
         const formData = new FormData();
         formData.append("name", productName);
         formData.append("description", productDescription);
         formData.append("endDate", productEndDate);
-        for(let i = 0; i < productPhotos.files.length; i++)formData.append("files", productPhotos.files[i]);
+        for(let i = 0; i < productPhotos.files.length; i++)formData.append("photos", productPhotos.files[i]);
         console.log(...formData);
+        (0, _updateSettings.updateProductData)(formData, productId);
     });
 }
 if (loginForm) loginForm.addEventListener("submit", (e)=>{
@@ -640,9 +644,6 @@ if (userDataForm) userDataForm.addEventListener("submit", (e)=>{
     formData.append("name", document.getElementById("name").value);
     formData.append("email", document.getElementById("email").value);
     formData.append("photo", document.getElementById("photo").files[0]);
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const photo = document.getElementById("photo").files[0];
     (0, _updateSettings.updateSettings)(formData, "data");
 });
 if (userPasswordForm) userPasswordForm.addEventListener("submit", async (e)=>{
@@ -5255,6 +5256,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "updateSettings", ()=>updateSettings);
 parcelHelpers.export(exports, "updateCover", ()=>updateCover);
+parcelHelpers.export(exports, "updateProductData", ()=>updateProductData);
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _alerts = require("./alerts");
@@ -5276,15 +5278,38 @@ const updateSettings = async (data, type)=>{
         (0, _alerts.showAlert)("error", err.response.data.message);
     }
 };
-const updateCover = async (data, type)=>{
+const updateCover = async (data, id)=>{
     console.log(data);
     try {
-        const url = type === "password" ? "/api/v1/users/updateMyPassword" : "/api/v1/users/updateMe";
+        const url = `/my-products/${id}/edit/uploadCover`;
         const res = await (0, _axiosDefault.default)({
             method: "PATCH",
             url,
             data
         });
+        console.log(res);
+        if (res.data.status === "Success") {
+            (0, _alerts.showAlert)("success", `COVER IMAGE changed successfuly!`);
+            setTimeout(()=>window.location.reload(), 3000);
+        }
+    } catch (err) {
+        (0, _alerts.showAlert)("error", err.response.data.message);
+    }
+};
+const updateProductData = async (data, id)=>{
+    console.log(data);
+    try {
+        const url = `/my-products/${id}/edit`;
+        const res = await (0, _axiosDefault.default)({
+            method: "PATCH",
+            url,
+            data
+        });
+        console.log(res);
+        if (res.data.status === "Success") {
+            (0, _alerts.showAlert)("success", `PRODUCT DATA changed successfuly!`);
+            setTimeout(()=>window.location.reload(), 3000);
+        }
     } catch (err) {
         (0, _alerts.showAlert)("error", err.response.data.message);
     }

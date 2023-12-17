@@ -20,42 +20,38 @@ const upload = multer({
   fileFilter: multerFilter,
 });
 
-exports.uploadProductImages = upload.fields([
-  { name: 'cover', maxCount: 1 },
-  { name: 'photos', maxCount: 4 },
-]);
+exports.uploadProductImages = upload.array('photos', 4);
+exports.uploadProductCoverImage = upload.single('coverImage');
 
-// upload.single('image') req.file
-// upload.array('images', 5) req.files
-
-exports.resizeProductImages = catchAsync(async (req, res, next) => {
-  if (!req.files.imageCover || !req.files.images) return next();
-
+exports.resizeProductCoverImage = catchAsync(async (req, res, next) => {
+  if (!req.file) return next();
   // 1) Cover image
-  req.body.imageCover = `product-${req.params.id}-${Date.now()}-cover.jpeg`;
-  await sharp(req.files.imageCover[0].buffer)
+  req.body.coverImage = `product-${req.params.id}-${Date.now()}-cover.jpeg`;
+  await sharp(req.file.buffer)
     .resize(2000, 1333)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
-    .toFile(`public/img/products/${req.body.imageCover}`); //todo: change path
+    .toFile(`public/products/${req.body.coverImage}`);
+  next();
+});
 
-  // 2) Images
-  req.body.images = [];
-
+exports.resizeProductImages = catchAsync(async (req, res, next) => {
+  if (!req.files) return next();
+  req.body.photos = [];
+  console.log('here');
   await Promise.all(
-    req.files.images.map(async (file, i) => {
-      const filename = `tour-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
-
+    req.files.map(async (file, i) => {
+      const filename = `product-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
       await sharp(file.buffer)
         .resize(2000, 1333)
         .toFormat('jpeg')
         .jpeg({ quality: 90 })
-        .toFile(`public/img/tours/${filename}`); //todo: change path
+        .toFile(`public/products/${filename}`);
 
-      req.body.images.push(filename);
+      req.body.photos.push(filename);
     }),
   );
-
+  console.log(req.files);
   next();
 });
 
