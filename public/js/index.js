@@ -77,10 +77,13 @@ if (userDataForm)
     e.preventDefault();
     const formData = new FormData();
     // updateSettings(form, 'data');
+    formData.append('name', document.getElementById('name').value);
+    formData.append('email', document.getElementById('email').value);
+    formData.append('photo', document.getElementById('photo').files[0]);
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const photo = document.getElementById('photo').files[0];
-    updateSettings({ name, email, photo }, 'data');
+    updateSettings(formData, 'data');
   });
 if (userPasswordForm)
   userPasswordForm.addEventListener('submit', async (e) => {

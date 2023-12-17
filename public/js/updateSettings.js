@@ -20,6 +20,7 @@ export const updateSettings = async (data, type) => {
     console.log(res);
     if (res.data.status === 'Success') {
       showAlert('success', `${type.toUpperCase()} changed successfuly!`);
+      setTimeout(() => window.location.reload(), 3000);
     }
   } catch (err) {
     showAlert('error', err.response.data.message);
@@ -38,6 +39,7 @@ export const updateCover = async (data, type) => {
       url,
       data,
     });
-  }catch(err){
-    showAlert('error', err.response.data.message)
-  };
+  } catch (err) {
+    showAlert('error', err.response.data.message);
+  }
+};

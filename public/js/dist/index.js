@@ -637,14 +637,13 @@ if (userDataForm) userDataForm.addEventListener("submit", (e)=>{
     e.preventDefault();
     const formData = new FormData();
     // updateSettings(form, 'data');
+    formData.append("name", document.getElementById("name").value);
+    formData.append("email", document.getElementById("email").value);
+    formData.append("photo", document.getElementById("photo").files[0]);
     const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
     const photo = document.getElementById("photo").files[0];
-    (0, _updateSettings.updateSettings)({
-        name,
-        email,
-        photo
-    }, "data");
+    (0, _updateSettings.updateSettings)(formData, "data");
 });
 if (userPasswordForm) userPasswordForm.addEventListener("submit", async (e)=>{
     e.preventDefault();
@@ -5269,7 +5268,10 @@ const updateSettings = async (data, type)=>{
             data
         });
         console.log(res);
-        if (res.data.status === "Success") (0, _alerts.showAlert)("success", `${type.toUpperCase()} changed successfuly!`);
+        if (res.data.status === "Success") {
+            (0, _alerts.showAlert)("success", `${type.toUpperCase()} changed successfuly!`);
+            setTimeout(()=>window.location.reload(), 3000);
+        }
     } catch (err) {
         (0, _alerts.showAlert)("error", err.response.data.message);
     }
