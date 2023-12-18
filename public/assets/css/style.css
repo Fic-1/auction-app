@@ -178,6 +178,14 @@ p.from-me {
   background-color: #248bf5;
   color: #fff;
 }
+p.start-price {
+  align-self: flex-start;
+  background-color: #f52424;
+  color: #fff;
+  border-radius: 20px;
+  width: fit-content;
+  padding: 0px 10px 0px 10px;
+}
 
 p.from-me::before {
   border-bottom-left-radius: 0.8rem 0.7rem;
@@ -324,4 +332,15 @@ h2 {
 .websocket-background {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+.seller-photo {
+  height: 15vh;
+}
+
+.seller-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }

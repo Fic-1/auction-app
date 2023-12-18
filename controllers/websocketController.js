@@ -5,6 +5,7 @@ const Product = require('../models/productsModel');
 const { getAllProducts } = require('./productController');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const { ServerCapabilities } = require('mongodb');
 
 const formatDate = (date = new Date()) => {
   const year = date.toLocaleString('default', { year: 'numeric' });
@@ -36,9 +37,9 @@ const updateProductBidsInDB = catchAsync(async () => {
     if (doc.startingBid > currentBid) return;
     if (doc.bids.length > 0 && currentBid <= doc.bids.at(-1).amount) return;
     doc.currentBid = currentBid;
-    doc.bids.push(...serverState[product._id]._newBids);
+    doc.bids.push(...serverState[productId]._newBids);
     await doc.save({ validateBeforeSave: false });
-    serverState[product._id]._newBids = [];
+    serverState[productId]._newBids = [];
   });
   console.log('------Completed-------');
 });
@@ -100,6 +101,7 @@ wss.on('connection', (ws) => {
       }
     });
     serverState[product._id]._newBids.push(newBid);
+    console.log(serverState[product._id]);
   });
 });
 //TODO: Add logic to update DB frequently
@@ -125,5 +127,5 @@ setInterval(
       updateProductBidsInDB();
     }
   },
-  5 * 60 * 1000,
+  0.5 * 60 * 1000,
 );

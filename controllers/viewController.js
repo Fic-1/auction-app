@@ -1,4 +1,5 @@
 // const WebSocket = require('ws');
+const numeral = require('numeral');
 const server = require('../server');
 const User = require('../models/usersModel');
 const Product = require('../models/productsModel');
@@ -51,13 +52,14 @@ exports.getProduct = catchAsync(async (req, res, next) => {
   });
   if (!product)
     return next(new AppError('There is no product with that name.', 404));
-
+  const formatedStartingBid = numeral(product.startingBid).format('0,0.00');
   // const users = await User.find();
   //* 2) build template
   //* 3) Render the template using the data from 1)
   res.status(200).render('productPage', {
     title: `${product.name}`,
     product,
+    formatedStartingBid,
   });
 });
 

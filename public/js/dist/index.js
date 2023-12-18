@@ -671,12 +671,15 @@ const updateBiddingUI = (state, newBid, messageData, updateElement)=>{
     console.log(messageData);
     if (messageData.type === "initialBids") {
         markup = state.map((bid)=>{
-            return `<p class=${bid.bidder === userEmail ? "from-me" : "from-them"}>${bid.bidder} <br><span>Added bid: </span><strong>${bid.amount}</strong></p>`;
+            let formatedAmount = numeral(bid.amount).format("0,0.00");
+            return `<p class=${bid.bidder === userEmail ? "from-me" : "from-them"}>${bid.bidder} <br><span>Added bid: </span><strong>${formatedAmount} \u{20AC}</strong></p>`;
         }).join(" ");
         updateElement.innerHTML = markup;
     }
     if (messageData.type === "newBid") {
-        markup = `<p class=${newBid.bidder === userEmail ? "from-me" : "from-them"}>${newBid.bidder} <br><span>Added bid: </span><strong>${newBid.amount}</strong></p>`;
+        const formatedAmount = numeral(newBid.amount).format("0,0.00");
+        console.log(formatedAmount);
+        markup = `<p class=${newBid.bidder === userEmail ? "from-me" : "from-them"}>${newBid.bidder} <br><span>Added bid: </span><strong>${formatedAmount} \u{20AC}</strong></p>`;
         console.log("Updating innerHTML; USER:", userEmail);
         if (productId === newBid._id) updateElement.innerHTML += markup;
         console.log("Updated!");
@@ -731,7 +734,7 @@ if (productTabs) {
     });
 }
 
-},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","./updateSettings":"l3cGY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5nVUE":[function(require,module,exports) {
+},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./updateSettings":"l3cGY"}],"5nVUE":[function(require,module,exports) {
 // https://github.com/maxogden/websocket-stream/blob/48dc3ddf943e5ada668c31ccd94e9186f02fafbd/ws-fallback.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);

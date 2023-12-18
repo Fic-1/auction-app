@@ -128,11 +128,12 @@ const updateBiddingUI = (state, newBid, messageData, updateElement) => {
   if (messageData.type === 'initialBids') {
     markup = state
       .map((bid) => {
+        let formatedAmount = numeral(bid.amount).format('0,0.00');
         return `<p class=${
           bid.bidder === userEmail ? 'from-me' : 'from-them'
-        }>${bid.bidder} <br><span>Added bid: </span><strong>${
-          bid.amount
-        }</strong></p>`;
+        }>${
+          bid.bidder
+        } <br><span>Added bid: </span><strong>${formatedAmount} €</strong></p>`;
       })
       .join(' ');
 
@@ -140,11 +141,13 @@ const updateBiddingUI = (state, newBid, messageData, updateElement) => {
   }
 
   if (messageData.type === 'newBid') {
+    const formatedAmount = numeral(newBid.amount).format('0,0.00');
+    console.log(formatedAmount);
     markup = `<p class=${
       newBid.bidder === userEmail ? 'from-me' : 'from-them'
-    }>${newBid.bidder} <br><span>Added bid: </span><strong>${
-      newBid.amount
-    }</strong></p>`;
+    }>${
+      newBid.bidder
+    } <br><span>Added bid: </span><strong>${formatedAmount} €</strong></p>`;
 
     console.log('Updating innerHTML; USER:', userEmail);
     if (productId === newBid._id) updateElement.innerHTML += markup;

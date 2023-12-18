@@ -37,6 +37,7 @@ block content
             .bid-col
               .card-flex-col
                 .websocket-background
+                  p.start-price= `Starting price: ${formatedStartingBid} €`
                   .imessage
                     //- each bid in product.bids
                     //-   - if(user.email === bid.bidder)
@@ -65,8 +66,8 @@ block content
           button.accordion-button.button-margin.collapsed(type="button", data-bs-toggle="collapse", data-bs-target="#collapseTwo", aria-expanded="false", aria-controls="collapseTwo")
               strong| Seller
           #collapseTwo.accordion-collapse.collapse(data-bs-parent="#accordionExample")
-            .accordion-body 
-              img(src=`/img/${product.seller.photo === 'default.png' ? product.seller.photo : product.seller.photo + '.jpg' }`)
+            .accordion-body.seller-section 
+              img.rounded-circle.img-fluid.seller-photo(src=`/img/${product.seller.photo === 'default.png' ? product.seller.photo : product.seller.photo }`)
               p=`${product.seller.name}`
             
         .accordion-item
