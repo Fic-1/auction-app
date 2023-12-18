@@ -8,7 +8,7 @@ nav.navbar.navbar-expand-md.bg-body.py-3
       span.visually-hidden Toggle navigation
       span.navbar-toggler-icon
     #navcol-2.collapse.navbar-collapse
-      ul.navbar-nav.ms-auto
+      ul.navbar-nav.ms-auto(style='display: flex; align-items: center')
         li.nav-item
           a.nav-link(href='/') Home
         li.nav-item.dropdown
@@ -27,8 +27,8 @@ nav.navbar.navbar-expand-md.bg-body.py-3
               a.dropdown-item(href='/my-products') My products
               .dropdown-divider
               a.dropdown-item.logoutbtn(href='#') Log out
-          li.nav-item
-            img.rounded-circle.img-fluid(src=`/img/${user.photo === 'default.png' ? user.photo : user.photo }`, style='display: inline;max-height: 3vh;')
+          li.nav-item(style='display: flex; max-width: 3vw;')
+            img.rounded-circle.img-fluid(src=`/img/${user.photo === 'default.png' ? user.photo : user.photo }`,)
         
         else
           a.btn.btn-primary.ms-md-2.btn--login(role='button' href='/login') Log in

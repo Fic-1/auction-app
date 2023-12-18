@@ -112,3 +112,11 @@ button:hover {
 .editImg:hover {
   background-color: transparent;
 }
+
+.btn--save-password {
+  width: 25vw;
+}
+
+.btn--save-data {
+  width: 25vw;
+}

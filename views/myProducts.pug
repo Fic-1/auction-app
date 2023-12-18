@@ -23,12 +23,12 @@ block content
                                             - if(remainingTime > 0) 
                                                 - const remainingDays = Math.round(Math.abs(remainingTime / oneDay)) 
                                                 - const remainingHours = Math.round(Math.abs(remainingTime / oneHour))
-                                                - remainingStr = `${remainingDays > 1 ? `${remainingDays} days left`: `${remainingHours} day left`}`
+                                                - remainingStr = `${remainingDays > 1 ? `${remainingDays} days left`: `${remainingHours} hours left`}`
                                                 p.text-muted.mb-0= `${remainingStr}`
                                             - if(remainingTime < 0) 
                                                 p.text-muted.mb-0 Auction has ended
                                         .d-flex
-                                            img.rounded-circle.flex-shrink-0.me-3.fit-cover(width='50' height='50' src=`/img/${product.seller.photo === 'default.png' ? product.seller.photo : product.seller.photo + '.jpg' }`)
+                                            img.rounded-circle.flex-shrink-0.me-3.fit-cover(width='50' height='50' src=`/img/${product.seller.photo === 'default.png' ? product.seller.photo : product.seller.photo }`)
                                             div
                                                 p.fw-bold.mb-0= product.seller.name
                                                 p.text-muted.mb-0 LOKACIJA - UPDATE MODELA

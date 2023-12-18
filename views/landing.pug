@@ -38,7 +38,7 @@ block content
                                                 - if(remainingTime > 0) 
                                                     - const remainingDays = Math.round(Math.abs(remainingTime / oneDay)) 
                                                     - const remainingHours = Math.round(Math.abs(remainingTime / oneHour))
-                                                    - remainingStr = `${remainingDays > 1 ? `${remainingDays} days left`: `${remainingHours} day left`}`
+                                                    - remainingStr = `${remainingDays > 1 ? `${remainingDays} days left`: `${remainingHours} hours left`}`
                                                     p.text-muted.mb-0= `${remainingStr}`
                                                 - if(remainingTime < 0) 
                                                     p.text-muted.mb-0 Auction has ended

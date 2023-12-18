@@ -25,6 +25,7 @@ let userData;
 let serverState = {};
 let activeConnections = 0;
 
+/* UPDATING DATABASE WITH NEW BIDS */
 const updateProductBidsInDB = catchAsync(async () => {
   if (serverState[product._id]._newBids.length === 0) {
     console.log('No new bids!');
