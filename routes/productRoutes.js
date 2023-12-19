@@ -16,5 +16,13 @@ router
 router.get('/', productController.getAllProducts);
 router.route('/:id').get(productController.getProduct);
 router.post('/', authController.protect, productController.createProduct);
+router.post(
+  '/create-my-product',
+  authController.protect,
+  productController.uploadProductCoverImage,
+  productController.resizeProductCoverImage,
+  productController.addSeller,
+  productController.createProduct,
+);
 
 module.exports = router;

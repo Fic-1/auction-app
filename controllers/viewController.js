@@ -88,9 +88,17 @@ exports.getProductPage = catchAsync(async (req, res, next) => {
 });
 
 exports.getMyProducts = catchAsync(async (req, res, next) => {
-  //* 1) Find all bookings for a specific user
-  const products = await Product.find({ seller: { _id: req.user.id } });
-  console.log(products);
+  req.query.limit = '5';
+  req.query.sort = '-endDate';
+  const features = new APIFeatures(
+    Product.find({ seller: { _id: req.user.id } }),
+    req.query,
+  )
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+  const products = await features.query;
 
   res.status(200).render('myProducts', {
     title: 'My tours',

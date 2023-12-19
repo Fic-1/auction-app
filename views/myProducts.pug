@@ -3,6 +3,10 @@ block append head
   link(rel='stylesheet', href='/assets/css/style.css')
 block content
     .container(style="margin-top: 3dvh")
+            p= `Showing ${5} products out of ${products.length}`
+            .paginateDiv
+                .previousPage <--
+                .nextPage -->
             each product in products  
                 .row
                     .col-md-12
@@ -43,4 +47,36 @@ block content
                                                 span
                                                     img.editImg(src='/assets/img/link-128.png')
             .add-product
-                span.add-product-btn +
+                img.add-product-btn(src='/assets/img/plus-135.png', alt='add product')
+                img.add-product-btn-toggled.hidden(src='/assets/img/plus-135-toggled.png', alt='add product')
+            .add-product-form-div.hidden
+                form.add-product-form(enctype="multipart/form-data")
+                        .row(style='margin-bottom: 25px;text-align: left;')
+                            .row
+                                .col-md-8.text-start
+                                    .mb-3
+                                        label.form-label(for='seller')
+                                            strong= `Seller: `
+                            .col-md-12
+                                .mb-3
+                                    label.form-label(for='name')
+                                        strong Product name
+                                    input.form-control#create-form--name(type='text', placeholder=``,value=``, name='name', required='')
+                                .mb-3
+                                    label.form-label(for='price')
+                                        strong Starting price (€)
+                                    input.form-control#create-form--price(type='number', placeholder=`[00000]`,value=``, name='name', required='')
+                                .mb-3
+                                    label.form-label(for='description')
+                                        strong Description
+                                    textarea.form-control#create-form--description(rows="5" cols="60" name="description" placeholder=``, value=``)
+                                .mb-3
+                                    label.form-label(for='endDate')
+                                        strong= `End date: `
+                                    br
+                                    input#create-form--date(type='date', placeholder=`Enter new date`, name='endDate' required)
+                                .mb-3
+                                    img.create-product-cover(src=`/products/default-no-img.png`)
+                                .mb-3
+                                    input.form-control.form-control-sm(type='file', id='coverImage', name='coverImage', accept='image/*')
+                                button.btn.btn-primary.btn-sm.btn--create-product(type='submit') Create new product

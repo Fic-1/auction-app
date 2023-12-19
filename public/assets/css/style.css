@@ -347,22 +347,55 @@ h2 {
 
 .add-product {
   display: flex;
-  height: 10dvh;
+  height: 7dvh;
   width: 2.5vw;
-  background-color: blue;
   position: fixed;
   bottom: 0;
   right: 0;
-  margin: 0px 0px 5px 0px;
+  margin-bottom: 5px;
+  margin-right: 15px;
   border-radius: 50px;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 101;
+}
+
+.hidden {
+  display: none;
 }
 
 .add-product-btn {
-  margin: auto 0px;
-  font-size: 10vh;
-  color: white;
-  z-index: 101;
+  height: 100%;
+  z-index: 100;
+  cursor: pointer;
+}
+.add-product-btn-toggled {
+  height: 100%;
+  z-index: 100;
+  cursor: pointer;
+}
+
+.add-product-form-div {
+  position: fixed;
+  bottom: 5%;
+  right: 0;
+  background-color: white;
+  border-radius: 25px;
+  padding: 2vh;
+  margin: 2%;
+  box-shadow:
+    0 4px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.create-product-cover {
+  height: 15vh;
+  width: fit-content;
+}
+
+.nextPage {
+  cursor: pointer;
+}
+.previousPage {
+  cursor: pointer;
 }

@@ -26,7 +26,9 @@ exports.uploadProductCoverImage = upload.single('coverImage');
 exports.resizeProductCoverImage = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
   // 1) Cover image
-  req.body.coverImage = `product-${req.params.id}-${Date.now()}-cover.jpeg`;
+  req.body.coverImage = `product-${
+    req.params.id ? req.params.id : req.user.id
+  }-${Date.now()}-cover.jpeg`;
   await sharp(req.file.buffer)
     .resize(2000, 1333)
     .toFormat('jpeg')
@@ -65,3 +67,10 @@ exports.getAllProducts = factory.getAll(Product);
 exports.getProduct = factory.getOne(Product);
 exports.createProduct = factory.createOne(Product);
 exports.updateProduct = factory.updateOne(Product);
+
+exports.addSeller = (req, res, next) => {
+  req.body.seller = req.user.id;
+  if (req.body.coverImage === 'undefined')
+    req.body.coverImage = 'default-no-img.png';
+  next();
+};

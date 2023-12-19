@@ -64,3 +64,24 @@ export const updateProductData = async (data, id) => {
     showAlert('error', err.response.data.message);
   }
 };
+
+export const createNewProduct = async (data, elementArray) => {
+  console.log(data);
+  try {
+    console.log('before request');
+    const res = await axios({
+      method: 'POST',
+      url: '/api/v1/products/create-my-product',
+      data,
+    });
+    console.log(res);
+    if (res.data.status === 'Success') {
+      showAlert('success', `PRODUCT created successfuly!`);
+      elementArray.array.forEach((el) => {
+        el.classList.toggle('hidden');
+      });
+    }
+  } catch (err) {
+    showAlert('error', err.response.data.message);
+  }
+};

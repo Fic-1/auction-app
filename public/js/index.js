@@ -7,7 +7,9 @@ import {
   updateSettings,
   updateCover,
   updateProductData,
+  createNewProduct,
 } from './updateSettings';
+import { nextPage, previousPage } from './paginate.js';
 
 const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.logoutbtn');
@@ -20,6 +22,53 @@ const userDataForm = document.querySelector('.user-data');
 const userPasswordForm = document.querySelector('.change-password');
 const coverImageForm = document.querySelector('.product-cover-form');
 const productDataForm = document.querySelector('.product-data-form');
+const addProduct = document.querySelector('.add-product');
+const addProductFormDiv = document.querySelector('.add-product-form-div');
+const addProductBtn = document.querySelector('.add-product-btn');
+const addProductBtnToggled = document.querySelector('.add-product-btn-toggled');
+const addProductForm = document.querySelector('.add-product-form');
+const paginateDiv = document.querySelector('.paginateDiv');
+
+if (addProduct) {
+  addProduct.addEventListener('click', (e) => {
+    addProductBtn.classList.toggle('hidden');
+    addProductBtnToggled.classList.toggle('hidden');
+    addProductFormDiv.classList.toggle('hidden');
+  });
+
+  addProductForm.addEventListener('submit', (e) => {
+    const elementArray = [
+      addProductForm,
+      addProductBtnToggled,
+      addProductFormDiv,
+    ];
+    const formData = new FormData();
+    formData.append('name', document.getElementById('create-form--name').value);
+    formData.append(
+      'description',
+      document.getElementById('create-form--description').value,
+    );
+    formData.append(
+      'startingBid',
+      document.getElementById('create-form--price').value,
+    );
+    formData.append(
+      'coverImage',
+      document.getElementById('coverImage').files[0],
+    );
+    formData.append(
+      'endDate',
+      document.getElementById('create-form--date').value,
+    );
+    console.log(...formData);
+    createNewProduct(formData, elementArray);
+  });
+
+  paginateDiv.addEventListener('click', (e) => {
+    if (e.target.closest('.nextPage')) nextPage();
+    if (e.target.closest('.previousPage')) previousPage();
+  });
+}
 
 if (coverImageForm) {
   const productId = document.querySelector('.label-id').dataset.id;

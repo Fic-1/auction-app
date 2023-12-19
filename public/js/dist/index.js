@@ -582,6 +582,7 @@ var _loginJs = require("./login.js");
 var _productPageJs = require("./productPage.js");
 var _signupJs = require("./signup.js");
 var _updateSettings = require("./updateSettings");
+var _paginateJs = require("./paginate.js");
 const loginForm = document.querySelector(".form--login");
 const logOutBtn = document.querySelector(".logoutbtn");
 const signupForm = document.querySelector(".form--signup");
@@ -593,6 +594,38 @@ const userDataForm = document.querySelector(".user-data");
 const userPasswordForm = document.querySelector(".change-password");
 const coverImageForm = document.querySelector(".product-cover-form");
 const productDataForm = document.querySelector(".product-data-form");
+const addProduct = document.querySelector(".add-product");
+const addProductFormDiv = document.querySelector(".add-product-form-div");
+const addProductBtn = document.querySelector(".add-product-btn");
+const addProductBtnToggled = document.querySelector(".add-product-btn-toggled");
+const addProductForm = document.querySelector(".add-product-form");
+const paginateDiv = document.querySelector(".paginateDiv");
+if (addProduct) {
+    addProduct.addEventListener("click", (e)=>{
+        addProductBtn.classList.toggle("hidden");
+        addProductBtnToggled.classList.toggle("hidden");
+        addProductFormDiv.classList.toggle("hidden");
+    });
+    addProductForm.addEventListener("submit", (e)=>{
+        const elementArray = [
+            addProductForm,
+            addProductBtnToggled,
+            addProductFormDiv
+        ];
+        const formData = new FormData();
+        formData.append("name", document.getElementById("create-form--name").value);
+        formData.append("description", document.getElementById("create-form--description").value);
+        formData.append("startingBid", document.getElementById("create-form--price").value);
+        formData.append("coverImage", document.getElementById("coverImage").files[0]);
+        formData.append("endDate", document.getElementById("create-form--date").value);
+        console.log(...formData);
+        (0, _updateSettings.createNewProduct)(formData, elementArray);
+    });
+    paginateDiv.addEventListener("click", (e)=>{
+        if (e.target.closest(".nextPage")) (0, _paginateJs.nextPage)();
+        if (e.target.closest(".previousPage")) (0, _paginateJs.previousPage)();
+    });
+}
 if (coverImageForm) {
     const productId = document.querySelector(".label-id").dataset.id;
     //*UPDATE COVER IMAGE
@@ -734,7 +767,7 @@ if (productTabs) {
     });
 }
 
-},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./updateSettings":"l3cGY"}],"5nVUE":[function(require,module,exports) {
+},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./updateSettings":"l3cGY","./paginate.js":"cv9JK"}],"5nVUE":[function(require,module,exports) {
 // https://github.com/maxogden/websocket-stream/blob/48dc3ddf943e5ada668c31ccd94e9186f02fafbd/ws-fallback.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -5260,6 +5293,7 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "updateSettings", ()=>updateSettings);
 parcelHelpers.export(exports, "updateCover", ()=>updateCover);
 parcelHelpers.export(exports, "updateProductData", ()=>updateProductData);
+parcelHelpers.export(exports, "createNewProduct", ()=>createNewProduct);
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _alerts = require("./alerts");
@@ -5317,7 +5351,59 @@ const updateProductData = async (data, id)=>{
         (0, _alerts.showAlert)("error", err.response.data.message);
     }
 };
+const createNewProduct = async (data, elementArray)=>{
+    console.log(data);
+    try {
+        console.log("before request");
+        const res = await (0, _axiosDefault.default)({
+            method: "POST",
+            url: "/api/v1/products/create-my-product",
+            data
+        });
+        console.log(res);
+        if (res.data.status === "Success") {
+            (0, _alerts.showAlert)("success", `PRODUCT created successfuly!`);
+            elementArray.array.forEach((el)=>{
+                el.classList.toggle("hidden");
+            });
+        }
+    } catch (err) {
+        (0, _alerts.showAlert)("error", err.response.data.message);
+    }
+};
 
-},{"axios":"jo6P5","./alerts":"6Mcnf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2Ex4i","f2QDv"], "f2QDv", "parcelRequire37fe")
+},{"axios":"jo6P5","./alerts":"6Mcnf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cv9JK":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "nextPage", ()=>nextPage);
+parcelHelpers.export(exports, "previousPage", ()=>previousPage);
+const nextPage = ()=>{
+    const currentUrl = window.location.href;
+    // Parse the URL to get its components
+    const url = new URL(currentUrl);
+    // Get the current page query parameter value (default to 1 if not present)
+    let currentPage = parseInt(url.searchParams.get("page")) || 1;
+    // Increment the page number
+    currentPage++;
+    // Set the new page value in the URL
+    url.searchParams.set("page", currentPage);
+    // Redirect to the new URL
+    window.location.href = url.href;
+};
+const previousPage = ()=>{
+    const currentUrl = window.location.href;
+    // Parse the URL to get its components
+    const url = new URL(currentUrl);
+    // Get the current page query parameter value (default to 1 if not present)
+    let currentPage = parseInt(url.searchParams.get("page")) || 1;
+    // Increment the page number
+    currentPage--;
+    // Set the new page value in the URL
+    url.searchParams.set("page", currentPage);
+    // Redirect to the new URL
+    window.location.href = url.href;
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2Ex4i","f2QDv"], "f2QDv", "parcelRequire37fe")
 
 //# sourceMappingURL=index.js.map

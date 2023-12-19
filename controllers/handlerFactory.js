@@ -44,8 +44,10 @@ exports.updateOne = (Model) => async (req, res, next) => {
 };
 
 exports.createOne = (Model) => async (req, res, next) => {
+  // console.log(`Query will run with: ${req.body}`);
   try {
     const doc = await Model.create(req.body); //Returns a promise
+    // console.log(`Query ran with: ${req.body}`);
     res.status(201).json({
       status: 'success',
       data: {
@@ -80,8 +82,6 @@ exports.getOne = (Model, popOptions) => async (req, res, next) => {
 exports.getAll = (Model) => async (req, res, next) => {
   //* To allow for nested GET reviews on tour (hack)
   try {
-    let filter;
-    if (req.params.tourid) filter = { tour: req.params.tourid };
     //EXECUTE QUERY
     const features = new APIFeatures(Model.find(), req.query)
       .filter()
