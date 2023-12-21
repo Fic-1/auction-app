@@ -370,6 +370,8 @@ h2 {
   cursor: pointer;
 }
 .add-product-btn-toggled {
+  transition: 2s;
+  animation: normal;
   height: 100%;
   z-index: 100;
   cursor: pointer;

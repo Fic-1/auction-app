@@ -124,9 +124,9 @@ process.on('SIGINT', () => {
 setInterval(
   async () => {
     if (activeConnections > 0) {
-      console.log('Running database update every 5 minutes...');
+      console.log('Running database update every 3 minutes...');
       updateProductBidsInDB();
     }
   },
-  0.5 * 60 * 1000,
+  3 * 60 * 1000,
 );
