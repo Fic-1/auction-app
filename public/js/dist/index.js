@@ -583,6 +583,8 @@ var _productPageJs = require("./productPage.js");
 var _signupJs = require("./signup.js");
 var _updateSettings = require("./updateSettings");
 var _paginateJs = require("./paginate.js");
+const currentUrl = window.location.href;
+const url = new URL(currentUrl);
 const loginForm = document.querySelector(".form--login");
 const logOutBtn = document.querySelector(".logoutbtn");
 const signupForm = document.querySelector(".form--signup");
@@ -601,6 +603,11 @@ const addProductBtnToggled = document.querySelector(".add-product-btn-toggled");
 const addProductForm = document.querySelector(".add-product-form");
 const paginateDiv = document.querySelector(".paginateDiv");
 if (addProduct) {
+    const pageControl = document.getElementById("pages");
+    let currentPage = parseInt(url.searchParams.get("page")) || 1;
+    const resultsNumberOfPages = Math.ceil(Number(pageControl.dataset.pages) / 5);
+    console.log(resultsNumberOfPages);
+    pageControl.textContent = `${currentPage - 1 <= 0 ? "" : currentPage - 1} [${currentPage}] ${currentPage + 1 > resultsNumberOfPages ? "" : currentPage + 1}`;
     addProduct.addEventListener("click", (e)=>{
         addProductBtn.classList.toggle("hidden");
         addProductBtnToggled.classList.toggle("hidden");
@@ -5379,28 +5386,18 @@ parcelHelpers.export(exports, "nextPage", ()=>nextPage);
 parcelHelpers.export(exports, "previousPage", ()=>previousPage);
 const nextPage = ()=>{
     const currentUrl = window.location.href;
-    // Parse the URL to get its components
     const url = new URL(currentUrl);
-    // Get the current page query parameter value (default to 1 if not present)
     let currentPage = parseInt(url.searchParams.get("page")) || 1;
-    // Increment the page number
     currentPage++;
-    // Set the new page value in the URL
     url.searchParams.set("page", currentPage);
-    // Redirect to the new URL
     window.location.href = url.href;
 };
 const previousPage = ()=>{
     const currentUrl = window.location.href;
-    // Parse the URL to get its components
     const url = new URL(currentUrl);
-    // Get the current page query parameter value (default to 1 if not present)
     let currentPage = parseInt(url.searchParams.get("page")) || 1;
-    // Increment the page number
     currentPage--;
-    // Set the new page value in the URL
     url.searchParams.set("page", currentPage);
-    // Redirect to the new URL
     window.location.href = url.href;
 };
 

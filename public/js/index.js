@@ -11,6 +11,9 @@ import {
 } from './updateSettings';
 import { nextPage, previousPage } from './paginate.js';
 
+const currentUrl = window.location.href;
+const url = new URL(currentUrl);
+
 const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.logoutbtn');
 const signupForm = document.querySelector('.form--signup');
@@ -30,6 +33,15 @@ const addProductForm = document.querySelector('.add-product-form');
 const paginateDiv = document.querySelector('.paginateDiv');
 
 if (addProduct) {
+  const pageControl = document.getElementById('pages');
+  let currentPage = parseInt(url.searchParams.get('page')) || 1;
+  const resultsNumberOfPages = Math.ceil(Number(pageControl.dataset.pages) / 5);
+  console.log(resultsNumberOfPages);
+  pageControl.textContent = `${
+    currentPage - 1 <= 0 ? '' : currentPage - 1
+  } [${currentPage}] ${
+    currentPage + 1 > resultsNumberOfPages ? '' : currentPage + 1
+  }`;
   addProduct.addEventListener('click', (e) => {
     addProductBtn.classList.toggle('hidden');
     addProductBtnToggled.classList.toggle('hidden');

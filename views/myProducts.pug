@@ -3,10 +3,15 @@ block append head
   link(rel='stylesheet', href='/assets/css/style.css')
 block content
     .container(style="margin-top: 3dvh")
-            p= `Showing ${5} products out of ${products.length}`
-            .paginateDiv
-                .previousPage <--
-                .nextPage -->
+            .pageControl
+                .pageInfo
+                    p= `Showing ${products.length} products out of ${resultsNumber}`
+                .paginateDiv
+                    .previousPage
+                        img(src='./assets/img/previous-32.png')
+                    p#pages(data-pages=`${resultsNumber}` )
+                    .nextPage
+                        img(src='./assets/img/next-32.png')
             each product in products  
                 .row
                     .col-md-12

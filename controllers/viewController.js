@@ -98,11 +98,13 @@ exports.getMyProducts = catchAsync(async (req, res, next) => {
     .sort()
     .limitFields()
     .paginate();
+  const resultsNumber = await features.totalDocs;
   const products = await features.query;
 
   res.status(200).render('myProducts', {
     title: 'My tours',
     products,
+    resultsNumber,
   });
 });
 

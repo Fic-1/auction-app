@@ -40,8 +40,15 @@ class APIFeatures {
   paginate() {
     const page = +this.queryString.page || 1; // by default page 1
     const limit = +this.queryString.limit || 100; //by default 100
+    // Create a copy of the query before applying pagination
+    const countQuery = { ...this.query.getQuery() };
+
+    // Separate query to get the total count
+    const totalDocs = this.query.model.countDocuments(countQuery);
     const skip = (page - 1) * limit;
     this.query = this.query.skip(skip).limit(limit);
+
+    this.totalDocs = totalDocs;
     return this;
   }
 }

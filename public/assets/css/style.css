@@ -395,9 +395,29 @@ h2 {
   width: fit-content;
 }
 
+.pageControl {
+  display: flex;
+  justify-content: space-between;
+}
+
 .nextPage {
   cursor: pointer;
+  width: fit-content;
+  height: 5vh;
 }
 .previousPage {
   cursor: pointer;
+}
+
+.paginateDiv {
+  display: flex;
+  width: 10vw;
+  justify-content: space-around;
+}
+
+.nextPage > img {
+  height: 2vh;
+}
+.previousPage > img {
+  height: 2vh;
 }
