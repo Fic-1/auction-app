@@ -1,6 +1,7 @@
 extends base
 block append head 
-  link(rel='stylesheet', href='/assets/css/style.css')
+    base(href='/')
+    link(rel='stylesheet', href='/assets/css/style.css')
 block content
     .container.allProducts(style="margin-top: 3dvh;")
             .pageControl
@@ -8,12 +9,12 @@ block content
                     p= `Showing ${products.length} products out of ${resultsNumber}`
                 .paginateDiv
                     .previousPage
-                        img(src='./public/assets/img/previous-32.png')
-                    p#pages(data-pages=`${resultsNumber}` )
+                        img(src='./assets/img/previous-32.png')
+                    p#pagesTop(data-pages=`${resultsNumber}` )
                     .nextPage
-                        img(src='./public/assets/img/next-32.png')
+                        img(src='./assets/img/next-32.png')
             each product in products  
-                .row
+                a(href=`products/${product._id}`).row
                     .col-md-12
                         .card.mb-3(style='max-width: 100%;')
                             .row.g-0
@@ -41,3 +42,12 @@ block content
                                             div
                                                 p.fw-bold.mb-0= product.seller.name
                                                 p.text-muted.mb-0 LOKACIJA - UPDATE MODELA
+            .pageControl
+                .pageInfo
+                    p= `Showing ${products.length} products out of ${resultsNumber}`
+                .paginateDiv
+                    .previousPage
+                        img(src='./assets/img/previous-32.png')
+                    p#pagesBottom(data-pages=`${resultsNumber}` )
+                    .nextPage
+                        img(src='./assets/img/next-32.png')

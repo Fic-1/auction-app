@@ -601,26 +601,24 @@ const addProductFormDiv = document.querySelector(".add-product-form-div");
 const addProductBtn = document.querySelector(".add-product-btn");
 const addProductBtnToggled = document.querySelector(".add-product-btn-toggled");
 const addProductForm = document.querySelector(".add-product-form");
-const paginateDiv = document.querySelector(".paginateDiv");
+const paginateDiv = document.querySelectorAll(".paginateDiv");
 const allProductsPage = document.querySelector(".allProducts");
 const pageControl = ()=>{
-    const pageControl = document.getElementById("pages");
+    const pagesTop = document.getElementById("pagesTop");
+    const pagesBottom = document.getElementById("pagesBottom");
     let currentPage = parseInt(url.searchParams.get("page")) || 1;
-    const resultsNumberOfPages = Math.ceil(Number(pageControl.dataset.pages) / 5);
+    const resultsNumberOfPages = Math.ceil(Number(pagesTop.dataset.pages) / 5);
     console.log(resultsNumberOfPages);
-    pageControl.textContent = `${currentPage - 1 <= 0 ? "" : currentPage - 1} [${currentPage}] ${currentPage + 1 > resultsNumberOfPages ? "" : currentPage + 1}`;
-    paginateDiv.addEventListener("click", (e)=>{
-        if (e.target.closest(".nextPage")) (0, _paginateJs.nextPage)();
-        if (e.target.closest(".previousPage")) (0, _paginateJs.previousPage)();
+    pagesTop.textContent = `${currentPage - 1 <= 0 ? "" : currentPage - 1} [${currentPage}] ${currentPage + 1 > resultsNumberOfPages ? "" : currentPage + 1}`;
+    pagesBottom.textContent = pagesTop.textContent;
+    paginateDiv.forEach((el)=>{
+        el.addEventListener("click", (e)=>{
+            if (e.target.closest(".nextPage")) (0, _paginateJs.nextPage)();
+            if (e.target.closest(".previousPage")) (0, _paginateJs.previousPage)();
+        });
     });
 };
-if (allProductsPage) {
-    pageControl();
-    paginateDiv.addEventListener("click", (e)=>{
-        if (e.target.closest(".nextPage")) (0, _paginateJs.nextPage)();
-        if (e.target.closest(".previousPage")) (0, _paginateJs.previousPage)();
-    });
-}
+if (allProductsPage) pageControl();
 if (addProduct) {
     addProduct.addEventListener("click", (e)=>{
         addProductBtn.classList.toggle("hidden");

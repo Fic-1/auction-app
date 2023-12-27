@@ -11,12 +11,8 @@ nav.navbar.navbar-expand-md.bg-body.py-3
       ul.navbar-nav.ms-auto(style='display: flex; align-items: center')
         li.nav-item
           a.nav-link(href='/') Home
-        li.nav-item.dropdown
-          a.dropdown-toggle.nav-link(aria-expanded='false' data-bs-toggle='dropdown' href='#') Auctions
-          .dropdown-menu
-            a.dropdown-item(href='/products') All products
-            a.dropdown-item(href='#') Second Item
-            a.dropdown-item(href='#') Third Item
+        li.nav-item
+          a.nav-link(href='/products') All products
         li.nav-item
         
         if user
@@ -28,7 +24,8 @@ nav.navbar.navbar-expand-md.bg-body.py-3
               .dropdown-divider
               a.dropdown-item.logoutbtn(href='#') Log out
           li.nav-item(style='display: flex; max-width: 3vw;')
-            img.rounded-circle.img-fluid(src=`/img/${user.photo === 'default.png' ? user.photo : user.photo }`,)
+            a(href='/me')
+              img.rounded-circle.img-fluid(src=`/img/${user.photo === 'default.png' ? user.photo : user.photo }`,)
         
         else
           a.btn.btn-primary.ms-md-2.btn--login(role='button' href='/login') Log in

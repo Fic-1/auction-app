@@ -43,6 +43,7 @@ exports.getSearchResults = catchAsync(async (req, res, next) => {
 
 exports.getAllProducts = catchAsync(async (req, res, next) => {
   req.query.limit = '5';
+  req.query.sort = 'name';
   const features = new APIFeatures(Product.find(), req.query)
     .filter()
     .sort()

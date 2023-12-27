@@ -58,8 +58,6 @@ app.use(globalErrorHandler);
 
 module.exports = app;
 
-//TODO: Style page navigation
-//TODO: Add all products browse
 //TODO: Add mobile responsivnes for edit product && add product
 //TODO: Add logic for finished auctions -> winner gets Stripe link
 //TODO: Add stripe payments

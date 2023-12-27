@@ -9,7 +9,12 @@ const router = express.Router();
 
 // router.use(viewController.alerts);
 
-router.get('/products', authController.protect, viewController.getAllProducts);
+router.get(
+  '/products',
+  authController.protect,
+  authController.isLoggedIn,
+  viewController.getAllProducts,
+);
 
 router.get(
   '/products/:id',

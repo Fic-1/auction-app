@@ -9,7 +9,7 @@ block content
                 .paginateDiv
                     .previousPage
                         img(src='./assets/img/previous-32.png')
-                    p#pages(data-pages=`${resultsNumber}` )
+                    p#pagesTop(data-pages=`${resultsNumber}` )
                     .nextPage
                         img(src='./assets/img/next-32.png')
             each product in products  
@@ -51,6 +51,15 @@ block content
                                             button.editBtn(for="name")
                                                 span
                                                     img.editImg(src='/assets/img/link-128.png')
+            .pageControl
+                .pageInfo
+                    p= `Showing ${products.length} products out of ${resultsNumber}`
+                .paginateDiv
+                    .previousPage
+                        img(src='./assets/img/previous-32.png')
+                    p#pagesBottom(data-pages=`${resultsNumber}` )
+                    .nextPage
+                        img(src='./assets/img/next-32.png')
             .add-product
                 img.add-product-btn(src='/assets/img/plus-135.png', alt='add product')
                 img.add-product-btn-toggled.hidden(src='/assets/img/plus-135-toggled.png', alt='add product')
