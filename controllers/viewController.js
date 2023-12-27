@@ -41,6 +41,23 @@ exports.getSearchResults = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getAllProducts = catchAsync(async (req, res, next) => {
+  req.query.limit = '5';
+  const features = new APIFeatures(Product.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+  const resultsNumber = await features.totalDocs;
+  const products = await features.query;
+
+  res.status(200).render('allProducts', {
+    title: `All products`,
+    products,
+    resultsNumber,
+  });
+});
+
 exports.getProduct = catchAsync(async (req, res, next) => {
   //* 1) Get data for requested tour (including revires and tour guides)
   const product = await Product.findOne({ _id: req.params.id });

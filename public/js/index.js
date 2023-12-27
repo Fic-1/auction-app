@@ -31,8 +31,9 @@ const addProductBtn = document.querySelector('.add-product-btn');
 const addProductBtnToggled = document.querySelector('.add-product-btn-toggled');
 const addProductForm = document.querySelector('.add-product-form');
 const paginateDiv = document.querySelector('.paginateDiv');
+const allProductsPage = document.querySelector('.allProducts');
 
-if (addProduct) {
+const pageControl = () => {
   const pageControl = document.getElementById('pages');
   let currentPage = parseInt(url.searchParams.get('page')) || 1;
   const resultsNumberOfPages = Math.ceil(Number(pageControl.dataset.pages) / 5);
@@ -42,6 +43,21 @@ if (addProduct) {
   } [${currentPage}] ${
     currentPage + 1 > resultsNumberOfPages ? '' : currentPage + 1
   }`;
+  paginateDiv.addEventListener('click', (e) => {
+    if (e.target.closest('.nextPage')) nextPage();
+    if (e.target.closest('.previousPage')) previousPage();
+  });
+};
+
+if (allProductsPage) {
+  pageControl();
+  paginateDiv.addEventListener('click', (e) => {
+    if (e.target.closest('.nextPage')) nextPage();
+    if (e.target.closest('.previousPage')) previousPage();
+  });
+}
+
+if (addProduct) {
   addProduct.addEventListener('click', (e) => {
     addProductBtn.classList.toggle('hidden');
     addProductBtnToggled.classList.toggle('hidden');
@@ -76,10 +92,7 @@ if (addProduct) {
     createNewProduct(formData, elementArray);
   });
 
-  paginateDiv.addEventListener('click', (e) => {
-    if (e.target.closest('.nextPage')) nextPage();
-    if (e.target.closest('.previousPage')) previousPage();
-  });
+  pageControl();
 }
 
 if (coverImageForm) {

@@ -1,0 +1,43 @@
+extends base
+block append head 
+  link(rel='stylesheet', href='/assets/css/style.css')
+block content
+    .container.allProducts(style="margin-top: 3dvh;")
+            .pageControl
+                .pageInfo
+                    p= `Showing ${products.length} products out of ${resultsNumber}`
+                .paginateDiv
+                    .previousPage
+                        img(src='./public/assets/img/previous-32.png')
+                    p#pages(data-pages=`${resultsNumber}` )
+                    .nextPage
+                        img(src='./public/assets/img/next-32.png')
+            each product in products  
+                .row
+                    .col-md-12
+                        .card.mb-3(style='max-width: 100%;')
+                            .row.g-0
+                                .col-md-4
+                                    img.img-fluid.rounded-start(src=`/products/${product.coverImage}` alt=`${product.name}`)
+                                .col-md-6
+                                    .card-body
+                                        h5.card-title #{product.name}
+                                        p.card-text
+                                        | #{product.description}
+                                        p.card-text
+                                            - const oneDay = 24*60*60*1000
+                                            - const oneHour = 60*60*1000
+                                            - let remainingStr
+                                            - const remainingTime = product.endDate - Date.now()
+                                            - if(remainingTime > 0) 
+                                                - const remainingDays = Math.round(Math.abs(remainingTime / oneDay)) 
+                                                - const remainingHours = Math.round(Math.abs(remainingTime / oneHour))
+                                                - remainingStr = `${remainingDays > 1 ? `${remainingDays} days left`: `${remainingHours} hours left`}`
+                                                p.text-muted.mb-0= `${remainingStr}`
+                                            - if(remainingTime < 0) 
+                                                p.text-muted.mb-0 Auction has ended
+                                        .d-flex
+                                            img.rounded-circle.flex-shrink-0.me-3.fit-cover(width='50' height='50' src=`/img/${product.seller.photo === 'default.png' ? product.seller.photo : product.seller.photo }`)
+                                            div
+                                                p.fw-bold.mb-0= product.seller.name
+                                                p.text-muted.mb-0 LOKACIJA - UPDATE MODELA

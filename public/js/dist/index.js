@@ -602,12 +602,26 @@ const addProductBtn = document.querySelector(".add-product-btn");
 const addProductBtnToggled = document.querySelector(".add-product-btn-toggled");
 const addProductForm = document.querySelector(".add-product-form");
 const paginateDiv = document.querySelector(".paginateDiv");
-if (addProduct) {
+const allProductsPage = document.querySelector(".allProducts");
+const pageControl = ()=>{
     const pageControl = document.getElementById("pages");
     let currentPage = parseInt(url.searchParams.get("page")) || 1;
     const resultsNumberOfPages = Math.ceil(Number(pageControl.dataset.pages) / 5);
     console.log(resultsNumberOfPages);
     pageControl.textContent = `${currentPage - 1 <= 0 ? "" : currentPage - 1} [${currentPage}] ${currentPage + 1 > resultsNumberOfPages ? "" : currentPage + 1}`;
+    paginateDiv.addEventListener("click", (e)=>{
+        if (e.target.closest(".nextPage")) (0, _paginateJs.nextPage)();
+        if (e.target.closest(".previousPage")) (0, _paginateJs.previousPage)();
+    });
+};
+if (allProductsPage) {
+    pageControl();
+    paginateDiv.addEventListener("click", (e)=>{
+        if (e.target.closest(".nextPage")) (0, _paginateJs.nextPage)();
+        if (e.target.closest(".previousPage")) (0, _paginateJs.previousPage)();
+    });
+}
+if (addProduct) {
     addProduct.addEventListener("click", (e)=>{
         addProductBtn.classList.toggle("hidden");
         addProductBtnToggled.classList.toggle("hidden");
@@ -628,10 +642,7 @@ if (addProduct) {
         console.log(...formData);
         (0, _updateSettings.createNewProduct)(formData, elementArray);
     });
-    paginateDiv.addEventListener("click", (e)=>{
-        if (e.target.closest(".nextPage")) (0, _paginateJs.nextPage)();
-        if (e.target.closest(".previousPage")) (0, _paginateJs.previousPage)();
-    });
+    pageControl();
 }
 if (coverImageForm) {
     const productId = document.querySelector(".label-id").dataset.id;
@@ -774,7 +785,7 @@ if (productTabs) {
     });
 }
 
-},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./updateSettings":"l3cGY","./paginate.js":"cv9JK"}],"5nVUE":[function(require,module,exports) {
+},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","./updateSettings":"l3cGY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./paginate.js":"cv9JK"}],"5nVUE":[function(require,module,exports) {
 // https://github.com/maxogden/websocket-stream/blob/48dc3ddf943e5ada668c31ccd94e9186f02fafbd/ws-fallback.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
