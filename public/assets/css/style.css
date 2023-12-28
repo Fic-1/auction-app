@@ -411,7 +411,7 @@ h2 {
 
 .paginateDiv {
   display: flex;
-  width: 10vw;
+  width: 20vw;
   justify-content: space-around;
 }
 
@@ -420,4 +420,50 @@ h2 {
 }
 .previousPage > img {
   height: 2vh;
+}
+@media screen and (min-width: 300px) {
+  .editBtnDiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+    border-left: none;
+  }
+}
+
+@media screen and (min-width: 754px) {
+  .editBtnDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-left: 1px solid #000;
+    height: 100%;
+  }
+}
+
+.editBtn {
+  border-radius: 30px;
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  cursor: pointer;
+}
+.editBtn:hover {
+  transition: 0.5s;
+  background-color: rgba(220, 220, 220, 0.5);
+}
+
+.editImg {
+  height: 5vh;
+}
+.editImg:hover {
+  background-color: transparent;
+}
+
+.btn--save-password {
+  width: 25vw;
+}
+
+.btn--save-data {
+  width: 25vw;
 }
