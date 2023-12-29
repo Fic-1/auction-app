@@ -1,9 +1,17 @@
-.edit-product {
-  display: grid;
-  grid-template-columns: 0.5fr 1fr;
-  grid-template-rows: repeat(5, 1fr);
-  grid-column-gap: 2vw;
-  grid-row-gap: 0px;
+@media screen and (min-width: 300px) {
+  .edit-product {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 754px) {
+  .edit-product {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr;
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 2vw;
+    grid-row-gap: 0px;
+  }
 }
 
 .edit-product--cover {

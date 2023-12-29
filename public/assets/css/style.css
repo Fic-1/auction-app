@@ -429,6 +429,10 @@ h2 {
     flex-direction: row;
     border-left: none;
   }
+
+  .edit-product {
+    display: block;
+  }
 }
 
 @media screen and (min-width: 754px) {
