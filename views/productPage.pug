@@ -18,19 +18,11 @@ block content
           #productContent.card-body.card-flex
             .product-col
               img.product-img(src=`/products/${product.coverImage}`)
-            .bid-col
-              .row.g-3
-                .col
-                  input.form-control(type='text', aria-label='First name', placeholder='First name')
-                .col
-                  input.form-control(type='text', aria-label='Last name', placeholder='Last name')
-              hr.style-one
-              .row.g-3
-                .col
-                  input.form-control(type='text', aria-label='First name', placeholder='First name')
-                .col
-                  input.form-control(type='text', aria-label='Last name', placeholder='Last name')
-              input.btn.btn-primary(type='submit', value='Add bid')
+            .product-photos-col
+              .product-photos
+                img.product-photo(src=`/products/${product.coverImage}`)
+                each photo in product.photos
+                   img.product-photo(src=`/products/${photo}`)
           #liveBidContent.card-body.none(style='overflow: visible')
             .product-col
               img.product-img(src=`/products/${product.coverImage}`)

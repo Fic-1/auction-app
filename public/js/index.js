@@ -32,6 +32,8 @@ const addProductBtnToggled = document.querySelector('.add-product-btn-toggled');
 const addProductForm = document.querySelector('.add-product-form');
 const paginateDiv = document.querySelectorAll('.paginateDiv');
 const allProductsPage = document.querySelector('.allProducts');
+const productPhotos = document.querySelector('.product-photos');
+const mainImage = document.querySelector('.product-img');
 
 const pageControl = () => {
   const pagesTop = document.getElementById('pagesTop');
@@ -190,6 +192,14 @@ if (userPasswordForm)
     document.getElementById('password').value = '';
     document.getElementById('password-confirm').value = '';
   });
+
+if (productPhotos) {
+  productPhotos.addEventListener('click', (e) => {
+    console.log(e.target.closest('.product-photo'));
+    if (e.target.closest('.product-photo'))
+      mainImage.src = e.target.closest('.product-photo').src;
+  });
+}
 
 /*----- Websocket logic -----*/
 
