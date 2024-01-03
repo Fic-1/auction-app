@@ -583,6 +583,7 @@ var _productPageJs = require("./productPage.js");
 var _signupJs = require("./signup.js");
 var _updateSettings = require("./updateSettings");
 var _paginateJs = require("./paginate.js");
+var _alertsJs = require("./alerts.js");
 const currentUrl = window.location.href;
 const url = new URL(currentUrl);
 const loginForm = document.querySelector(".form--login");
@@ -747,6 +748,10 @@ if (productTabs) {
     const ws = new (0, _isomorphicWsDefault.default)(uri);
     const wsBidding = (formValue)=>{
         const id = document.getElementById("product").dataset.id;
+        if (!+formValue) {
+            (0, _alertsJs.showAlert)("error", "Please enter the valid number");
+            return;
+        }
         const messageData = {
             _id: id,
             amount: formValue,
@@ -789,7 +794,7 @@ if (productTabs) {
     });
 }
 
-},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","./updateSettings":"l3cGY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./paginate.js":"cv9JK"}],"5nVUE":[function(require,module,exports) {
+},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","./updateSettings":"l3cGY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./paginate.js":"cv9JK","./alerts.js":"6Mcnf"}],"5nVUE":[function(require,module,exports) {
 // https://github.com/maxogden/websocket-stream/blob/48dc3ddf943e5ada668c31ccd94e9186f02fafbd/ws-fallback.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);

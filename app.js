@@ -58,7 +58,6 @@ app.use(globalErrorHandler);
 
 module.exports = app;
 
-//TODO: Add product pictures to product page
 //TODO: Handle wrong data type on ws
 //TODO: Add logic for finished auctions -> winner gets Stripe link
 //TODO: Add stripe payments

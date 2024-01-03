@@ -10,6 +10,7 @@ import {
   createNewProduct,
 } from './updateSettings';
 import { nextPage, previousPage } from './paginate.js';
+import { showAlert } from './alerts.js';
 
 const currentUrl = window.location.href;
 const url = new URL(currentUrl);
@@ -255,6 +256,10 @@ if (productTabs) {
   const ws = new WebSocket(uri);
   const wsBidding = (formValue) => {
     const id = document.getElementById('product').dataset.id;
+    if (!+formValue) {
+      showAlert('error', 'Please enter the valid number');
+      return;
+    }
     const messageData = {
       _id: id,
       amount: formValue,

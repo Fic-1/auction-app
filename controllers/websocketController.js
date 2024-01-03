@@ -87,12 +87,22 @@ wss.on('connection', (ws) => {
       product.bids.length > 0 &&
       newBid.amount <= serverState[product._id]._activeBids.at(-1).amount
     ) {
-      ws.send('Bid must be a larger amount than the current bid.');
+      ws.send(
+        JSON.stringify({
+          type: 'error',
+          message: 'Bid must be a larger amount than the current bid.',
+        }),
+      );
       return;
     }
     newBid.amount *= 1;
     if (!newBid.amount) {
-      ws.send('Bid must be a number!');
+      ws.send(
+        JSON.stringify({
+          type: 'error',
+          message: 'Bid must be a number!',
+        }),
+      );
       return;
     }
     serverState[newBid._id]._activeBids.push(newBid);
