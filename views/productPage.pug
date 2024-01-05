@@ -3,6 +3,7 @@ block append head
   link(rel='stylesheet', href='/assets/css/style.css')
 block content 
     - const userEmail = user.email;
+    - const userFirstName = user.name.split(' ')[0] 
     - const remainingTime = product.endDate - Date.now()
     section.product-section
       .product-container
@@ -10,14 +11,15 @@ block content
           .card-header
             ul.nav.nav-tabs.card-header-tabs.card-header-tabs
               li.nav-item
-                a.nav-link.active#product(aria-current='true', href='#' data-id=`${product.id}`)= `${product.name} - photos`
+                a.nav-link.active#product(aria-current='true', href='#' data-tab='0' data-id=`${product.id}`)= `${product.name} - photos`
               li.nav-item
-                a.nav-link#liveBid(href='#')
+                a.nav-link#liveBid(href='#' data-tab='1')
                   span Live biddings
               - console.log(product?.bids?.at(-1))
               - if(product.bids.length > 0 && remainingTime < 0 && userEmail === product.bids.at(-1).bidder) 
                   li.nav-item
-                    a.nav-link#checkoutLink(disabled='true', href='#', tabindex='-1') Checkout
+                    a.nav-link#checkoutLink(href='#' data-tab='2')
+                      span Checkout
           #productContent.card-body.card-flex
             .product-col
               img.product-img(src=`/products/${product.coverImage}`)
@@ -49,6 +51,16 @@ block content
                 .card-flex.websocket-bid
                   input.websocket-form.form-control(type='text',name='bidAmount', aria-label='bidAmount', placeholder='Enter amount', style='margin: 0px 5px; padding: 1vh')
                   input.btn.btn-primary#btnAddBid(type='submit', for='bidAmount' value='Add bid 📤')
+          - if(product.bids.length > 0 && remainingTime < 0 && userEmail === product.bids.at(-1).bidder) 
+            #checkoutContent.card-body.none
+              .product-col
+                img.product-img(src=`/products/${product.coverImage}`)
+              .product-col
+                h2= `Congratulations ${userFirstName} !`
+                p You've won the auction, here is your checkout link:
+                a(href='#') 
+                button Proceed to checkout
+                p After the checkout is complete we will connect your with the seller.
       hr
       h2 Product details:
       #accordionExample.accordion.product-container.mt-2.mb-4
