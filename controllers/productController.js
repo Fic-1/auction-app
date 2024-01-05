@@ -40,7 +40,6 @@ exports.resizeProductCoverImage = catchAsync(async (req, res, next) => {
 exports.resizeProductImages = catchAsync(async (req, res, next) => {
   if (!req.files) return next();
   req.body.photos = [];
-  console.log('here');
   await Promise.all(
     req.files.map(async (file, i) => {
       const filename = `product-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;

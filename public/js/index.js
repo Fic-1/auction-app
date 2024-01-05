@@ -26,6 +26,7 @@ const userDataForm = document.querySelector('.user-data');
 const userPasswordForm = document.querySelector('.change-password');
 const coverImageForm = document.querySelector('.product-cover-form');
 const productDataForm = document.querySelector('.product-data-form');
+const productPhotosForm = document.querySelector('.product-photos-form');
 const addProduct = document.querySelector('.add-product');
 const addProductFormDiv = document.querySelector('.add-product-form-div');
 const addProductBtn = document.querySelector('.add-product-btn');
@@ -126,16 +127,24 @@ if (coverImageForm) {
     const productEndDate = document.getElementById(
       'product-data--endDate',
     ).value;
-    const productPhotos = document.getElementById('photos');
+
+    const updateObject = {
+      name: productName,
+      description: productDescription,
+      endDate: productEndDate,
+    };
+    updateProductData(updateObject, productId, 'data');
+  });
+
+  productPhotosForm.addEventListener('submit', (e) => {
+    e.preventDefault();
     const formData = new FormData();
-    formData.append('name', productName);
-    formData.append('description', productDescription);
-    formData.append('endDate', productEndDate);
+    const productPhotos = document.getElementById('photos');
     for (let i = 0; i < productPhotos.files.length; i++) {
       formData.append('photos', productPhotos.files[i]);
     }
     console.log(...formData);
-    updateProductData(formData, productId);
+    updateProductData(formData, productId, 'photos');
   });
 }
 
@@ -240,6 +249,13 @@ const updateBiddingUI = (state, newBid, messageData, updateElement) => {
 
     console.log('Updating innerHTML; USER:', userEmail);
     if (productId === newBid._id) updateElement.innerHTML += markup;
+    console.log('Updated!');
+  }
+  if (messageData.type === 'over') {
+    markup = `<p class=over> Auction has ended </p>`;
+
+    console.log('Updating innerHTML; USER:', userEmail);
+    updateElement.innerHTML += markup;
     console.log('Updated!');
   }
 };

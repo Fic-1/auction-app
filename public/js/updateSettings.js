@@ -46,10 +46,13 @@ export const updateCover = async (data, id) => {
   }
 };
 
-export const updateProductData = async (data, id) => {
+export const updateProductData = async (data, id, type) => {
   console.log(data);
   try {
-    const url = `/my-products/${id}/edit`;
+    const url =
+      type === 'photos'
+        ? `/my-products/${id}/edit-photos`
+        : `/my-products/${id}/edit-data`;
     const res = await axios({
       method: 'PATCH',
       url,
@@ -58,7 +61,7 @@ export const updateProductData = async (data, id) => {
     console.log(res);
     if (res.data.status === 'Success') {
       showAlert('success', `PRODUCT DATA changed successfuly!`);
-      setTimeout(() => window.location.reload(), 3000);
+      // setTimeout(() => window.location.reload(), 3000);
     }
   } catch (err) {
     showAlert('error', err.response.data.message);

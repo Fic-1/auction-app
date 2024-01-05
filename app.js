@@ -60,5 +60,5 @@ module.exports = app;
 
 //TODO: Add logic for finished auctions -> winner gets Stripe link
 //TODO: Add stripe payments
-//TODO: Add email sending functionality - welcome mail, reset password, won auction, auction is close to end, someone else added bid
+//TODO: Add email sending functionality - welcome mail, reset password, won auction, auction is close to end, someone else added bid - MAILCHIMP
 //TODO: Update MODEL with adress

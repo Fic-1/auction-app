@@ -53,12 +53,22 @@ router
     authController.protect,
     authController.allowEdit,
     viewController.editProduct,
-  )
+  );
+router
+  .route('/my-products/:id/edit-photos')
   .patch(
     authController.protect,
     authController.allowEdit,
     productController.uploadProductImages,
     productController.resizeProductImages,
+    productController.updateProduct,
+  );
+
+router
+  .route('/my-products/:id/edit-data')
+  .patch(
+    authController.protect,
+    authController.allowEdit,
     productController.updateProduct,
   );
 

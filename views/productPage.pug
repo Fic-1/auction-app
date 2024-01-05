@@ -3,6 +3,7 @@ block append head
   link(rel='stylesheet', href='/assets/css/style.css')
 block content 
     - const userEmail = user.email;
+    - const remainingTime = product.endDate - Date.now()
     section.product-section
       .product-container
         .card.text-center.product-card
@@ -13,8 +14,10 @@ block content
               li.nav-item
                 a.nav-link#liveBid(href='#')
                   span Live biddings
-              li.nav-item
-                a.nav-link#checkoutLink(disabled='true', href='#', tabindex='-1') Disabled
+              - console.log(product?.bids?.at(-1))
+              - if(product.bids.length > 0 && remainingTime < 0 && userEmail === product.bids.at(-1).bidder) 
+                  li.nav-item
+                    a.nav-link#checkoutLink(disabled='true', href='#', tabindex='-1') Checkout
           #productContent.card-body.card-flex
             .product-col
               img.product-img(src=`/products/${product.coverImage}`)

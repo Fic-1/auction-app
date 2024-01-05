@@ -29,28 +29,30 @@ block content
                                 .mb-3
                                     label.form-label(for='description')
                                         strong Description
-                                    textarea.form-control#product-data--description(rows="5" cols="60" name="description" placeholder=`${product.description}`, value=`${product.description}`)
+                                    textarea.form-control#product-data--description(rows="5" cols="60" name="description" placeholder=`${product.description}`, value=`${product.description}` required)
                                 .mb-3
                                     label.form-label(for='endDate')
                                         strong= `End date: ${product.endDate}`
                                     br
                                     input#product-data--endDate(type='date', placeholder=`Enter new date`, name='endDate' required)
-                                .mb-3.multiple-upload 
-                                    label.form-label(for='name')
-                                        strong Upload product pictures:
-                                    br
-                                    .dashed_upload
-                                        .wrapper
-                                            .drop
-                                                .cont
-                                                    i.fa.fa-cloud-upload
-                                                    .tit
-                                                        | Drag &amp; Drop
-                                                    .desc
-                                                        | or
-                                                    .browse
-                                                        | click here to browse
-                                                output#list
-                                                input#photos(multiple='' name='photos' type='file')
-                                button.btn.btn-primary.btn-sm.btn--change-cover(type='submit') Save
+                                button.btn.btn-primary.btn-sm.btn--change-cover(type='submit') Save changes
+                form.product-photos-form(enctype="multipart/form-data")
+                    .mb-3.multiple-upload 
+                        label.form-label(for='name')
+                            strong Upload product pictures:
+                        br
+                        .dashed_upload
+                            .wrapper
+                                .drop
+                                    .cont
+                                        i.fa.fa-cloud-upload
+                                        .tit
+                                            | Drag &amp; Drop
+                                        .desc
+                                            | or
+                                        .browse
+                                            | click here to browse
+                                    output#list
+                                    input#photos(multiple='' name='photos' type='file')
+                    button.btn.btn-primary.btn-sm.btn--change-cover(type='submit') Upload photos
 

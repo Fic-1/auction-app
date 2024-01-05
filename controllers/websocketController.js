@@ -7,20 +7,21 @@ const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const { ServerCapabilities } = require('mongodb');
 
-const formatDate = (date = new Date()) => {
-  const year = date.toLocaleString('default', { year: 'numeric' });
-  const month = date.toLocaleString('default', {
-    month: '2-digit',
-  });
-  const day = date.toLocaleString('default', { day: '2-digit' });
-  const hour = date.toLocaleString('default', { hour: '2-digit' });
-  const minute = date.toLocaleString('default', { minute: '2-digit' });
-  const time = ` - ${hour}:${minute}`;
+// const formatDate = (date = new Date()) => {
+//   const year = date.toLocaleString('default', { year: 'numeric' });
+//   const month = date.toLocaleString('default', {
+//     month: '2-digit',
+//   });
+//   const day = date.toLocaleString('default', { day: '2-digit' });
+//   const hour = date.toLocaleString('default', { hour: '2-digit' });
+//   const minute = date.toLocaleString('default', { minute: '2-digit' });
+//   const time = ` - ${hour}:${minute}`;
 
-  return [day, month, year, time].join('');
-};
+//   return [day, month, year, time].join('');
+// };
 
 let product;
+let remainingTime;
 let userData;
 let serverState = {};
 let activeConnections = 0;
@@ -51,6 +52,7 @@ exports.liveBidding = async (req, res, next) => {
   userData = req.user;
   console.log('querying db...');
   product = await Product.findOne({ _id: req.params.id });
+  remainingTime = product.endDate - Date.now();
   console.log(`product ${product.name} found`);
   if (!serverState[product._id]) {
     serverState[product._id] = {};
@@ -78,11 +80,29 @@ wss.on('connection', (ws) => {
       _activeBids: serverState[product._id]._activeBids,
     }),
   );
+  if (remainingTime < 0) {
+    ws.send(
+      JSON.stringify({
+        type: 'over',
+        message: 'Auction has ended.',
+      }),
+    );
+    ws.close(1000, 'Auction over');
+  }
   ws.isAlive = true;
 
   ws.on('message', (data) => {
     const newBid = JSON.parse(data);
     console.log(newBid);
+    if (remainingTime < 0) {
+      ws.send(
+        JSON.stringify({
+          type: 'over',
+          message: 'Auction has ended.',
+        }),
+      );
+      return;
+    }
     if (
       product.bids.length > 0 &&
       newBid.amount <= serverState[product._id]._activeBids.at(-1).amount

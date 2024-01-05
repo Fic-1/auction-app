@@ -246,6 +246,16 @@ p.start-price {
   padding: 0px 10px 0px 10px;
 }
 
+p.over {
+  font-weight: bold;
+  display: flex;
+  align-self: center;
+  background-color: #520f0f;
+  color: #fff;
+  border-radius: 20px;
+  width: fit-content;
+}
+
 p.from-me::before {
   border-bottom-left-radius: 0.8rem 0.7rem;
   border-right: 1rem solid #248bf5;
