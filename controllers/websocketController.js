@@ -88,6 +88,7 @@ wss.on('connection', (ws) => {
       }),
     );
     ws.close(1000, 'Auction over');
+    updateProductBidsInDB();
   }
   ws.isAlive = true;
 

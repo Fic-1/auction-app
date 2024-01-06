@@ -58,8 +58,7 @@ block content
               .product-col
                 h2= `Congratulations ${userFirstName} !`
                 p You've won the auction, here is your checkout link:
-                a(href='#') 
-                button Proceed to checkout
+                button#checkoutBtn(data-productId=`${product.id}`) Proceed to checkout
                 p After the checkout is complete we will connect your with the seller.
       hr
       h2 Product details:

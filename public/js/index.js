@@ -11,6 +11,7 @@ import {
 } from './updateSettings';
 import { nextPage, previousPage } from './paginate.js';
 import { showAlert } from './alerts.js';
+import { checkoutProduct } from './stripe.js';
 
 const currentUrl = window.location.href;
 const url = new URL(currentUrl);
@@ -36,6 +37,7 @@ const paginateDiv = document.querySelectorAll('.paginateDiv');
 const allProductsPage = document.querySelector('.allProducts');
 const productPhotos = document.querySelector('.product-photos');
 const mainImage = document.querySelector('.product-img');
+const checkoutBtn = document.getElementById('checkoutBtn');
 
 const pageControl = () => {
   const pagesTop = document.getElementById('pagesTop');
@@ -57,12 +59,16 @@ const pageControl = () => {
   });
 };
 
+if (checkoutBtn) {
+  checkoutBtn.addEventListener('click', (e) => {
+    e.target.textContent = 'Processing...';
+    const productId = e.target.dataset.productid;
+    checkoutProduct(productId);
+  });
+}
+
 if (allProductsPage) {
   pageControl();
-  // paginateDiv.addEventListener('click', (e) => {
-  //   if (e.target.closest('.nextPage')) nextPage();
-  //   if (e.target.closest('.previousPage')) previousPage();
-  // });
 }
 
 if (addProduct) {

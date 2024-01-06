@@ -12,6 +12,7 @@ const productRouter = require('./routes/productRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
+const productController = require('./controllers/productController');
 
 const app = express();
 
@@ -31,6 +32,13 @@ app.use(
     limit: '10kb',
   }),
 );
+
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  productController.webhookCheckout,
+);
+
 app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -62,3 +70,4 @@ module.exports = app;
 //TODO: Add stripe payments
 //TODO: Add email sending functionality - welcome mail, reset password, won auction, auction is close to end, someone else added bid - MAILCHIMP
 //TODO: Update MODEL with adress
+//TODO: Add checkout collection into db

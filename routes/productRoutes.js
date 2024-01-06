@@ -25,4 +25,10 @@ router.post(
   productController.createProduct,
 );
 
+router.get(
+  '/checkout-session/:productId',
+  authController.protect,
+  productController.getCheckoutSession,
+);
+
 module.exports = router;
