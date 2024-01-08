@@ -66,7 +66,6 @@ app.use(globalErrorHandler);
 
 module.exports = app;
 
-//TODO: Add stripe payments
 //TODO: Add email sending functionality - welcome mail, reset password, won auction, auction is close to end, someone else added bid - MAILCHIMP
 //TODO: Update MODEL with adress
 //TODO: Add checkout collection into db

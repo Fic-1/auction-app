@@ -4,6 +4,7 @@ const factory = require('./handlerFactory');
 const User = require('../models/usersModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const Email = require('../utils/email');
 
 exports.getAllUsers = factory.getAll(User);
 exports.getUser = factory.getOne(User);
