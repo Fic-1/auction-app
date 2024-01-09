@@ -9,6 +9,9 @@ const router = express.Router();
 
 // router.use(viewController.alerts);
 
+router.route('/forgot-password').get(viewController.getForgotPasswordPage);
+router.route('/reset-password/:token').get(viewController.getResetPasswordPage);
+
 router.get(
   '/products',
   authController.protect,
@@ -81,15 +84,5 @@ router
     productController.resizeProductCoverImage,
     productController.updateProduct,
   );
-
-// router.get('/product', viewController.getProductPage);
-// router.get(
-//   '/tour/:tourSlug',
-//   authController.isLoggedIn,
-//   viewController.getTour,
-// );
-// router.get('/login', authController.isLoggedIn, viewController.getLoginForm);
-// router.get('/me', authController.protect, viewController.getAccount);
-// router.get('/my-tours', authController.protect, viewController.getMyTours);
 
 module.exports = router;

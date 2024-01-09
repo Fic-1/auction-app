@@ -3,6 +3,7 @@ import WebSocket from 'isomorphic-ws';
 import { login, logout } from './login.js';
 import { switchTabs } from './productPage.js';
 import { signup } from './signup.js';
+import { forgotPassword, resetPassword } from './resetPassword.js';
 import {
   updateSettings,
   updateCover,
@@ -19,15 +20,17 @@ const url = new URL(currentUrl);
 const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.logoutbtn');
 const signupForm = document.querySelector('.form--signup');
+const userDataForm = document.querySelector('.user-data');
 const productTabs = document.querySelector('.nav-tabs');
+const coverImageForm = document.querySelector('.product-cover-form');
 const wsForm = document.querySelector('.websocket-form');
+const productPhotosForm = document.querySelector('.product-photos-form');
+const userPasswordForm = document.querySelector('.change-password');
+const productDataForm = document.querySelector('.product-data-form');
+const forgotPasswordForm = document.querySelector('.form--forgot-password');
+const resetPasswordForm = document.querySelector('.form--reset-password');
 const btnAddBid = document.getElementById('btnAddBid');
 const liveBiddingElement = document.querySelector('.imessage');
-const userDataForm = document.querySelector('.user-data');
-const userPasswordForm = document.querySelector('.change-password');
-const coverImageForm = document.querySelector('.product-cover-form');
-const productDataForm = document.querySelector('.product-data-form');
-const productPhotosForm = document.querySelector('.product-photos-form');
 const addProduct = document.querySelector('.add-product');
 const addProductFormDiv = document.querySelector('.add-product-form-div');
 const addProductBtn = document.querySelector('.add-product-btn');
@@ -38,6 +41,7 @@ const allProductsPage = document.querySelector('.allProducts');
 const productPhotos = document.querySelector('.product-photos');
 const mainImage = document.querySelector('.product-img');
 const checkoutBtn = document.getElementById('checkoutBtn');
+const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
 
 const pageControl = () => {
   const pagesTop = document.getElementById('pagesTop');
@@ -329,5 +333,24 @@ if (productTabs) {
   }
   window.addEventListener('unload', function () {
     if (ws.readyState == WebSocket.OPEN) ws.close();
+  });
+}
+
+if (forgotPasswordForm) {
+  forgotPasswordForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    forgotPassword(email);
+  });
+}
+
+if (resetPasswordForm) {
+  resetPasswordForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const token = document.getElementById('resetPasswordBtn').dataset.token;
+    console.log(token);
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('passwordConfirm').value;
+    resetPassword(password, passwordConfirm, token);
   });
 }

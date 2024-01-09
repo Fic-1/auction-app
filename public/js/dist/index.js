@@ -581,6 +581,7 @@ var _isomorphicWsDefault = parcelHelpers.interopDefault(_isomorphicWs);
 var _loginJs = require("./login.js");
 var _productPageJs = require("./productPage.js");
 var _signupJs = require("./signup.js");
+var _resetPasswordJs = require("./resetPassword.js");
 var _updateSettings = require("./updateSettings");
 var _paginateJs = require("./paginate.js");
 var _alertsJs = require("./alerts.js");
@@ -590,15 +591,17 @@ const url = new URL(currentUrl);
 const loginForm = document.querySelector(".form--login");
 const logOutBtn = document.querySelector(".logoutbtn");
 const signupForm = document.querySelector(".form--signup");
+const userDataForm = document.querySelector(".user-data");
 const productTabs = document.querySelector(".nav-tabs");
+const coverImageForm = document.querySelector(".product-cover-form");
 const wsForm = document.querySelector(".websocket-form");
+const productPhotosForm = document.querySelector(".product-photos-form");
+const userPasswordForm = document.querySelector(".change-password");
+const productDataForm = document.querySelector(".product-data-form");
+const forgotPasswordForm = document.querySelector(".form--forgot-password");
+const resetPasswordForm = document.querySelector(".form--reset-password");
 const btnAddBid = document.getElementById("btnAddBid");
 const liveBiddingElement = document.querySelector(".imessage");
-const userDataForm = document.querySelector(".user-data");
-const userPasswordForm = document.querySelector(".change-password");
-const coverImageForm = document.querySelector(".product-cover-form");
-const productDataForm = document.querySelector(".product-data-form");
-const productPhotosForm = document.querySelector(".product-photos-form");
 const addProduct = document.querySelector(".add-product");
 const addProductFormDiv = document.querySelector(".add-product-form-div");
 const addProductBtn = document.querySelector(".add-product-btn");
@@ -609,6 +612,7 @@ const allProductsPage = document.querySelector(".allProducts");
 const productPhotos = document.querySelector(".product-photos");
 const mainImage = document.querySelector(".product-img");
 const checkoutBtn = document.getElementById("checkoutBtn");
+const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
 const pageControl = ()=>{
     const pagesTop = document.getElementById("pagesTop");
     const pagesBottom = document.getElementById("pagesBottom");
@@ -813,8 +817,21 @@ if (productTabs) {
         if (ws.readyState == (0, _isomorphicWsDefault.default).OPEN) ws.close();
     });
 }
+if (forgotPasswordForm) forgotPasswordForm.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    (0, _resetPasswordJs.forgotPassword)(email);
+});
+if (resetPasswordForm) resetPasswordForm.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    const token = document.getElementById("resetPasswordBtn").dataset.token;
+    console.log(token);
+    const password = document.getElementById("password").value;
+    const passwordConfirm = document.getElementById("passwordConfirm").value;
+    (0, _resetPasswordJs.resetPassword)(password, passwordConfirm, token);
+});
 
-},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./updateSettings":"l3cGY","./paginate.js":"cv9JK","./alerts.js":"6Mcnf","./stripe.js":"10tSC"}],"5nVUE":[function(require,module,exports) {
+},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./updateSettings":"l3cGY","./paginate.js":"cv9JK","./alerts.js":"6Mcnf","./stripe.js":"10tSC","./resetPassword.js":"eRWSh"}],"5nVUE":[function(require,module,exports) {
 // https://github.com/maxogden/websocket-stream/blob/48dc3ddf943e5ada668c31ccd94e9186f02fafbd/ws-fallback.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -5484,6 +5501,55 @@ const checkoutProduct = async (productId)=>{
     }
 };
 
-},{"axios":"jo6P5","./alerts":"6Mcnf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2Ex4i","f2QDv"], "f2QDv", "parcelRequire37fe")
+},{"axios":"jo6P5","./alerts":"6Mcnf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eRWSh":[function(require,module,exports) {
+/*eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "forgotPassword", ()=>forgotPassword);
+parcelHelpers.export(exports, "resetPassword", ()=>resetPassword);
+var _axios = require("axios");
+var _axiosDefault = parcelHelpers.interopDefault(_axios);
+var _alertsJs = require("./alerts.js");
+const forgotPassword = async (email)=>{
+    try {
+        const res = await (0, _axiosDefault.default)({
+            method: "POST",
+            url: "/api/v1/users/forgot-password",
+            data: {
+                email
+            }
+        });
+        if (res.data.status === "success") {
+            (0, _alertsJs.showAlert)("success", "Password reset token sent! Please check your email.");
+            window.setTimeout(()=>{
+                location.assign("/login");
+            }, 1500);
+        }
+    } catch (error) {
+        (0, _alertsJs.showAlert)("danger", error.response.data.message);
+    }
+};
+const resetPassword = async (password, passwordConfirm, token)=>{
+    try {
+        const res = await (0, _axiosDefault.default)({
+            method: "PATCH",
+            url: `/api/v1/users/reset-password/${token}`,
+            data: {
+                password,
+                passwordConfirm
+            }
+        });
+        console.log(res.url);
+        if (res.data.status === "success") {
+            (0, _alertsJs.showAlert)("success", "Password changed successfuly!");
+            window.setTimeout(()=>{
+                location.assign("/");
+            }, 1500);
+        }
+    } catch (error) {
+        (0, _alertsJs.showAlert)("danger", error.response.data.message);
+    }
+};
+
+},{"axios":"jo6P5","./alerts.js":"6Mcnf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2Ex4i","f2QDv"], "f2QDv", "parcelRequire37fe")
 
 //# sourceMappingURL=index.js.map

@@ -87,6 +87,19 @@ exports.getLoginPage = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getForgotPasswordPage = catchAsync(async (req, res, next) => {
+  res.status(200).render('forgotPassword', {
+    title: 'Forgot password',
+  });
+});
+
+exports.getResetPasswordPage = catchAsync(async (req, res, next) => {
+  res.status(200).render('resetPassword', {
+    title: 'Reset password',
+    token: req.params.token,
+  });
+});
+
 exports.getSignupPage = catchAsync(async (req, res, next) => {
   res.status(200).render('signup', {
     title: 'Sign up',
