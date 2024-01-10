@@ -2,10 +2,12 @@ const WebSocket = require('ws');
 const startWebSocketServer = require('../webSocketServer');
 const server = require('../server');
 const Product = require('../models/productsModel');
+const User = require('../models/usersModel');
 const { getAllProducts } = require('./productController');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const { ServerCapabilities } = require('mongodb');
+const Email = require('../utils/email');
 
 // const formatDate = (date = new Date()) => {
 //   const year = date.toLocaleString('default', { year: 'numeric' });
@@ -19,12 +21,20 @@ const { ServerCapabilities } = require('mongodb');
 
 //   return [day, month, year, time].join('');
 // };
-
+let protocol;
+let host;
 let product;
 let remainingTime;
 let userData;
-let serverState = {};
+const serverState = {};
 let activeConnections = 0;
+
+const sendEmailToUser = catchAsync(async (user, url, type) => {
+  console.log(user);
+  const userDataMail = await User.findOne({ email: user });
+  if (type === 'outbid') await new Email(userDataMail, url).outBidded();
+  if (type === 'won') await new Email(userDataMail, url).auctionWon();
+});
 
 /* UPDATING DATABASE WITH NEW BIDS */
 const updateProductBidsInDB = catchAsync(async () => {
@@ -49,6 +59,8 @@ const updateProductBidsInDB = catchAsync(async () => {
 const wss = startWebSocketServer({ port: '8080' });
 
 exports.liveBidding = async (req, res, next) => {
+  protocol = req.protocol;
+  host = req.get('host');
   userData = req.user;
   console.log('querying db...');
   product = await Product.findOne({ _id: req.params.id });
@@ -89,12 +101,20 @@ wss.on('connection', (ws) => {
     );
     ws.close(1000, 'Auction over');
     updateProductBidsInDB();
+    if (product.bids.length > 0 && remainingTime < 0) {
+      const url = `${protocol}://${host}/products/${product._id}`;
+      sendEmailToUser(
+        serverState[product._id]._activeBids.at(-1).bidder,
+        url,
+        'won',
+      );
+    }
   }
   ws.isAlive = true;
 
   ws.on('message', (data) => {
     const newBid = JSON.parse(data);
-    console.log(newBid);
+    // console.log(newBid);
     if (remainingTime < 0) {
       ws.send(
         JSON.stringify({
@@ -103,6 +123,18 @@ wss.on('connection', (ws) => {
         }),
       );
       return;
+    }
+    if (
+      product.bids.length > 0 &&
+      remainingTime > 0 &&
+      userData.email === serverState[newBid._id]._activeBids.at(-1).bidder
+    ) {
+      const url = `${protocol}://${host}/products/${product._id}`;
+      sendEmailToUser(
+        serverState[newBid._id]._activeBids.at(-2).bidder,
+        url,
+        'outbid',
+      );
     }
     if (
       product.bids.length > 0 &&
@@ -127,16 +159,17 @@ wss.on('connection', (ws) => {
       return;
     }
     serverState[newBid._id]._activeBids.push(newBid);
+    console.log(serverState[newBid._id]._activeBids.at(-2).bidder);
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify({ type: 'newBid', bid: newBid }));
       }
     });
     serverState[product._id]._newBids.push(newBid);
-    console.log(serverState[product._id]);
+    // console.log(serverState[product._id]);
   });
 });
-//TODO: Add logic to update DB frequently
+
 wss.on('close', () => {
   activeConnections--;
   serverState[product._id].clients.delete(wss);
