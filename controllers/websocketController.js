@@ -101,14 +101,15 @@ wss.on('connection', (ws) => {
     );
     ws.close(1000, 'Auction over');
     updateProductBidsInDB();
-    if (product.bids.length > 0 && remainingTime < 0) {
-      const url = `${protocol}://${host}/products/${product._id}`;
-      sendEmailToUser(
-        serverState[product._id]._activeBids.at(-1).bidder,
-        url,
-        'won',
-      );
-    }
+    //TODO: MAKE SURE EMAIL IS SENT ONLY ONCE IN THIS FUNCTION
+    //   if (product.bids.length > 0 && remainingTime < 0) {
+    //     const url = `${protocol}://${host}/products/${product._id}`;
+    //     sendEmailToUser(
+    //       serverState[product._id]._activeBids.at(-1).bidder,
+    //       url,
+    //       'won',
+    //     );
+    //   }
   }
   ws.isAlive = true;
 
