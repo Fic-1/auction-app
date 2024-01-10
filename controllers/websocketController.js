@@ -50,6 +50,7 @@ const updateProductBidsInDB = catchAsync(async () => {
     if (doc.bids.length > 0 && currentBid <= doc.bids.at(-1).amount) return;
     doc.currentBid = currentBid;
     doc.bids.push(...serverState[productId]._newBids);
+    doc.emailSent = serverState[productId].emailSent;
     await doc.save({ validateBeforeSave: false });
     serverState[productId]._newBids = [];
   });
@@ -100,16 +101,20 @@ wss.on('connection', (ws) => {
       }),
     );
     ws.close(1000, 'Auction over');
+    if (
+      !serverState[product._id].emailSent &&
+      product.bids.length > 0 &&
+      remainingTime < 0
+    ) {
+      const url = `${protocol}://${host}/products/${product._id}`;
+      sendEmailToUser(
+        serverState[product._id]._activeBids.at(-1).bidder,
+        url,
+        'won',
+      );
+      serverState[product._id].emailSent = true; //Only send email once flag
+    }
     updateProductBidsInDB();
-    //TODO: MAKE SURE EMAIL IS SENT ONLY ONCE IN THIS FUNCTION
-    //   if (product.bids.length > 0 && remainingTime < 0) {
-    //     const url = `${protocol}://${host}/products/${product._id}`;
-    //     sendEmailToUser(
-    //       serverState[product._id]._activeBids.at(-1).bidder,
-    //       url,
-    //       'won',
-    //     );
-    //   }
   }
   ws.isAlive = true;
 
@@ -128,11 +133,12 @@ wss.on('connection', (ws) => {
     if (
       product.bids.length > 0 &&
       remainingTime > 0 &&
-      userData.email === serverState[newBid._id]._activeBids.at(-1).bidder
+      userData.email === serverState[newBid._id]._activeBids.at(-1).bidder &&
+      serverState[newBid._id]._activeBids.at(-2)
     ) {
       const url = `${protocol}://${host}/products/${product._id}`;
       sendEmailToUser(
-        serverState[newBid._id]._activeBids.at(-2).bidder,
+        serverState[newBid._id]._activeBids?.at(-2)?.bidder,
         url,
         'outbid',
       );

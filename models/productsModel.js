@@ -38,6 +38,7 @@ const productSchema = new mongoose.Schema({
   },
   coverImage: { type: String, default: 'default-no-img.png' },
   photos: { type: [String] },
+  emailSent: { type: Boolean, default: false },
   // Additional product details
 });
 
