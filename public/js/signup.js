@@ -9,7 +9,6 @@ export const signup = async (
   password,
   passwordConfirm,
 ) => {
-  console.log('signup');
   const name = `${firstName}  ${lastName}`;
   if (password !== passwordConfirm)
     showAlert('danger', 'Passwords do not match');

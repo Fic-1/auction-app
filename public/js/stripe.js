@@ -14,7 +14,6 @@ export const checkoutProduct = async (productId) => {
       `/api/v1/checkouts/checkout-session/${productId}`,
     );
     // 2) Create checkout form + charge credit card
-    console.log(session);
     await stripe.redirectToCheckout({
       sessionId: session.data.session.id,
     });

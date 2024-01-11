@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const compression = require('compression');
 
 const userRouter = require('./routes/userRoutes');
 const bidRouter = require('./routes/bidRoutes');
@@ -45,6 +46,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(helmet());
 
 app.use(morgan('dev'));
+
+app.use(compression());
 
 const limiter = rateLimit({
   max: 100, //? 100 request from the same IP

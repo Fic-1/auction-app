@@ -47,10 +47,8 @@ exports.liveBidding = async (req, res, next) => {
   protocol = req.protocol;
   host = req.get('host');
   userData = req.user;
-  console.log('querying db...');
   product = await Product.findOne({ _id: req.params.id });
   remainingTime = product.endDate - Date.now();
-  console.log(`product ${product.name} found`);
   if (!serverState[product._id]) {
     serverState[product._id] = {};
     serverState[product._id].clients = new Set();
@@ -70,7 +68,7 @@ exports.liveBidding = async (req, res, next) => {
 };
 
 wss.on('connection', (ws) => {
-  serverState[product._id].clients.add(wss);
+  if (serverState[product._id]) serverState[product._id].clients.add(wss);
   activeConnections++;
   ws.send(
     JSON.stringify({

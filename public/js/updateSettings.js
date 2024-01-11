@@ -6,7 +6,6 @@ import { showAlert } from './alerts';
 
 //* Type: 'password' || 'data'
 export const updateSettings = async (data, type) => {
-  console.log(data);
   try {
     const url =
       type === 'password'
@@ -17,7 +16,6 @@ export const updateSettings = async (data, type) => {
       url,
       data,
     });
-    console.log(res);
     if (res.data.status === 'Success') {
       showAlert('success', `${type.toUpperCase()} changed successfuly!`);
       setTimeout(() => window.location.reload(), 3000);
@@ -28,7 +26,6 @@ export const updateSettings = async (data, type) => {
 };
 
 export const updateCover = async (data, id) => {
-  console.log(data);
   try {
     const url = `/my-products/${id}/edit/uploadCover`;
     const res = await axios({
@@ -36,7 +33,6 @@ export const updateCover = async (data, id) => {
       url,
       data,
     });
-    console.log(res);
     if (res.data.status === 'Success') {
       showAlert('success', `COVER IMAGE changed successfuly!`);
       setTimeout(() => window.location.reload(), 3000);
@@ -47,7 +43,6 @@ export const updateCover = async (data, id) => {
 };
 
 export const updateProductData = async (data, id, type) => {
-  console.log(data);
   try {
     const url =
       type === 'photos'
@@ -58,7 +53,6 @@ export const updateProductData = async (data, id, type) => {
       url,
       data,
     });
-    console.log(res);
     if (res.data.status === 'Success') {
       showAlert('success', `PRODUCT DATA changed successfuly!`);
       // setTimeout(() => window.location.reload(), 3000);
@@ -69,15 +63,12 @@ export const updateProductData = async (data, id, type) => {
 };
 
 export const createNewProduct = async (data, elementArray) => {
-  console.log(data);
   try {
-    console.log('before request');
     const res = await axios({
       method: 'POST',
       url: '/api/v1/products/create-my-product',
       data,
     });
-    console.log(res);
     if (res.data.status === 'Success') {
       showAlert('success', `PRODUCT created successfuly!`);
       elementArray.array.forEach((el) => {

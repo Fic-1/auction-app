@@ -48,7 +48,6 @@ const pageControl = () => {
   const pagesBottom = document.getElementById('pagesBottom');
   let currentPage = parseInt(url.searchParams.get('page')) || 1;
   const resultsNumberOfPages = Math.ceil(Number(pagesTop.dataset.pages) / 5);
-  console.log(resultsNumberOfPages);
   pagesTop.textContent = `${
     currentPage - 1 <= 0 ? '' : currentPage - 1
   } [${currentPage}] ${
@@ -106,7 +105,6 @@ if (addProduct) {
       'endDate',
       document.getElementById('create-form--date').value,
     );
-    console.log(...formData);
     createNewProduct(formData, elementArray);
   });
 
@@ -123,7 +121,6 @@ if (coverImageForm) {
       'coverImage',
       document.getElementById('coverImage').files[0],
     );
-    console.log(...formData);
     updateCover(formData, productId);
   });
 
@@ -153,7 +150,6 @@ if (coverImageForm) {
     for (let i = 0; i < productPhotos.files.length; i++) {
       formData.append('photos', productPhotos.files[i]);
     }
-    console.log(...formData);
     updateProductData(formData, productId, 'photos');
   });
 }
@@ -168,7 +164,6 @@ if (loginForm) {
 }
 if (signupForm) {
   signupForm.addEventListener('submit', (e) => {
-    console.log('signup event listener');
     e.preventDefault();
     const firstName = document.getElementById('fname').value;
     const lastName = document.getElementById('lname').value;
@@ -215,7 +210,6 @@ if (userPasswordForm)
 
 if (productPhotos) {
   productPhotos.addEventListener('click', (e) => {
-    console.log(e.target.closest('.product-photo'));
     if (e.target.closest('.product-photo'))
       mainImage.src = e.target.closest('.product-photo').src;
   });
@@ -229,9 +223,6 @@ if (productTabs) productId = document.getElementById('product').dataset.id;
 const updateBiddingUI = (state, newBid, messageData, updateElement) => {
   let markup;
   productId = document.getElementById('product').dataset.id;
-
-  console.log(state);
-  console.log(messageData);
 
   if (messageData.type === 'initialBids') {
     markup = state
@@ -250,23 +241,18 @@ const updateBiddingUI = (state, newBid, messageData, updateElement) => {
 
   if (messageData.type === 'newBid') {
     const formatedAmount = numeral(newBid.amount).format('0,0.00');
-    console.log(formatedAmount);
     markup = `<p class=${
       newBid.bidder === userEmail ? 'from-me' : 'from-them'
     }>${
       newBid.bidder
     } <br><span>Added bid: </span><strong>${formatedAmount} €</strong></p>`;
 
-    console.log('Updating innerHTML; USER:', userEmail);
     if (productId === newBid._id) updateElement.innerHTML += markup;
-    console.log('Updated!');
   }
   if (messageData.type === 'over') {
     markup = `<p class=over> Auction has ended </p>`;
 
-    console.log('Updating innerHTML; USER:', userEmail);
     updateElement.innerHTML += markup;
-    console.log('Updated!');
   }
 };
 
@@ -277,7 +263,6 @@ if (productTabs) {
     .trim()
     .split('=')[1]
     .replace('%40', '@');
-  console.log(userEmail);
   const uri = `ws://${window.location.host.split(':')[0]}:8080`;
   const ws = new WebSocket(uri);
   const wsBidding = (formValue) => {
@@ -292,7 +277,6 @@ if (productTabs) {
       bidder: userEmail,
     };
     const message = JSON.stringify(messageData);
-    console.log(userEmail, messageData.bidder);
     if (userEmail === messageData.bidder) {
       ws.send(message);
     }
@@ -310,11 +294,9 @@ if (productTabs) {
   ws.onmessage = (event) => {
     const message = JSON.parse(event.data);
     const biddingState = message._activeBids;
-    console.log(biddingState);
     const newBid = message.bid;
 
     updateBiddingUI(biddingState, newBid, message, liveBiddingElement);
-    console.log(`Message from server: ${event.data}`);
   };
 
   if (btnAddBid) {
@@ -348,7 +330,6 @@ if (resetPasswordForm) {
   resetPasswordForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const token = document.getElementById('resetPasswordBtn').dataset.token;
-    console.log(token);
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('passwordConfirm').value;
     resetPassword(password, passwordConfirm, token);

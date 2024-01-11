@@ -42,20 +42,8 @@ const productSchema = new mongoose.Schema({
   // Additional product details
 });
 
-// productSchema.pre('save', function (next) {
-//   const { currentBid } = this;
-//   const { bids } = this;
-//   console.log(bids.at(-1));
-//   // Assuming bids is an array
-//   if (bids.length > 0 && currentBid <= bids.at(-1).amount) {
-//   }
-
-//   next();
-// });
 
 productSchema.pre(/^find/, function (next) {
-  //   this.populate({ path: 'user', select: 'name photo' });
-  //   this.populate({ path: 'tour', select: 'name' });
 
   this.populate({ path: 'seller', select: 'name photo' });
   this.populate({ path: 'bids', select: 'amount' });

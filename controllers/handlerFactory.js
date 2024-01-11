@@ -31,7 +31,6 @@ exports.updateOne = (Model) => async (req, res, next) => {
     if (!doc) {
       return next(new AppError('No document found with that ID', 404));
     }
-    console.log('Update me ran with', req.body);
     res.status(200).json({
       status: 'Success',
       data: {
@@ -44,10 +43,8 @@ exports.updateOne = (Model) => async (req, res, next) => {
 };
 
 exports.createOne = (Model) => async (req, res, next) => {
-  // console.log(`Query will run with: ${req.body}`);
   try {
-    const doc = await Model.create(req.body); //Returns a promise
-    // console.log(`Query ran with: ${req.body}`);
+    const doc = await Model.create(req.body);
     res.status(201).json({
       status: 'success',
       data: {

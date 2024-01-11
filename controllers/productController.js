@@ -52,7 +52,6 @@ exports.resizeProductImages = catchAsync(async (req, res, next) => {
       req.body.photos.push(filename);
     }),
   );
-  console.log(req.files);
   next();
 });
 

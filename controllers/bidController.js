@@ -16,7 +16,6 @@ exports.addBid = catchAsync(async (req, res, next) => {
     return next(
       new AppError('Bid must be a larger amount than the starting bid.', 400),
     );
-  //   console.log(doc);
   if (doc.bids.length > 0 && currentBid <= doc.bids.at(-1).amount) {
     return next(
       new AppError('Bid must be a larger amount than the current bid.', 400),
@@ -24,7 +23,6 @@ exports.addBid = catchAsync(async (req, res, next) => {
   }
   doc.currentBid = currentBid;
   doc.bids.push(addedBid);
-  //   console.log(doc.bids);
   await doc.save({ validateBeforeSave: false });
   const newBid = await Bid.create({
     productId: req.params.id,

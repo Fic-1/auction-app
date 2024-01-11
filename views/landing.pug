@@ -22,13 +22,11 @@ block content
                                 img.card-img-top.w-100.d-block.fit-cover(style='height: 200px;' src=`/products/${product.coverImage}` alt=`${product.name}`)
                                 .card-body.p-4
                                     h4.card-title #{product.name}
-                                    p.card-text #{product.description}
                                     .info-products
                                         .d-flex
                                             img.rounded-circle.flex-shrink-0.me-3.fit-cover(width='50' height='50' src=`/img/${product.seller.photo === 'default.png' ? product.seller.photo : product.seller.photo }`)
                                             div
                                                 p.fw-bold.mb-0= product.seller.name
-                                                p.text-muted.mb-0 LOKACIJA - UPDATE MODELA
                                         div(style="border-left:1px solid #000;padding: 5vh 0px 0px 0px")
                                         .d-flex
                                             div

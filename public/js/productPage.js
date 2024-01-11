@@ -15,7 +15,6 @@ export const switchTabs = (e) => {
   const checkout = document.getElementById('checkoutLink');
   const checkoutContent = document.getElementById('checkoutContent');
   if (!tabProduct && !tabLive && !tabCheckout) return;
-  console.log(allLinks);
   allContent.forEach((element) => {
     element.classList.remove('card-flex');
     element.classList.add('none');
@@ -28,19 +27,4 @@ export const switchTabs = (e) => {
     if (i == e.target.closest('.nav-link').dataset.tab)
       element.classList.add('card-flex');
   });
-
-  // product.classList.toggle('active');
-  // productContent.classList.toggle('none');
-  // productContent.classList.toggle('card-flex');
-
-  // live.classList.toggle('active');
-  // liveContent.classList.toggle('none');
-  // liveContent.classList.toggle('card-flex');
-  // liveBids.scrollTop = liveBids.scrollHeight;
-  // if (tabCheckout) {
-  //   checkout.classList.toggle('active');
-  //   checkoutContent.classList.toggle('none');
-  //   checkoutContent.classList.toggle('card-flex');
-  // }
-  // console.log(e.target);
 };

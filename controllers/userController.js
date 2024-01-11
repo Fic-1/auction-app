@@ -55,8 +55,6 @@ exports.getMe = (req, res, next) => {
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   //* 1) Create error if user POSTs password data
-  console.log(req.file);
-  console.log('Update me ran with', req.body);
   if (req.body.password || req.body.passwordConfirm)
     return next(
       new AppError(
@@ -68,12 +66,10 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   const filteredBody = filterObj(req.body, 'name', 'email');
   if (req.file) filteredBody.photo = req.file.filename;
   //* 3) Update user document
-  console.log(filteredBody);
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: true,
   });
-  console.log(updatedUser);
   res.status(200).json({
     status: 'Success',
     data: {

@@ -35,7 +35,6 @@ export const resetPassword = async (password, passwordConfirm, token) => {
         passwordConfirm,
       },
     });
-    console.log(res.url);
     if (res.data.status === 'success') {
       showAlert('success', 'Password changed successfuly!');
       window.setTimeout(() => {

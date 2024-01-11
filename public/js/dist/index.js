@@ -618,7 +618,6 @@ const pageControl = ()=>{
     const pagesBottom = document.getElementById("pagesBottom");
     let currentPage = parseInt(url.searchParams.get("page")) || 1;
     const resultsNumberOfPages = Math.ceil(Number(pagesTop.dataset.pages) / 5);
-    console.log(resultsNumberOfPages);
     pagesTop.textContent = `${currentPage - 1 <= 0 ? "" : currentPage - 1} [${currentPage}] ${currentPage + 1 > resultsNumberOfPages ? "" : currentPage + 1}`;
     pagesBottom.textContent = pagesTop.textContent;
     paginateDiv.forEach((el)=>{
@@ -652,7 +651,6 @@ if (addProduct) {
         formData.append("startingBid", document.getElementById("create-form--price").value);
         formData.append("coverImage", document.getElementById("coverImage").files[0]);
         formData.append("endDate", document.getElementById("create-form--date").value);
-        console.log(...formData);
         (0, _updateSettings.createNewProduct)(formData, elementArray);
     });
     pageControl();
@@ -664,7 +662,6 @@ if (coverImageForm) {
         e.preventDefault();
         const formData = new FormData();
         formData.append("coverImage", document.getElementById("coverImage").files[0]);
-        console.log(...formData);
         (0, _updateSettings.updateCover)(formData, productId);
     });
     //* UPDATE PRODUCT DATA
@@ -685,7 +682,6 @@ if (coverImageForm) {
         const formData = new FormData();
         const productPhotos = document.getElementById("photos");
         for(let i = 0; i < productPhotos.files.length; i++)formData.append("photos", productPhotos.files[i]);
-        console.log(...formData);
         (0, _updateSettings.updateProductData)(formData, productId, "photos");
     });
 }
@@ -696,7 +692,6 @@ if (loginForm) loginForm.addEventListener("submit", (e)=>{
     (0, _loginJs.login)(email, password);
 });
 if (signupForm) signupForm.addEventListener("submit", (e)=>{
-    console.log("signup event listener");
     e.preventDefault();
     const firstName = document.getElementById("fname").value;
     const lastName = document.getElementById("lname").value;
@@ -733,7 +728,6 @@ if (userPasswordForm) userPasswordForm.addEventListener("submit", async (e)=>{
     document.getElementById("password-confirm").value = "";
 });
 if (productPhotos) productPhotos.addEventListener("click", (e)=>{
-    console.log(e.target.closest(".product-photo"));
     if (e.target.closest(".product-photo")) mainImage.src = e.target.closest(".product-photo").src;
 });
 /*----- Websocket logic -----*/ let productId;
@@ -741,8 +735,6 @@ if (productTabs) productId = document.getElementById("product").dataset.id;
 const updateBiddingUI = (state, newBid, messageData, updateElement)=>{
     let markup;
     productId = document.getElementById("product").dataset.id;
-    console.log(state);
-    console.log(messageData);
     if (messageData.type === "initialBids") {
         markup = state.map((bid)=>{
             let formatedAmount = numeral(bid.amount).format("0,0.00");
@@ -752,22 +744,16 @@ const updateBiddingUI = (state, newBid, messageData, updateElement)=>{
     }
     if (messageData.type === "newBid") {
         const formatedAmount = numeral(newBid.amount).format("0,0.00");
-        console.log(formatedAmount);
         markup = `<p class=${newBid.bidder === userEmail ? "from-me" : "from-them"}>${newBid.bidder} <br><span>Added bid: </span><strong>${formatedAmount} \u{20AC}</strong></p>`;
-        console.log("Updating innerHTML; USER:", userEmail);
         if (productId === newBid._id) updateElement.innerHTML += markup;
-        console.log("Updated!");
     }
     if (messageData.type === "over") {
         markup = `<p class=over> Auction has ended </p>`;
-        console.log("Updating innerHTML; USER:", userEmail);
         updateElement.innerHTML += markup;
-        console.log("Updated!");
     }
 };
 if (productTabs) {
     userEmail = document.cookie.split(";").filter((el)=>el.includes("user"))[0].trim().split("=")[1].replace("%40", "@");
-    console.log(userEmail);
     const uri = `ws://${window.location.host.split(":")[0]}:8080`;
     const ws = new (0, _isomorphicWsDefault.default)(uri);
     const wsBidding = (formValue)=>{
@@ -782,7 +768,6 @@ if (productTabs) {
             bidder: userEmail
         };
         const message = JSON.stringify(messageData);
-        console.log(userEmail, messageData.bidder);
         if (userEmail === messageData.bidder) ws.send(message);
     };
     ws.onopen = function open() {
@@ -795,10 +780,8 @@ if (productTabs) {
     ws.onmessage = (event)=>{
         const message = JSON.parse(event.data);
         const biddingState = message._activeBids;
-        console.log(biddingState);
         const newBid = message.bid;
         updateBiddingUI(biddingState, newBid, message, liveBiddingElement);
-        console.log(`Message from server: ${event.data}`);
     };
     if (btnAddBid) {
         wsForm.addEventListener("keydown", (e)=>{
@@ -825,7 +808,6 @@ if (forgotPasswordForm) forgotPasswordForm.addEventListener("submit", (e)=>{
 if (resetPasswordForm) resetPasswordForm.addEventListener("submit", (e)=>{
     e.preventDefault();
     const token = document.getElementById("resetPasswordBtn").dataset.token;
-    console.log(token);
     const password = document.getElementById("password").value;
     const passwordConfirm = document.getElementById("passwordConfirm").value;
     (0, _resetPasswordJs.resetPassword)(password, passwordConfirm, token);
@@ -5312,7 +5294,6 @@ const switchTabs = (e)=>{
     const checkout = document.getElementById("checkoutLink");
     const checkoutContent = document.getElementById("checkoutContent");
     if (!tabProduct && !tabLive && !tabCheckout) return;
-    console.log(allLinks);
     allContent.forEach((element)=>{
         element.classList.remove("card-flex");
         element.classList.add("none");
@@ -5324,19 +5305,6 @@ const switchTabs = (e)=>{
     allContent.forEach((element, i)=>{
         if (i == e.target.closest(".nav-link").dataset.tab) element.classList.add("card-flex");
     });
-// product.classList.toggle('active');
-// productContent.classList.toggle('none');
-// productContent.classList.toggle('card-flex');
-// live.classList.toggle('active');
-// liveContent.classList.toggle('none');
-// liveContent.classList.toggle('card-flex');
-// liveBids.scrollTop = liveBids.scrollHeight;
-// if (tabCheckout) {
-//   checkout.classList.toggle('active');
-//   checkoutContent.classList.toggle('none');
-//   checkoutContent.classList.toggle('card-flex');
-// }
-// console.log(e.target);
 };
 
 },{"isomorphic-ws":"5nVUE","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fNY2o":[function(require,module,exports) {
@@ -5347,7 +5315,6 @@ var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _alertsJs = require("./alerts.js");
 const signup = async (firstName, lastName, email, password, passwordConfirm)=>{
-    console.log("signup");
     const name = `${firstName}  ${lastName}`;
     if (password !== passwordConfirm) (0, _alertsJs.showAlert)("danger", "Passwords do not match");
     if (!email || !password || !passwordConfirm) (0, _alertsJs.showAlert)("danger", "Please enter valid information");
@@ -5385,7 +5352,6 @@ var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _alerts = require("./alerts");
 const updateSettings = async (data, type)=>{
-    console.log(data);
     try {
         const url = type === "password" ? "/api/v1/users/updateMyPassword" : "/api/v1/users/updateMe";
         const res = await (0, _axiosDefault.default)({
@@ -5393,7 +5359,6 @@ const updateSettings = async (data, type)=>{
             url,
             data
         });
-        console.log(res);
         if (res.data.status === "Success") {
             (0, _alerts.showAlert)("success", `${type.toUpperCase()} changed successfuly!`);
             setTimeout(()=>window.location.reload(), 3000);
@@ -5403,7 +5368,6 @@ const updateSettings = async (data, type)=>{
     }
 };
 const updateCover = async (data, id)=>{
-    console.log(data);
     try {
         const url = `/my-products/${id}/edit/uploadCover`;
         const res = await (0, _axiosDefault.default)({
@@ -5411,7 +5375,6 @@ const updateCover = async (data, id)=>{
             url,
             data
         });
-        console.log(res);
         if (res.data.status === "Success") {
             (0, _alerts.showAlert)("success", `COVER IMAGE changed successfuly!`);
             setTimeout(()=>window.location.reload(), 3000);
@@ -5421,7 +5384,6 @@ const updateCover = async (data, id)=>{
     }
 };
 const updateProductData = async (data, id, type)=>{
-    console.log(data);
     try {
         const url = type === "photos" ? `/my-products/${id}/edit-photos` : `/my-products/${id}/edit-data`;
         const res = await (0, _axiosDefault.default)({
@@ -5429,22 +5391,18 @@ const updateProductData = async (data, id, type)=>{
             url,
             data
         });
-        console.log(res);
         if (res.data.status === "Success") (0, _alerts.showAlert)("success", `PRODUCT DATA changed successfuly!`);
     } catch (err) {
         (0, _alerts.showAlert)("error", err.response.data.message);
     }
 };
 const createNewProduct = async (data, elementArray)=>{
-    console.log(data);
     try {
-        console.log("before request");
         const res = await (0, _axiosDefault.default)({
             method: "POST",
             url: "/api/v1/products/create-my-product",
             data
         });
-        console.log(res);
         if (res.data.status === "Success") {
             (0, _alerts.showAlert)("success", `PRODUCT created successfuly!`);
             elementArray.array.forEach((el)=>{
@@ -5491,7 +5449,6 @@ const checkoutProduct = async (productId)=>{
         // 1) Get the session from the API endpoint
         const session = await (0, _axiosDefault.default)(`/api/v1/checkouts/checkout-session/${productId}`);
         // 2) Create checkout form + charge credit card
-        console.log(session);
         await stripe.redirectToCheckout({
             sessionId: session.data.session.id
         });
@@ -5538,7 +5495,6 @@ const resetPassword = async (password, passwordConfirm, token)=>{
                 passwordConfirm
             }
         });
-        console.log(res.url);
         if (res.data.status === "success") {
             (0, _alertsJs.showAlert)("success", "Password changed successfuly!");
             window.setTimeout(()=>{
