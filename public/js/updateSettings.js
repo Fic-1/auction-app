@@ -1,7 +1,6 @@
 /* eslint-disable */
 // Update data function
 
-import axios from 'axios';
 import { showAlert } from './alerts';
 
 //* Type: 'password' || 'data'
