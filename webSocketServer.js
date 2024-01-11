@@ -1,9 +1,9 @@
-const WebSocket = require('ws');
+const { WebSocketServer } = require('ws');
 const server = require('./server');
 
-const startWebSocketServer = (port) => {
+const startWebSocketServer = (httpserver) => {
   console.log('ws');
-  const wss = new WebSocket.Server(port);
+  const wss = new WebSocketServer(httpserver);
   return wss;
 };
 module.exports = startWebSocketServer;

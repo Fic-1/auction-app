@@ -1,9 +1,10 @@
 const express = require('express');
 const websocketController = require('../controllers/websocketController');
+const server = require('../server');
 const viewController = require('../controllers/viewController');
 const authController = require('../controllers/authController');
 const productController = require('../controllers/productController');
-const productRouter = require('./productRoutes');
+// const productRouter = require('./productRoutes');
 
 const router = express.Router();
 
@@ -13,7 +14,6 @@ router.route('/forgot-password').get(viewController.getForgotPasswordPage);
 router.route('/reset-password/:token').get(viewController.getResetPasswordPage);
 
 router.get('/products', viewController.getAllProducts);
-
 router.get(
   '/products/:id',
   authController.protect,

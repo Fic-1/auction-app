@@ -754,7 +754,7 @@ const updateBiddingUI = (state, newBid, messageData, updateElement)=>{
 };
 if (productTabs) {
     userEmail = document.cookie.split(";").filter((el)=>el.includes("user"))[0].trim().split("=")[1].replace("%40", "@");
-    const uri = `ws://${window.location.host.split(":")[0]}:8080`;
+    const uri = `wss://${window.location.host.split(":")[0]}:443`;
     const ws = new (0, _isomorphicWsDefault.default)(uri);
     const wsBidding = (formValue)=>{
         const id = document.getElementById("product").dataset.id;
@@ -813,7 +813,7 @@ if (resetPasswordForm) resetPasswordForm.addEventListener("submit", (e)=>{
     (0, _resetPasswordJs.resetPassword)(password, passwordConfirm, token);
 });
 
-},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./updateSettings":"l3cGY","./paginate.js":"cv9JK","./alerts.js":"6Mcnf","./stripe.js":"10tSC","./resetPassword.js":"eRWSh"}],"5nVUE":[function(require,module,exports) {
+},{"isomorphic-ws":"5nVUE","./login.js":"7yHem","./productPage.js":"c9xgY","./signup.js":"fNY2o","./updateSettings":"l3cGY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./paginate.js":"cv9JK","./alerts.js":"6Mcnf","./stripe.js":"10tSC","./resetPassword.js":"eRWSh"}],"5nVUE":[function(require,module,exports) {
 // https://github.com/maxogden/websocket-stream/blob/48dc3ddf943e5ada668c31ccd94e9186f02fafbd/ws-fallback.js
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
