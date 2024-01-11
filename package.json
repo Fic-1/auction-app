@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "nodemon server.js",
-    "parcel": "parcel serve ./public/js/index.js --dist-dir ./public/js/dist"
+    "parcel": "parcel serve ./public/js/index.js --dist-dir ./public/js/dist",
+    "build": "parcel build ./public/js/index.js --dist-dir ./public/js/dist/build --out-file bundle.js"
   },
   "name": "auction-app",
   "description": "��#\u0000 \u0000a\u0000u\u0000c\u0000t\u0000i\u0000o\u0000n\u0000-\u0000a\u0000p\u0000p\u0000\r\u0000 \u0000",
