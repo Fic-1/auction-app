@@ -5489,7 +5489,7 @@ const stripe = Stripe("pk_test_51OUuIUBhYQwhtBdpefIQnW6Nsn4TFQh9ezwLyra1a1ugaAY1
 const checkoutProduct = async (productId)=>{
     try {
         // 1) Get the session from the API endpoint
-        const session = await (0, _axiosDefault.default)(`/api/v1/products/checkout-session/${productId}`);
+        const session = await (0, _axiosDefault.default)(`/api/v1/checkouts/checkout-session/${productId}`);
         // 2) Create checkout form + charge credit card
         console.log(session);
         await stripe.redirectToCheckout({

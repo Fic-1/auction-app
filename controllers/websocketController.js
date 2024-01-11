@@ -1,26 +1,10 @@
 const WebSocket = require('ws');
 const startWebSocketServer = require('../webSocketServer');
-const server = require('../server');
 const Product = require('../models/productsModel');
 const User = require('../models/usersModel');
-const { getAllProducts } = require('./productController');
-const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
-const { ServerCapabilities } = require('mongodb');
 const Email = require('../utils/email');
 
-// const formatDate = (date = new Date()) => {
-//   const year = date.toLocaleString('default', { year: 'numeric' });
-//   const month = date.toLocaleString('default', {
-//     month: '2-digit',
-//   });
-//   const day = date.toLocaleString('default', { day: '2-digit' });
-//   const hour = date.toLocaleString('default', { hour: '2-digit' });
-//   const minute = date.toLocaleString('default', { minute: '2-digit' });
-//   const time = ` - ${hour}:${minute}`;
-
-//   return [day, month, year, time].join('');
-// };
 let protocol;
 let host;
 let product;
@@ -72,6 +56,7 @@ exports.liveBidding = async (req, res, next) => {
     serverState[product._id].clients = new Set();
     serverState[product._id]._activeBids = [];
     serverState[product._id]._newBids = [];
+    serverState[product._id].emailSent = product.emailSent;
   }
   if (
     wss.clients.size < 1 &&
@@ -101,11 +86,7 @@ wss.on('connection', (ws) => {
       }),
     );
     ws.close(1000, 'Auction over');
-    if (
-      !serverState[product._id].emailSent &&
-      product.bids.length > 0 &&
-      remainingTime < 0
-    ) {
+    if (!serverState[product._id].emailSent && product.bids.length > 0) {
       const url = `${protocol}://${host}/products/${product._id}`;
       sendEmailToUser(
         serverState[product._id]._activeBids.at(-1).bidder,
@@ -130,19 +111,19 @@ wss.on('connection', (ws) => {
       );
       return;
     }
-    if (
-      product.bids.length > 0 &&
-      remainingTime > 0 &&
-      userData.email === serverState[newBid._id]._activeBids.at(-1).bidder &&
-      serverState[newBid._id]._activeBids.at(-2)
-    ) {
-      const url = `${protocol}://${host}/products/${product._id}`;
-      sendEmailToUser(
-        serverState[newBid._id]._activeBids?.at(-2)?.bidder,
-        url,
-        'outbid',
-      );
-    }
+    //* COMMENTED - SPAMMING
+    // if (
+    //   product.bids.length > 0 &&
+    //   remainingTime > 0 &&
+    //   userData.email === serverState[newBid._id]._activeBids.at(-2).bidder
+    // ) {
+    //   const url = `${protocol}://${host}/products/${product._id}`;
+    //   sendEmailToUser(
+    //     serverState[newBid._id]._activeBids?.at(-2)?.bidder,
+    //     url,
+    //     'outbid',
+    //   );
+    // }
     if (
       product.bids.length > 0 &&
       newBid.amount <= serverState[product._id]._activeBids.at(-1).amount
@@ -166,14 +147,12 @@ wss.on('connection', (ws) => {
       return;
     }
     serverState[newBid._id]._activeBids.push(newBid);
-    console.log(serverState[newBid._id]._activeBids.at(-2).bidder);
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify({ type: 'newBid', bid: newBid }));
       }
     });
     serverState[product._id]._newBids.push(newBid);
-    // console.log(serverState[product._id]);
   });
 });
 

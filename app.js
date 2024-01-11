@@ -10,9 +10,10 @@ const userRouter = require('./routes/userRoutes');
 const bidRouter = require('./routes/bidRoutes');
 const productRouter = require('./routes/productRoutes');
 const viewRouter = require('./routes/viewRoutes');
+const checkoutRouter = require('./routes/checkoutRoutes');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
-const productController = require('./controllers/productController');
+const checkoutController = require('./controllers/checkoutController');
 
 const app = express();
 
@@ -24,6 +25,12 @@ app.use(cors());
 
 app.options('*', cors()); //? options <-- HTTP method __ Pre flight phase
 
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  checkoutController.webhookCheckout,
+);
+
 //?Body parse, reading data frm body into req.body
 app.use(express.json({ limit: '10kb' }));
 app.use(
@@ -32,13 +39,6 @@ app.use(
     limit: '10kb',
   }),
 );
-
-app.post(
-  '/webhook-checkout',
-  express.raw({ type: 'application/json' }),
-  productController.webhookCheckout,
-);
-
 app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -57,6 +57,7 @@ app.use('/', viewRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
 app.use('/api/v1/bids', bidRouter);
+app.use('/api/v1/checkouts', checkoutRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
@@ -66,7 +67,6 @@ app.use(globalErrorHandler);
 
 module.exports = app;
 
-//TODO: Add email sending functionality - welcome mail, reset password, won auction, auction is close to end, someone else added bid - MAILCHIMP
 //TODO: Update MODEL with adress
-//TODO: Add checkout collection into db
+//TODO: Add wonAuctionsPage
 //TODO: Add webhook after deployment
