@@ -263,7 +263,7 @@ if (productTabs) {
     .trim()
     .split('=')[1]
     .replace('%40', '@');
-  const uri = `ws://${window.location.host.split(':')[0]}:8080`;
+  const uri = `wss://${window.location.host.split(':')[0]}:8080`;
   const ws = new WebSocket(uri);
   const wsBidding = (formValue) => {
     const id = document.getElementById('product').dataset.id;
