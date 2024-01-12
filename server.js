@@ -29,7 +29,7 @@ const server = app.listen(port, () => {
 // let serverState = setupServerState();
 mongoose.connect(DB).then(() => console.log('DB connection successful'));
 
-const wss = new WebSocketServer({ port: 8080 });
+const wss = new WebSocketServer({ server });
 
 process.on('unhandledRejection', (err) => {
   console.log(err.name, err.message);
