@@ -50,6 +50,7 @@ const createCheckoutRecord = async (session) => {
   const user = (await User.findOne({ email: session.customer_email })).id;
   const price = session.display_items[0].amount / 100;
   await CheckoutRecords.create({ product, user, price });
+  console.log('Created record with:', product, user, price);
 };
 
 exports.webhookCheckout = (req, res, next) => {
