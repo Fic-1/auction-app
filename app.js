@@ -30,6 +30,8 @@ app.use(cors());
 
 app.options('*', cors()); //? options <-- HTTP method __ Pre flight phase
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.post(
   '/webhook-checkout',
   express.raw({ type: 'application/json' }),
@@ -46,7 +48,6 @@ app.use(
 );
 app.use(cookieParser());
 
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(helmet());
 
 if (process.env.NODE_ENV === 'development') {

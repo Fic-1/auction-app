@@ -54,7 +54,6 @@ const createCheckoutRecord = async (session) => {
 };
 
 exports.webhookCheckout = (req, res, next) => {
-  console.log('webhook activated route');
   const signature = req.headers['stripe-signature'];
   let event;
   try {
@@ -65,13 +64,12 @@ exports.webhookCheckout = (req, res, next) => {
     );
   } catch (error) {
     res.status(400).send(`Webhook error: ${error.message}`);
-    console.log(signature, event.type);
-    console.log(event.type === 'checkout.session.completed');
-    if (event.type === 'checkout.session.completed')
-      createCheckoutRecord(event.data.object);
-
-    res.status(200).json({ received: true });
   }
+
+  if (event.type === 'checkout.session.completed')
+    createCheckoutRecord(event.data.object);
+
+  res.status(200).json({ received: true });
 };
 
 exports.createCheckout = factory.createOne(CheckoutRecords);
