@@ -754,7 +754,7 @@ const updateBiddingUI = (state, newBid, messageData, updateElement)=>{
 };
 if (productTabs) {
     userEmail = document.cookie.split(";").filter((el)=>el.includes("user"))[0].trim().split("=")[1].replace("%40", "@");
-    const uri = `wss://${window.location.host.split(":")[0]}:443`;
+    const uri = `ws://${window.location.host.split(":")[0]}:8080`;
     const ws = new (0, _isomorphicWsDefault.default)(uri);
     const wsBidding = (formValue)=>{
         const id = document.getElementById("product").dataset.id;

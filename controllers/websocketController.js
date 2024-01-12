@@ -5,7 +5,7 @@ const Product = require('../models/productsModel');
 const User = require('../models/usersModel');
 const catchAsync = require('../utils/catchAsync');
 const Email = require('../utils/email');
-const { server } = require('../server');
+const Server = require('../server');
 
 // const wss = startWebSocketServer({ server });
 
@@ -99,7 +99,6 @@ exports.websocketErrorHandler = () => {
 };
 
 exports.connectionHandler = (ws) => {
-  console.log(serverState);
   if (!serverState) return;
   if (serverState[product._id])
     serverState[product._id].clients.add(userData._id);
@@ -179,11 +178,12 @@ exports.connectionHandler = (ws) => {
       return;
     }
     serverState[newBid._id]._activeBids.push(newBid);
-    wss.clients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({ type: 'newBid', bid: newBid }));
-      }
-    });
+    Server.sendNewBids(newBid);
+    // wss.clients.forEach((client) => {
+    //   if (client.readyState === WebSocket.OPEN) {
+    //     client.send(JSON.stringify({ type: 'newBid', bid: newBid }));
+    //   }
+    // });
     serverState[product._id]._newBids.push(newBid);
   });
 };

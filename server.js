@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const WebSocket = require('ws');
 const { WebSocketServer } = require('ws');
 const websocketController = require('./controllers/websocketController');
 const ServerState = require('./utils/serverState');
@@ -28,7 +29,7 @@ const server = app.listen(port, () => {
 // let serverState = setupServerState();
 mongoose.connect(DB).then(() => console.log('DB connection successful'));
 
-const wss = new WebSocketServer({ server });
+const wss = new WebSocketServer({ port: 8080 });
 
 process.on('unhandledRejection', (err) => {
   console.log(err.name, err.message);
@@ -51,4 +52,10 @@ setTimeout(() => {
   wss.on('error', websocketController.websocketErrorHandler);
 }, 3000);
 
-module.exports = { server, DB };
+exports.sendNewBids = (newBid) => {
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify({ type: 'newBid', bid: newBid }));
+    }
+  });
+};
