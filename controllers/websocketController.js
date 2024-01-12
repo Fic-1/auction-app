@@ -113,6 +113,7 @@ exports.websocketErrorHandler = () => {
 
 exports.connectionHandler = (ws) => {
   if (!serverState) return;
+  if (!serverState[product._id]) return;
   if (serverState[product._id])
     serverState[product._id].clients.add(userData._id);
   activeConnections++;
@@ -146,6 +147,7 @@ exports.connectionHandler = (ws) => {
   ws.on('message', (data) => {
     const newBid = JSON.parse(data);
     // console.log(newBid);
+    if (!serverState[product._id]) return;
     if (remainingTime < 0) {
       ws.send(
         JSON.stringify({
