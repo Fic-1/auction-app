@@ -67,6 +67,18 @@ const sendEmailToUser = catchAsync(async (user, url, type) => {
   if (type === 'won') await new Email(userDataMail, url).auctionWon();
 });
 
+const updateProductOnMessage = catchAsync(async () => {
+  const currentBid = serverState[product.id]._activeBids.at(-1).amount;
+  const doc = await Product.findOne({ _id: product._id });
+  if (doc.startingBid > currentBid) return;
+  if (doc.bids.length > 0 && currentBid <= doc.bids.at(-1).amount) return;
+  doc.currentBid = currentBid;
+  doc.bids.push(...serverState[product.id]._newBids);
+  doc.emailSent = serverState[product.id].emailSent;
+  await doc.save({ validateBeforeSave: false });
+  serverState[product.id]._newBids = [];
+});
+
 /* UPDATING DATABASE WITH NEW BIDS */
 const updateProductBidsInDB = catchAsync(async () => {
   if (serverState[product._id]._newBids.length === 0) {
@@ -185,6 +197,7 @@ exports.connectionHandler = (ws) => {
     //   }
     // });
     serverState[product._id]._newBids.push(newBid);
+    updateProductOnMessage();
   });
 };
 
