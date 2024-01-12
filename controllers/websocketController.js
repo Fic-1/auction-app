@@ -76,6 +76,7 @@ const updateProductOnMessage = catchAsync(async () => {
   doc.bids.push(...serverState[product.id]._newBids);
   doc.emailSent = serverState[product.id].emailSent;
   await doc.save({ validateBeforeSave: false });
+  console.log('Updated on message:', product._id);
   serverState[product.id]._newBids = [];
 });
 
