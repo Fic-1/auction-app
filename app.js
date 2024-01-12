@@ -6,6 +6,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const compression = require('compression');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 
 const userRouter = require('./routes/userRoutes');
 const bidRouter = require('./routes/bidRoutes');
@@ -17,6 +19,8 @@ const globalErrorHandler = require('./controllers/errorController');
 const checkoutController = require('./controllers/checkoutController');
 
 const app = express();
+
+app.enable('trust proxy');
 
 //* Postavljanje pug-a
 app.set('view engine', 'pug');
@@ -45,7 +49,15 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(helmet());
 
-// app.use(morgan('dev'));
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
+
+// Data sanitization against NoSQL query injection
+app.use(mongoSanitize());
+
+// Data sanitization against XSS
+app.use(xss());
 
 app.use(compression());
 
