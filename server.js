@@ -13,7 +13,19 @@ const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
-
+// const setupServerState = async () => {
+//   let initialServerState = {};
+//   const product = await Product.find();
+//   product.forEach((document) => {
+//     initialServerState[document._id] = {};
+//     initialServerState[document._id].clients = new Set();
+//     initialServerState[document._id]._activeBids = [];
+//     initialServerState[document._id]._newBids = [];
+//     initialServerState[document._id].emailSent = document.emailSent;
+//   });
+//   return initialServerState;
+// };
+// let serverState = setupServerState();
 mongoose.connect(DB).then(() => console.log('DB connection successful'));
 
 const wss = new WebSocketServer({ server });
@@ -33,25 +45,10 @@ process.on('SIGTERM', () => {
   });
 });
 
-const setupServerState = async () => {
-  let serverState = {};
-  const product = await Product.find();
-  product.forEach((document) => {
-    serverState[document._id] = {};
-    serverState[document._id].clients = new Set();
-    serverState[document._id]._activeBids = [];
-    serverState[document._id]._newBids = [];
-    serverState[document._id].emailSent = document.emailSent;
-  });
-  return serverState;
-};
-let serverState = setupServerState();
-// setTimeout(() => {
-//   console.log(serverState, 'this is server state');
-// }, 3000);
-
-wss.on('connection', websocketController.connectionHandler);
-wss.on('close', websocketController.closeConnectionHandler);
-wss.on('error', websocketController.websocketErrorHandler);
+setTimeout(() => {
+  wss.on('connection', websocketController.connectionHandler);
+  wss.on('close', websocketController.closeConnectionHandler);
+  wss.on('error', websocketController.websocketErrorHandler);
+}, 3000);
 
 module.exports = { server, DB };

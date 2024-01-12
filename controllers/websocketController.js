@@ -11,7 +11,7 @@ const { server } = require('../server');
 
 let remainingTime;
 let userData;
-let serverState = {};
+let serverState;
 let activeConnections = 0;
 let protocol;
 let host;
@@ -31,6 +31,7 @@ let product;
 // };
 
 exports.liveBidding = async (req, res, next) => {
+  serverState = {};
   protocol = req.protocol;
   host = req.get('host');
   userData = req.user;
@@ -98,6 +99,8 @@ exports.websocketErrorHandler = () => {
 };
 
 exports.connectionHandler = (ws) => {
+  console.log(serverState);
+  if (!serverState) return;
   if (serverState[product._id])
     serverState[product._id].clients.add(userData._id);
   activeConnections++;

@@ -141,6 +141,7 @@ exports.isLoggedIn = async (req, res, next) => {
       // }
 
       //! THERE IS A LOGGED IN USER
+      if (!req.user) req.user = currentUser;
       res.locals.user = currentUser; //* Every pug template has acces to res.locals
 
       return next();
