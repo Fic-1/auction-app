@@ -28,7 +28,7 @@ export const signup = async (
     if (res.data.status === 'success') {
       showAlert('success', 'Signed in successfuly!');
       window.setTimeout(() => {
-        location.assign('/'); //* Poslje dodati rutu /me
+        location.assign('/me'); //* Poslje dodati rutu /me
       }, 1500);
     }
   } catch (error) {

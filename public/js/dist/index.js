@@ -628,7 +628,8 @@ const pageControl = ()=>{
     });
 };
 if (checkoutBtn) checkoutBtn.addEventListener("click", (e)=>{
-    e.target.textContent = "Processing...";
+    e.target.textContent = "Processing... ";
+    e.target.innerHTML += '<span class="spinner-border spinner-border-sm"></span>';
     const productId = e.target.dataset.productid;
     (0, _stripeJs.checkoutProduct)(productId);
 });
@@ -966,7 +967,7 @@ const signup = async (firstName, lastName, email, password, passwordConfirm)=>{
         if (res.data.status === "success") {
             (0, _alertsJs.showAlert)("success", "Signed in successfuly!");
             window.setTimeout(()=>{
-                location.assign("/"); //* Poslje dodati rutu /me
+                location.assign("/me"); //* Poslje dodati rutu /me
             }, 1500);
         }
     } catch (error) {

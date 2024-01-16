@@ -64,7 +64,9 @@ const pageControl = () => {
 
 if (checkoutBtn) {
   checkoutBtn.addEventListener('click', (e) => {
-    e.target.textContent = 'Processing...';
+    e.target.textContent = 'Processing... ';
+    e.target.innerHTML +=
+      '<span class="spinner-border spinner-border-sm"></span>';
     const productId = e.target.dataset.productid;
     checkoutProduct(productId);
   });
