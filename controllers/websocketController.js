@@ -60,11 +60,13 @@ exports.liveBidding = async (req, res, next) => {
 //   userData,
 // ) => {
 
-const sendEmailToUser = catchAsync(async (user, url, type) => {
-  console.log(user);
-  const userDataMail = await User.findOne({ email: user });
-  if (type === 'outbid') await new Email(userDataMail, url).outBidded();
-  if (type === 'won') await new Email(userDataMail, url).auctionWon();
+const handleEmailsInDb = catchAsync(async () => {
+  const doc = await Product.findOne({ _id: product._id });
+  if (!doc.emailSent) {
+    serverState[product._id].emailSent = true;
+    doc.emailSent = true;
+    await doc.save({ validateBeforeSave: false });
+  }
 });
 
 const updateProductOnMessage = catchAsync(async () => {
@@ -99,6 +101,16 @@ const updateProductBidsInDB = catchAsync(async () => {
     serverState[productId]._newBids = [];
   });
   console.log('------Completed-------');
+});
+
+const sendEmailToUser = catchAsync(async (user, url, type) => {
+  console.log(user);
+  const userDataMail = await User.findOne({ email: user });
+  if (type === 'outbid') await new Email(userDataMail, url).outBidded();
+  if (type === 'won' && !serverState[product._id].emailSent) {
+    await new Email(userDataMail, url).auctionWon();
+    handleEmailsInDb();
+  }
 });
 
 exports.closeConnectionHandler = (ws) => {
@@ -138,7 +150,6 @@ exports.connectionHandler = (ws) => {
         url,
         'won',
       );
-      serverState[product._id].emailSent = true; //Only send email once flag
     }
     updateProductBidsInDB();
   }
