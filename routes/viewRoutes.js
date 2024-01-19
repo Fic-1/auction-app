@@ -13,7 +13,11 @@ const router = express.Router();
 router.route('/forgot-password').get(viewController.getForgotPasswordPage);
 router.route('/reset-password/:token').get(viewController.getResetPasswordPage);
 
-router.get('/products', viewController.getAllProducts);
+router.get(
+  '/products',
+  authController.isLoggedIn,
+  viewController.getAllProducts,
+);
 router.get(
   '/products/:id',
   authController.protect,
