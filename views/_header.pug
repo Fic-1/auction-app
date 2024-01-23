@@ -25,7 +25,7 @@ nav.navbar.navbar-expand-md.bg-body.py-3
               a.dropdown-item.logoutbtn(href='#') Log out
           li.nav-item(style='display: flex; max-width: 3vw;')
             a(href='/me')
-              img.rounded-circle.img-fluid(src=`/img/${user.photo === 'default.png' ? user.photo : user.photo }`,)
+              img.rounded-circle.img-fluid(src=`${user.photo === 'default.png' ? 'img/default.png' :`https://res.cloudinary.com/dtzxdpxij/image/upload/q_auto/f_auto/v1706034390/user-img/${user.photo}.jpg`}`,)
         
         else
           a.btn.btn-primary.ms-md-2.btn--login(role='button' href='/login') Log in

@@ -37,7 +37,7 @@ block content
                                             - if(remainingTime < 0) 
                                                 p.text-muted.mb-0 Auction has ended
                                         .d-flex
-                                            img.rounded-circle.flex-shrink-0.me-3.fit-cover(width='50' height='50' src=`/img/${product.seller.photo === 'default.png' ? product.seller.photo : product.seller.photo }`)
+                                            img.rounded-circle.flex-shrink-0.me-3.fit-cover(width='50' height='50'  src=`${product.seller.photo === 'default.png' ? 'img/default.png' : `https://res.cloudinary.com/dtzxdpxij/image/upload/q_auto/f_auto/v1706034390/user-img/${product.seller.photo}.jpg`}`)
                                             div
                                                 p.fw-bold.mb-0= product.seller.name
                                 .col-md-2

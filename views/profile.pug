@@ -31,7 +31,7 @@ block content
                     form.user-data
                         .row(style='margin-bottom: 25px;text-align: left;')
                             .col-sm-4.col-md-4.col-lg-3.col-xl-2.col-xxl-2(style='display: inline;text-align: center;margin-bottom: 25px;')
-                                img.rounded-circle.mb-3.mt-4.img-fluid(src=`img/${user.photo === 'default.png' ? user.photo : user.photo }`, style='display: inline;max-height: 110px;')
+                                img.rounded-circle.mb-3.mt-4.img-fluid(src=`${user.photo === 'default.png' ? 'img/default.png' :`https://res.cloudinary.com/dtzxdpxij/image/upload/q_auto/f_auto/v1706034390/user-img/${user.photo}.jpg`}`, style='display: inline;max-height: 110px;')
                                 br
                                 input.form-control.form-control-sm(type='file', accept='image/*', id="photo", name='photo') 
                             .col-sm-8.col-md-8.col-lg-9.col-xl-10.col-xxl-10.align-self-center

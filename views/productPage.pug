@@ -73,6 +73,6 @@ block content
               strong| Seller
           #collapseTwo.accordion-collapse.collapse(data-bs-parent="#accordionExample")
             .accordion-body.seller-section 
-              img.rounded-circle.img-fluid.seller-photo(src=`/img/${product.seller.photo === 'default.png' ? product.seller.photo : product.seller.photo }`)
+              img.rounded-circle.img-fluid.seller-photo( src=`${product.seller.photo === 'default.png' ? 'img/default.png' : `https://res.cloudinary.com/dtzxdpxij/image/upload/q_auto/f_auto/v1706034390/user-img/${product.seller.photo}.jpg`}`)
               p=`${product.seller.name}`
             

@@ -42,11 +42,9 @@ const productSchema = new mongoose.Schema({
   // Additional product details
 });
 
-
 productSchema.pre(/^find/, function (next) {
-
-  this.populate({ path: 'seller', select: 'name photo' });
   this.populate({ path: 'bids', select: 'amount' });
+  this.populate({ path: 'seller', select: 'name photo' });
 
   next();
 });

@@ -1,5 +1,7 @@
 const multer = require('multer');
 const sharp = require('sharp');
+const cloudinary = require('cloudinary').v2;
+const streamifier = require('streamifier');
 const factory = require('./handlerFactory');
 const User = require('../models/usersModel');
 const AppError = require('../utils/appError');
@@ -26,6 +28,25 @@ const upload = multer({
 
 exports.uploadUserPhoto = upload.single('photo');
 
+exports.uploadUserPhotoCloud = catchAsync(async (req, res, next) => {
+  req.file.filename = `user-${req.user.id}-${Date.now()}`;
+  console.log('Uploading to cloudinary');
+  const cldUploadStream = cloudinary.uploader.upload_stream(
+    {
+      height: 600,
+      width: 600,
+      folder: 'user-img',
+      public_id: req.file.filename,
+    },
+    (error, result) => {
+      console.log(error, result);
+    },
+  );
+
+  streamifier.createReadStream(req.file.buffer).pipe(cldUploadStream);
+
+  next();
+});
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
 
