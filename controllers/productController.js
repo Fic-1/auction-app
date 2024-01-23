@@ -1,5 +1,7 @@
 const multer = require('multer');
 const sharp = require('sharp');
+const cloudinary = require('cloudinary').v2;
+const streamifier = require('streamifier');
 const factory = require('./handlerFactory');
 const Product = require('../models/productsModel');
 const AppError = require('../utils/appError');
@@ -23,17 +25,62 @@ const upload = multer({
 exports.uploadProductImages = upload.array('photos', 4);
 exports.uploadProductCoverImage = upload.single('coverImage');
 
+exports.uploadProductCoverImageCloud = catchAsync(async (req, res, next) => {
+  req.body.coverImage = `product-${
+    req.params.id ? req.params.id : req.user.id
+  }-${Date.now()}-cover`;
+  console.log('Uploading to cloudinary');
+  const cldUploadStream = cloudinary.uploader.upload_stream(
+    {
+      width: 2000,
+      height: 1333,
+      folder: 'product-img',
+      public_id: req.body.coverImage,
+    },
+    (error, result) => {
+      console.log(error, result);
+    },
+  );
+
+  streamifier.createReadStream(req.file.buffer).pipe(cldUploadStream);
+
+  next();
+});
+
 exports.resizeProductCoverImage = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
   // 1) Cover image
   req.body.coverImage = `product-${
     req.params.id ? req.params.id : req.user.id
-  }-${Date.now()}-cover.jpeg`;
+  }-${Date.now()}-cover`;
   await sharp(req.file.buffer)
     .resize(2000, 1333)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
     .toFile(`public/products/${req.body.coverImage}`);
+  next();
+});
+
+exports.uploadProductImagesCloud = catchAsync(async (req, res, next) => {
+  if (!req.files) return next();
+  req.body.photos = [];
+  console.log('Uploading to cloudinary');
+  req.files.map(async (file, i) => {
+    const filename = `product-${req.params.id}-${Date.now()}-${i + 1}`;
+    const cldUploadStream = cloudinary.uploader.upload_stream(
+      {
+        width: 2000,
+        height: 1333,
+        folder: 'product-img',
+        public_id: filename,
+      },
+      (error, result) => {
+        console.log(error, result);
+      },
+    );
+    streamifier.createReadStream(file.buffer).pipe(cldUploadStream);
+    req.body.photos.push(filename);
+  });
   next();
 });
 

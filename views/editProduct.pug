@@ -7,7 +7,7 @@ block content
         .edit-product
             .edit-product--cover 
                 form.product-cover-form(enctype="multipart/form-data")
-                    img.product-cover(src=`/products/${product.coverImage}`)
+                    img.product-cover(src=`${product.coverImage === 'default-no-img.png' ? 'products/default-no-img.png' :`https://res.cloudinary.com/dtzxdpxij/image/upload/q_auto/f_auto/v1706037124/product-img/${product.coverImage}`}`)
                     input.form-control.form-control-sm(type='file', id='coverImage', name='coverImage', accept='image/*')
                     button.btn.btn-primary.btn-sm.btn--change-cover(type='submit') Change picture
             .edit-product--data

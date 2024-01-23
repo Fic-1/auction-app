@@ -11,26 +11,26 @@ block content
           .card-header
             ul.nav.nav-tabs.card-header-tabs.card-header-tabs
               li.nav-item
-                a.nav-link.active#product(aria-current='true', href='#' data-tab='0' data-id=`${product.id}`)= `${product.name} - photos`
+                a.nav-link.active#product(aria-current='true', href=`/products/${product._id}#` data-tab='0' data-id=`${product.id}`)= `${product.name} - photos`
               li.nav-item
-                a.nav-link#liveBid(href='#' data-tab='1')
+                a.nav-link#liveBid(href=`/products/${product._id}#` data-tab='1')
                   span Live biddings
               - console.log(product?.bids?.at(-1))
               - if(product.bids.length > 0 && remainingTime < 0 && userEmail === product.bids.at(-1).bidder) 
                   li.nav-item
-                    a.nav-link#checkoutLink(href='#' data-tab='2')
+                    a.nav-link#checkoutLink(href=`/products/${product._id}#` data-tab='2')
                       span Checkout
           #productContent.card-body.card-flex
             .product-col
-              img.product-img(src=`/products/${product.coverImage}`)
+              img.product-img(src=`${product.coverImage === 'default-no-img.png' ? 'products/default-no-img.png' :`https://res.cloudinary.com/dtzxdpxij/image/upload/q_auto/f_auto/v1706037124/product-img/${product.coverImage}`}`)
             .product-photos-col
               .product-photos
-                img.product-photo(src=`/products/${product.coverImage}`)
+                img.product-photo(src=`${product.coverImage === 'default-no-img.png' ? 'products/default-no-img.png' :`https://res.cloudinary.com/dtzxdpxij/image/upload/q_auto/f_auto/v1706037124/product-img/${product.coverImage}`}`)
                 each photo in product.photos
-                   img.product-photo(src=`/products/${photo}`)
+                   img.product-photo(src=`https://res.cloudinary.com/dtzxdpxij/image/upload/q_auto/f_auto/v1706037124/product-img/${photo}`)
           #liveBidContent.card-body.none(style='overflow: visible')
             .product-col
-              img.product-img(src=`/products/${product.coverImage}`)
+              img.product-img(src=`${product.coverImage === 'default-no-img.png' ? 'products/default-no-img.png' :`https://res.cloudinary.com/dtzxdpxij/image/upload/q_auto/f_auto/v1706037124/product-img/${product.coverImage}`}`)
             .bid-col
               .card-flex-col
                 .websocket-background
@@ -54,7 +54,7 @@ block content
           - if(product.bids.length > 0 && remainingTime < 0 && userEmail === product.bids.at(-1).bidder) 
             #checkoutContent.card-body.none
               .product-col
-                img.product-img(src=`/products/${product.coverImage}`)
+                img.product-img(src=`${product.coverImage === 'default-no-img.png' ? 'products/default-no-img.png' :`https://res.cloudinary.com/dtzxdpxij/image/upload/q_auto/f_auto/v1706037124/product-img/${product.coverImage}`}`)
               .product-col
                 h2= `Congratulations ${userFirstName} !`
                 p You've won the auction, here is your checkout link:

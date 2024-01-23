@@ -22,9 +22,12 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
             name: `${product.name}`,
             description: product.summary,
             images: [
-              `${req.protocol}://${req.get('host')}/products/${
-                product.coverImage
-              }`,
+              `${
+                product.coverImage === 'default-no-img.png'
+                  ? 'products/default-no-img.png'
+                  : `https://res.cloudinary.com/dtzxdpxij/image/upload/q_auto/f_auto/v1706037124/product-img/${product.coverImage}`
+              }
+              `,
             ],
           },
         },

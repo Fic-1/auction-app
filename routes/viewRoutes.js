@@ -56,15 +56,14 @@ router
     authController.allowEdit,
     viewController.editProduct,
   );
-router
-  .route('/my-products/:id/edit-photos')
-  .patch(
-    authController.protect,
-    authController.allowEdit,
-    productController.uploadProductImages,
-    productController.resizeProductImages,
-    productController.updateProduct,
-  );
+router.route('/my-products/:id/edit-photos').patch(
+  authController.protect,
+  authController.allowEdit,
+  productController.uploadProductImages,
+  productController.uploadProductImagesCloud,
+  // productController.resizeProductImages,
+  productController.updateProduct,
+);
 
 router
   .route('/my-products/:id/edit-data')
@@ -74,14 +73,13 @@ router
     productController.updateProduct,
   );
 
-router
-  .route('/my-products/:id/edit/uploadCover')
-  .patch(
-    authController.protect,
-    authController.allowEdit,
-    productController.uploadProductCoverImage,
-    productController.resizeProductCoverImage,
-    productController.updateProduct,
-  );
+router.route('/my-products/:id/edit/uploadCover').patch(
+  authController.protect,
+  authController.allowEdit,
+  productController.uploadProductCoverImage,
+  productController.uploadProductCoverImageCloud,
+  // productController.resizeProductCoverImage,
+  productController.updateProduct,
+);
 
 module.exports = router;

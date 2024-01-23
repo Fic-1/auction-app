@@ -23,7 +23,7 @@ block content
                             .card.mb-3(style='max-width: 100%;')
                                 .row.g-0
                                     .col-md-4
-                                        img.img-fluid.rounded-start(src=`/products/${product.coverImage}` alt=`${product.name}`)
+                                        img.img-fluid.rounded-start(src=`${product.coverImage === 'default-no-img.png' ? 'products/default-no-img.png' :`https://res.cloudinary.com/dtzxdpxij/image/upload/q_auto/f_auto/v1706037124/product-img/${product.coverImage}`}` alt=`${product.name}`)
                                     .col-md-8
                                         .card-body
                                             h5.card-title #{product.name}
