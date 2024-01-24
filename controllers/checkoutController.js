@@ -8,6 +8,11 @@ const factory = require('./handlerFactory');
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   //* 1) GEt the currently booked tour
   const product = await Product.findById(req.params.productId);
+  const image = `${
+    product.coverImage === 'default-no-img.png'
+      ? `${req.protocol}://${req.get('host')}/products/${product.coverImage}`
+      : `https://res.cloudinary.com/dtzxdpxij/image/upload/q_auto/f_auto/v1706037124/product-img/${product.coverImage}`
+  }`;
   //* 2) Create checkout session
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
@@ -21,14 +26,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
           product_data: {
             name: `${product.name}`,
             description: product.summary,
-            images: [
-              `${
-                product.coverImage === 'default-no-img.png'
-                  ? 'products/default-no-img.png'
-                  : `https://res.cloudinary.com/dtzxdpxij/image/upload/q_auto/f_auto/v1706037124/product-img/${product.coverImage}`
-              }
-              `,
-            ],
+            images: [image],
           },
         },
         quantity: 1,
@@ -36,7 +34,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     ],
     mode: 'payment',
     success_url: `${req.protocol}://${req.get('host')}/?alert=booking`,
-    cancel_url: `${req.protocol}://${req.get('host')}/product/${product.id}`,
+    cancel_url: `${req.protocol}://${req.get('host')}/products/${product.id}`,
   });
   console.log(
     `${req.protocol}://${req.get('host')}/products/${product.coverImage}`,
