@@ -162,14 +162,14 @@ exports.connectionHandler = (ws) => {
       }),
     );
     ws.close(1000, 'Auction over');
-    if (!serverState[product._id].emailSent && product.bids.length > 0) {
-      const url = `${protocol}://${host}/products/${product._id}`;
-      sendEmailToUser(
-        serverState[product._id]._activeBids.at(-1).bidder,
-        url,
-        'won',
-      );
-    }
+    // if (!serverState[product._id].emailSent && product.bids.length > 0) {
+    //   const url = `${protocol}://${host}/products/${product._id}`;
+    //   sendEmailToUser(
+    //     serverState[product._id]._activeBids.at(-1).bidder,
+    //     url,
+    //     'won',
+    //   );
+    // }
     updateProductBidsInDB();
   }
   ws.isAlive = true;
