@@ -60,15 +60,6 @@ exports.liveBidding = async (req, res, next) => {
 //   userData,
 // ) => {
 
-const handleEmailsInDb = catchAsync(async () => {
-  const doc = await Product.findOne({ _id: product._id });
-  if (!doc.emailSent) {
-    serverState[product._id].emailSent = true;
-    doc.emailSent = true;
-    await doc.save({ validateBeforeSave: false });
-  }
-});
-
 const updateProductOnMessage = catchAsync(async () => {
   const currentBid = serverState[product.id]._activeBids.at(-1).amount;
   const doc = await Product.findOne({ _id: product._id });
@@ -103,15 +94,43 @@ const updateProductBidsInDB = catchAsync(async () => {
   console.log('------Completed-------');
 });
 
+const handleEmailsInDb = catchAsync(async (mailingProduct) => {
+  const doc = await Product.findOne({ _id: mailingProduct._id });
+  if (!doc.emailSent) {
+    // serverState[product._id].emailSent = true;
+    doc.emailSent = true;
+    await doc.save({ validateBeforeSave: false });
+  }
+});
+
 const sendEmailToUser = catchAsync(async (user, url, type) => {
   console.log(user);
   const userDataMail = await User.findOne({ email: user });
   if (type === 'outbid') await new Email(userDataMail, url).outBidded();
-  if (type === 'won' && !serverState[product._id].emailSent) {
+  if (type === 'won') {
     await new Email(userDataMail, url).auctionWon();
-    handleEmailsInDb();
   }
 });
+
+setInterval(
+  async () => {
+    const doc = await Product.find({ emailSent: false });
+    doc.forEach((undeliveredMailProduct) => {
+      const timeUntilEnd = undeliveredMailProduct.endDate - Date.now();
+      if (timeUntilEnd < 0) {
+        const mailUrl = `${protocol}://${host}/products/${undeliveredMailProduct._id}`;
+        if (!undeliveredMailProduct.bids.at(-1)) return;
+        sendEmailToUser(
+          undeliveredMailProduct.bids.at(-1).bidder,
+          mailUrl,
+          'won',
+        );
+        handleEmailsInDb(undeliveredMailProduct);
+      }
+    });
+  },
+  30 * 60 * 1000,
+);
 
 exports.closeConnectionHandler = (ws) => {
   activeConnections--;
@@ -320,13 +339,11 @@ exports.connectionHandler = (ws) => {
 setInterval(
   async () => {
     if (activeConnections > 0) {
-      console.log('Running database update every 3 minutes...');
       updateProductBidsInDB();
     }
   },
   3 * 60 * 1000,
-);
-// // };
+); //Running database update every 3 minutes...
 
 process.on('SIGINT', () => {
   console.log('Server is shutting down...');
