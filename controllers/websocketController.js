@@ -222,6 +222,7 @@ exports.connectionHandler = (ws) => {
       );
       return;
     }
+    if (!serverState[newBid._id]) return;
     serverState[newBid._id]._activeBids.push(newBid);
     Server.sendNewBids(newBid);
     // wss.clients.forEach((client) => {
@@ -229,6 +230,7 @@ exports.connectionHandler = (ws) => {
     //     client.send(JSON.stringify({ type: 'newBid', bid: newBid }));
     //   }
     // });
+    if (!serverState[product._id]) return;
     serverState[product._id]._newBids.push(newBid);
     updateProductOnMessage();
   });
