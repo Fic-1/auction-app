@@ -20,7 +20,8 @@ router.post(
   '/create-my-product',
   authController.protect,
   productController.uploadProductCoverImage,
-  productController.resizeProductCoverImage,
+  productController.uploadProductCoverImageCloud,
+  // productController.resizeProductCoverImage,
   productController.addSeller,
   productController.createProduct,
 );
