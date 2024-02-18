@@ -29,7 +29,7 @@ const upload = multer({
 exports.uploadUserPhoto = upload.single('photo');
 
 exports.uploadUserPhotoCloud = catchAsync(async (req, res, next) => {
-  if (!req.file) return;
+  if (!req.file) return next();
   req.file.filename = `user-${req.user.id}-${Date.now()}`;
   console.log('Uploading to cloudinary');
   const cldUploadStream = cloudinary.uploader.upload_stream(
